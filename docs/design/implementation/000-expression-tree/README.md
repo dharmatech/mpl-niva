@@ -1,6 +1,6 @@
 # 000 expression-tree
 
-**Status:** Done; not yet committed.
+**Status:** Done; landed at `7cc033f` (2026-10-22).
 
 The expression type, how to build and print expressions, and structural
 equality: what the simplifier will work on. Also the project setup:

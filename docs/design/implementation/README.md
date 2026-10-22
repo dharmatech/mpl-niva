@@ -17,4 +17,4 @@ series: **expression-tree**, **collect-terms 001**.
 
 | Series | What | Status |
 |---|---|---|
-| [`000-expression-tree`](000-expression-tree/README.md) | `Expr`, building it with operators, printing, structural equality, and the project setup. | Done; not yet committed. |
+| [`000-expression-tree`](000-expression-tree/README.md) | `Expr`, building it with operators, printing, structural equality, and the project setup. | Done at `7cc033f` (2026-10-22). |
