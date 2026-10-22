@@ -14,16 +14,23 @@ filed. Once filed, the header links the issue.
 | Draft | Status |
 |---|---|
 | [000 negative literal as a unary receiver](000-negative-literal-unary-receiver.md) | Filed as [#430](https://github.com/gavr123456789/Niva/issues/430) (2026-10-22). Fix opened as [#431](https://github.com/gavr123456789/Niva/pull/431) ([draft](000-negative-literal-unary-receiver-pr.md)). |
+| [001 Clojure: an early `^` is silently dropped](001-clojure-early-return.md) | Filed as [#432](https://github.com/gavr123456789/Niva/issues/432) (2026-10-22). Fix opened as [#433](https://github.com/gavr123456789/Niva/pull/433) ([draft](001-clojure-early-return-pr.md)). |
 
 ## Self-hosted compiler
 
 Found while porting to the self-hosted compiler
 ([series 001](../design/implementation/001-self-hosted/README.md)), on
-`self-host` at `6af8f9f6`. Not drafted yet; most likely to bite first:
+`self-host` at `6af8f9f6`. Most likely to bite first; only the first is
+filed so far:
 
-1. **Clojure:** `^` inside `ifTrue: [...]` is dropped. The method carries
-   on and returns the wrong value, with no error: `this > 0 ifTrue:
-   [^ true]` followed by `false` always gives `false`.
+1. **Clojure:** a `^` before the end of a method is dropped, with no
+   error, and the method carries on to return the wrong value. It
+   happens in a branch of `ifTrue:`, `ifFalse:`, `ifTrue:ifFalse:` and
+   `match`, and in loops: `this > 0 ifTrue: [^ "positive"]` followed by
+   `"not positive"` always gives `"not positive"`. Filed as
+   [#432](https://github.com/gavr123456789/Niva/issues/432)
+   ([draft](001-clojure-early-return.md)), fix in
+   [#433](https://github.com/gavr123456789/Niva/pull/433).
 2. **Clojure:** a type declared in one file can't be used from another.
    The generated code names a class that doesn't exist:
    `niva.generated.mpl.tree.mpl.tree_Num` for a file in a folder (the
