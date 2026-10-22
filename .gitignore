@@ -1,0 +1,3 @@
+# `niva build` output and `niva dev` / `> expr` debug data
+*.jar
+devModeData.json

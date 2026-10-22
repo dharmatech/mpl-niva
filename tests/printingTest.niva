@@ -1,0 +1,45 @@
+Test atoms = [
+  Assert that: 3 num toString equals: "3"
+  Assert that: (Num value: -3) toString equals: "-3"
+  Assert that: "x" sym toString equals: "x"
+]
+
+Test productBindsTighterThanSum = [
+  x = "x" sym
+  y = "y" sym
+  Assert that: (x + 2 num * y) toString equals: "x + 2 * y"
+  Assert that: ((x + 2 num) * y) toString equals: "(x + 2) * y"
+]
+
+Test nestingShowsUntilSimplified = [
+  x = "x" sym
+  y = "y" sym
+  z = "z" sym
+  Assert that: (x + y + z) toString equals: "(x + y) + z"
+  Assert that: (x * (y * z)) toString equals: "x * (y * z)"
+  Assert that: (Sum terms: {x y z}) toString equals: "x + y + z"
+]
+
+Test powerParentheses = [
+  x = "x" sym
+  y = "y" sym
+  Assert that: (x pow: 2 num) toString equals: "x^2"
+  Assert that: ((x + y) pow: 2 num) toString equals: "(x + y)^2"
+  Assert that: ((x * y) pow: 2 num) toString equals: "(x * y)^2"
+  Assert that: ((x pow: 2 num) pow: 3 num) toString equals: "(x^2)^3"
+  Assert that: (x pow: (y pow: 2 num)) toString equals: "x^(y^2)"
+  Assert that: (x pow: (Num value: -1)) toString equals: "x^(-1)"
+  Assert that: ((Num value: -2) pow: x) toString equals: "(-2)^x"
+]
+
+Test negativeTermsAndFactors = [
+  x = "x" sym
+  Assert that: (x + (Num value: -1)) toString equals: "x + -1"
+  Assert that: ((Num value: -1) * x) toString equals: "-1 * x"
+]
+
+Test emptySumAndProduct = [
+  none::List::Expr = {}
+  Assert that: (Sum terms: none) toString equals: "0"
+  Assert that: (Product factors: none) toString equals: "1"
+]

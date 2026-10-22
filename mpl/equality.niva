@@ -1,0 +1,28 @@
+// Structural equality. Niva's `==` on union values compares identity:
+// `(Sym name: "x") == (Sym name: "x")` is false.
+
+extend Expr [
+  /// Same shape and same leaves. Order matters: `x + y` isn't `y + x`.
+  on same(other): Expr -> Bool = | this
+  | Num => | other
+    | Num => value == other value
+    |=> false
+  | Sym => | other
+    | Sym => name == other name
+    |=> false
+  | Sum => | other
+    | Sum => terms same: other terms
+    |=> false
+  | Product => | other
+    | Product => factors same: other factors
+    |=> false
+  | Power => | other
+    | Power => (base same: other base) && (exp same: other exp)
+    |=> false
+]
+
+/// Same length, and each pair the same. Lists have no `all:`, hence `any:`.
+List::Expr same(other): List::Expr -> Bool = [
+  this count != other count => ^ false
+  ^ (this mapIndexed: [i, e -> e same: (other at: i)]) any: [it not], not
+]
