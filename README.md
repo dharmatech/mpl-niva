@@ -84,8 +84,10 @@ Found while building this, with Niva `402e02a6`:
 - There's no overloading on the argument type: `Expr + Expr` and
   `Expr + Int` can't both exist, and `Int + Expr` clashes with
   `Int + Int`. Hence `2 num`.
-- **Compiler bug:** a negative literal as a receiver, as in `-1 num`,
-  becomes Kotlin `-1.num()`, which is `-(1.num())`. Use `Num value: -1`.
+- **Compiler bug** ([#430](https://github.com/gavr123456789/Niva/issues/430)):
+  a negative literal as the receiver of a unary message, as in `-1 num`,
+  becomes Kotlin `-1.num()`, which is `-(1.num())`. Write `(-1) num` or
+  `Num value: -1`.
 - **Compiler bug:** `List::Expr new` generates broken Kotlin. Use a typed
   empty literal: `none::List::Expr = {}`.
 - Lists have no `all:`; use `any:` and `not`.
