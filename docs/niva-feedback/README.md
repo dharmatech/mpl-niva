@@ -13,7 +13,7 @@ filed. Once filed, the header links the issue.
 
 | Draft | Status |
 |---|---|
-| [000 negative literal as a unary receiver](000-negative-literal-unary-receiver.md) | Filed as [#430](https://github.com/gavr123456789/Niva/issues/430) (2026-10-22). |
+| [000 negative literal as a unary receiver](000-negative-literal-unary-receiver.md) | Filed as [#430](https://github.com/gavr123456789/Niva/issues/430) (2026-10-22). Fix opened as [#431](https://github.com/gavr123456789/Niva/pull/431) ([draft](000-negative-literal-unary-receiver-pr.md)). |
 
 Found but not drafted yet, in the order we plan to file them:
 
