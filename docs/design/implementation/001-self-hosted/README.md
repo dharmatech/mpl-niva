@@ -1,6 +1,6 @@
 # 001 self-hosted
 
-**Status:** Done; not yet committed.
+**Status:** Done; landed at `5cbdef7` (2026-10-22).
 
 Moves the project from the legacy Kotlin compiler to Niva's self-hosted
 compiler, NivaInNiva, on the `self-host` branch. Ports
