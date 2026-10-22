@@ -4,14 +4,9 @@ A small computer algebra simplifier written in
 [Niva](https://github.com/gavr123456789/Niva), to exercise the language.
 
 It follows a line of simplifiers based on Joel S. Cohen's *Computer
-Algebra and Symbolic Computation* books:
-
-- [mpl](https://github.com/dharmatech/mpl), for R6RS Scheme
-- [Symbolism](https://github.com/dharmatech/Symbolism), for C#, based on mpl
-- [symbolism.lean](https://github.com/dharmatech/symbolism.lean), a small
-  simplifier in Lean
-- `examples/mpl` in [Aloe](https://github.com/dharmatech/2026-09-02-aloe-racket),
-  a small simplifier in Aloe
+Algebra and Symbolic Computation* books: mpl for Scheme, Symbolism for
+C#, and small versions in Lean and Aloe. [Lineage](docs/lineage.md) has
+the story.
 
 Niva's only polymorphism is tagged unions, so an expression is a `union`
 and the algorithms `match` on it, as in the Lean version. Sums and
