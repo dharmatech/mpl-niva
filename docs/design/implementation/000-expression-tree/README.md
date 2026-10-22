@@ -67,14 +67,15 @@ The project began with a throwaway spike to answer these questions:
 | Can a union branch hold a list of the union? | Yes: `Sum terms: List::Expr` works. |
 | What does `==` do on union values? | Compares identity. Hence `same:`. |
 | How far does `match` go? | Branch type only, but matches nest. `same:` matches `this`, then `other`. |
-| Does a custom `toString` work? | Only per branch, and only in the union's own file (see the README's Niva notes). |
+| Does a custom `toString` work? | Only per branch, and only in the union's own file (see the [legacy Niva notes](../../../niva-notes-legacy.md)). |
 | Operators? | `+` and `*` work on `Expr`, and `*` binds tighter. `^` is return and `**` isn't a selector, so power is `pow:`. No overloading by argument type, so no `2 + x`. |
 | Can expressions be sorted? | `sortedWith:` with typed lambda parameters. `String` has no ordering, but Kotlin's `compareTo` can be bound with `@emit`. Canonical ordering of symbols will need that. |
 | `niva run`, `niva test`? | Both work, and both exit 0 on failure. |
 
 Two compiler bugs turned up while writing the real code: `-1 num`
 miscompiles, and so does `List::Expr new`. They and the workarounds are
-in the [README's Niva notes](../../../../README.md#niva-notes).
+in the [legacy Niva notes](../../../niva-notes-legacy.md), which were
+the README's Niva notes until [001](../001-self-hosted/README.md).
 
 ## Next
 

@@ -1,0 +1,35 @@
+type PrintingChecks
+
+constructor PrintingChecks all -> List(Check) = [
+  x = "x" sym
+  y = "y" sym
+  z = "z" sym
+  none::List(Expr) = {}
+  {
+    (Check named: "number" got: 3 num text want: "3")
+    (Check named: "negative number" got: -3 num text want: "-3")
+    (Check named: "symbol" got: x text want: "x")
+
+    // No precedence: binary messages go left to right.
+    (Check named: "left to right" got: (x + 2 num * y) text want: "(x + 2) * y")
+    (Check named: "product in a sum" got: (x + (2 num * y)) text want: "x + 2 * y")
+
+    (Check named: "sum in a sum" got: (x + y + z) text want: "(x + y) + z")
+    (Check named: "product in a product" got: (x * (y * z)) text want: "x * (y * z)")
+    (Check named: "three terms" got: (Sum terms: {x y z}) text want: "x + y + z")
+
+    (Check named: "power" got: (x pow: 2 num) text want: "x^2")
+    (Check named: "sum to a power" got: ((x + y) pow: 2 num) text want: "(x + y)^2")
+    (Check named: "product to a power" got: ((x * y) pow: 2 num) text want: "(x * y)^2")
+    (Check named: "power of a power" got: ((x pow: 2 num) pow: 3 num) text want: "(x^2)^3")
+    (Check named: "power exponent" got: (x pow: (y pow: 2 num)) text want: "x^(y^2)")
+    (Check named: "negative exponent" got: (x pow: -1 num) text want: "x^(-1)")
+    (Check named: "negative base" got: (-2 num pow: x) text want: "(-2)^x")
+
+    (Check named: "negative term" got: (x + -1 num) text want: "x + -1")
+    (Check named: "negative factor" got: (-1 num * x) text want: "-1 * x")
+
+    (Check named: "empty sum" got: (Sum terms: none) text want: "0")
+    (Check named: "empty product" got: (Product factors: none) text want: "1")
+  }
+]

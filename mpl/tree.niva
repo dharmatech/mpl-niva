@@ -3,18 +3,19 @@
 union Expr =
 | Num     value: Int
 | Sym     name: String
-| Sum     terms: List::Expr
-| Product factors: List::Expr
+| Sum     terms: List(Expr)
+| Product factors: List(Expr)
 | Power   base: Expr exp: Expr
 
-/// `3 num` is the expression 3.
+/// `3 num` is the expression 3, and `-1 num` is -1.
 Int num -> Expr = Num value: this
 
 /// `"x" sym` is the symbol x.
 String sym -> Expr = Sym name: this
 
 // The operators build the expression as written; nothing is simplified.
-// `x + y + z` is a sum inside a sum.
+// `x + y + z` is a sum inside a sum. Binary messages have no precedence
+// and go left to right, so `x + 2 num * y` is `(x + 2) * y`.
 extend Expr [
   on + other::Expr -> Expr = Sum terms: {this other}
   on * other::Expr -> Expr = Product factors: {this other}
@@ -22,45 +23,3 @@ extend Expr [
   /// `^` is Niva's return, so power is a keyword message.
   on pow(n): Expr -> Expr = Power base: this exp: n
 ]
-
-// Printing, in math notation with only the parentheses the structure
-// needs. A sum inside a sum keeps its parentheses, so unsimplified input
-// shows its shape: `(x + y) + z`.
-
-extend Expr [
-  /// How tightly this binds as an operand: sums loosest, atoms tightest.
-  /// A negative number binds like a power, so `x^(-1)` and `(-2)^x` get
-  /// parentheses and `x + -1` doesn't.
-  on precedence -> Int = | this
-  | Sum     => 1
-  | Product => 2
-  | Power   => 3
-  | Num     => value < 0 ifTrue: [3] ifFalse: [4]
-  | Sym     => 4
-
-  /// This as an operand of something at `level`, in parentheses unless it
-  /// binds tighter.
-  on operandText(level): Int -> String =
-    this precedence > level
-      ifTrue: [this toString]
-      ifFalse: ["(" + this toString + ")"]
-]
-
-// Defined per branch: a `toString` on the union itself isn't used when
-// printing. Niva copies each branch's `toString` into that branch's class,
-// in this file's package, so everything it calls must be in this file too.
-Num toString -> String = value toString
-
-Sym toString -> String = name
-
-Sum toString -> String =
-  terms isEmpty
-    ifTrue: ["0"]
-    ifFalse: [terms map: [it operandText: 1], joinWith: " + "]
-
-Product toString -> String =
-  factors isEmpty
-    ifTrue: ["1"]
-    ifFalse: [factors map: [it operandText: 2], joinWith: " * "]
-
-Power toString -> String = (base operandText: 3) + "^" + (exp operandText: 3)

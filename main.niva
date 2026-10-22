@@ -1,19 +1,22 @@
-// `niva run`: builds a few expressions and prints each one beside the Niva
-// that built it. Nothing is simplified yet.
+// `tools/nin run --backend=go`: builds a few expressions and prints each
+// one beside the Niva that built it. Nothing is simplified yet.
 
-String show(e): Expr -> Unit = (this + "   =>   " + e toString) echo
+String show(e): Expr -> Unit = [
+  (this + "   =>   " + e text) echo
+  ()
+]
 
 x = "x" sym
 y = "y" sym
 z = "z" sym
 
+"x + (2 num * y)" show: x + (2 num * y)
 "x + 2 num * y" show: x + 2 num * y
-"(x + 2 num) * y" show: (x + 2 num) * y
 "x + y + z" show: x + y + z
 "x * (y * z)" show: x * (y * z)
 "(x + y) pow: 2 num" show: ((x + y) pow: 2 num)
-"x pow: (Num value: -1)" show: (x pow: (Num value: -1))
-"(Num value: -2) pow: x" show: ((Num value: -2) pow: x)
+"x pow: -1 num" show: (x pow: -1 num)
+"-2 num pow: x" show: (-2 num pow: x)
 "(x pow: 2 num) pow: 3 num" show: ((x pow: 2 num) pow: 3 num)
 "x * y pow: z + 1 num" show: (x * y pow: z + 1 num)
 

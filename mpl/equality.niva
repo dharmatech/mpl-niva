@@ -1,5 +1,6 @@
-// Structural equality. Niva's `==` on union values compares identity:
-// `(Sym name: "x") == (Sym name: "x")` is false.
+// Structural equality. `==` compares structure too, but on the Go backend
+// it fails at run time for sums and products: Go can't compare the lists
+// inside them. `same:` works everywhere.
 
 extend Expr [
   /// Same shape and same leaves. Order matters: `x + y` isn't `y + x`.
@@ -21,8 +22,9 @@ extend Expr [
     |=> false
 ]
 
-/// Same length, and each pair the same. Lists have no `all:`, hence `any:`.
-List::Expr same(other): List::Expr -> Bool = [
-  this count != other count => ^ false
-  ^ (this mapIndexed: [i, e -> e same: (other at: i)]) any: [it not], not
-]
+/// Same length, and no pair differs. Lists have no `all:`, and `any:` is
+/// missing from the Clojure runtime, hence `filter:`.
+List(Expr) same(other): List(Expr) -> Bool =
+  this count != other count
+    ifTrue: [false]
+    ifFalse: [((this mapIndexed: [i, e -> e same: (other at: i)]) filter: [it not]) isEmpty]

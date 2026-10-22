@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Builds Niva's self-hosted compiler (NivaInNiva) from a pinned commit of
+# the self-host branch, in its own clone. Your installed niva and ~/.niva
+# are left alone: the bootstrap compiler gets a private home in the clone.
+#
+#   tools/build-self-hosted-niva
+#
+# NIVA_SELF_HOST overrides where the clone lives.
+set -euo pipefail
+
+repo=https://github.com/gavr123456789/Niva.git
+commit=6af8f9f6   # self-host, 2026-10-19
+dir=${NIVA_SELF_HOST:-$HOME/src/Niva-self-host}
+
+if [ ! -d "$dir" ]; then
+  git clone --branch self-host "$repo" "$dir"
+fi
+cd "$dir"
+
+# Move to the pinned commit, but never over local changes.
+if [ "$(git rev-parse HEAD)" != "$(git rev-parse --verify -q "$commit^{commit}" || echo missing)" ]; then
+  if [ -n "$(git status --porcelain)" ]; then
+    echo "build-self-hosted-niva: $dir has local changes; not moving it to $commit" >&2
+    exit 1
+  fi
+  git cat-file -e "$commit^{commit}" 2>/dev/null || git fetch origin self-host
+  git checkout --detach "$commit"
+fi
+
+# local/ holds the private home; keep it out of git status.
+mkdir -p local/home
+grep -qx 'local/' .git/info/exclude || echo 'local/' >> .git/info/exclude
+
+echo "== stage 1: the branch's Kotlin compiler"
+(cd Niva/Niva && ./gradlew installDist -q)
+
+echo "== stage 2: NivaInNiva, compiled by stage 1"
+# The Kotlin compiler exits 0 even when the build fails, and keeps the old
+# jar, so remove it first and check it came back.
+cd Niva/NivaInNiva
+rm -f main.jar
+JAVA_OPTS="-Duser.home=$dir/local/home" ../Niva/build/install/niva/bin/niva build
+if [ ! -f main.jar ]; then
+  echo "build-self-hosted-niva: stage 2 failed; no main.jar" >&2
+  exit 1
+fi
+echo "== built $dir/Niva/NivaInNiva/main.jar at $commit"

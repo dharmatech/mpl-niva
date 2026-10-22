@@ -1,0 +1,15 @@
+// `tools/check`: runs every check, prints each failure, and ends with a
+// summary. The last line is `all N checks passed` only when every check
+// passes; tools/check looks for it, since the compiler's exit code is 0
+// even when the build fails.
+//
+// Not `test.niva`: the compiler leaves a file with that name out.
+
+checks = PrintingChecks all + EqualityChecks all
+failed = checks filter: [it ok not]
+failed forEach: [("FAIL " + it name + ": " + it detail) echo]
+
+total = checks count toString
+failed isEmpty
+  ifTrue: [("all " + total + " checks passed") echo]
+  ifFalse: [(failed count toString + " of " + total + " checks failed") echo]

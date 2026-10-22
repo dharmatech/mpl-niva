@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Runs check.niva and fails unless its last line says every check passed.
+# The compiler exits 0 even when the build fails, so this reads the output.
+#
+#   tools/check                  # Go backend
+#   tools/check --backend=clj
+set -uo pipefail
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+cd "$root"
+[ $# -eq 0 ] && set -- --backend=go
+
+out=$("$root/tools/nin" run check.niva "$@" 2>&1)
+printf '%s\n' "$out"
+[[ $(printf '%s\n' "$out" | tail -n 1) =~ ^all\ [0-9]+\ checks\ passed$ ]]

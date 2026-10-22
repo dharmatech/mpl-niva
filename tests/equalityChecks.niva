@@ -1,0 +1,22 @@
+type EqualityChecks
+
+constructor EqualityChecks all -> List(Check) = [
+  x = "x" sym
+  y = "y" sym
+  {
+    (Check named: "same number" holds: (3 num same: 3 num))
+    (Check named: "different numbers" holds: (3 num same: 4 num) not)
+    (Check named: "same symbol" holds: (x same: "x" sym))
+    (Check named: "different symbols" holds: (x same: y) not)
+    (Check named: "number and symbol" holds: (1 num same: x) not)
+
+    (Check named: "same sum" holds: ((x + y) same: (x + y)))
+    (Check named: "operand order" holds: ((x + y) same: (y + x)) not)
+    (Check named: "sum and product" holds: ((x + y) same: (x * y)) not)
+    (Check named: "operand count" holds: ((Sum terms: {x y}) same: (Sum terms: {x y x})) not)
+
+    (Check named: "same power" holds: ((x pow: 2 num) same: (x pow: 2 num)))
+    (Check named: "different exponent" holds: ((x pow: 2 num) same: (x pow: 3 num)) not)
+    (Check named: "base and exponent swapped" holds: ((x pow: 2 num) same: (2 num pow: x)) not)
+  }
+]

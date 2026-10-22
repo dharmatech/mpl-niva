@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Runs Niva's self-hosted compiler, as built by tools/build-self-hosted-niva.
+#
+#   tools/nin run main.niva --backend=go
+#   tools/nin --help
+set -euo pipefail
+
+jar=${NIVA_SELF_HOST:-$HOME/src/Niva-self-host}/Niva/NivaInNiva/main.jar
+if [ ! -f "$jar" ]; then
+  echo "nin: $jar not found; run tools/build-self-hosted-niva" >&2
+  exit 1
+fi
+exec java -jar "$jar" "$@"

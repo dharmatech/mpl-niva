@@ -1,0 +1,39 @@
+// Printing, in math notation with only the parentheses the structure
+// needs. A sum inside a sum keeps its parentheses, so unsimplified input
+// shows its shape: `(x + y) + z`.
+//
+// It's `text` rather than `toString`, which the compilers treat
+// specially: on Clojure, `e toString` ignores a `toString` declared on
+// the union's branches.
+
+extend Expr [
+  on text -> String = | this
+  | Num     => value toString
+  | Sym     => name
+  | Sum     => this operands: terms joinedBy: " + " level: 1 ifNone: "0"
+  | Product => this operands: factors joinedBy: " * " level: 2 ifNone: "1"
+  | Power   => (base operandText: 3) + "^" + (exp operandText: 3)
+
+  /// How tightly this binds as an operand: sums loosest, atoms tightest.
+  /// A negative number binds like a power, so `x^(-1)` and `(-2)^x` get
+  /// parentheses and `x + -1` doesn't.
+  on precedence -> Int = | this
+  | Sum     => 1
+  | Product => 2
+  | Power   => 3
+  | Num     => value < 0 ifTrue: [3] ifFalse: [4]
+  | Sym     => 4
+
+  /// This as an operand of something at `level`, in parentheses unless it
+  /// binds tighter.
+  on operandText(level): Int -> String =
+    this precedence > level
+      ifTrue: [this text]
+      ifFalse: ["(" + this text + ")"]
+
+  /// A sum's or product's operands, joined; `none` when there are none.
+  on operands(list): List(Expr) joinedBy: String level: Int ifNone(none): String -> String =
+    list isEmpty
+      ifTrue: [none]
+      ifFalse: [list map: [it operandText: level], joinWith: joinedBy]
+]

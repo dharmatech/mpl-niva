@@ -1,0 +1,10 @@
+/// One expectation, and whether it held. `detail` says what was seen.
+type Check name: String ok: Bool detail: String
+
+/// Passes when `got` is `want`.
+constructor Check named(name): String got(got): String want(want): String -> Check =
+  Check name: name ok: got == want detail: "got " + got + ", expected " + want
+
+/// Passes when `holds` is true.
+constructor Check named(name): String holds(holds): Bool -> Check =
+  Check name: name ok: holds detail: "didn't hold"
