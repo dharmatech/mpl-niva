@@ -1,6 +1,6 @@
 # 004 Go: `==` on a type that holds a list
 
-**Status:** Drafted 2026-10-23, not filed.
+**Status:** Filed 2026-10-23 as [#439](https://github.com/gavr123456789/Niva/issues/439).
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `3746ffb7` (2026-10-23), first found
 at `6af8f9f6` (2026-10-19)
@@ -54,7 +54,7 @@ Not verified: neither 1 nor 2 is spiked, and that fixing the `String`
 argument alone would still fail on Go is read from the code (`IrOpBin`
 becomes Go's `==`), not built.
 
-Everything below the line is the issue as it would be filed.
+Everything below the line is the issue as filed.
 
 ---
 
