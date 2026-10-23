@@ -67,6 +67,8 @@ found. Generate the code with `tools/nin run … --backend=clj`, then in
 lg -source-paths generated:. run.lg
 ```
 
-`lg` has no `-m`. `lg -e` works too but prints the last value, an extra
+`lg` has no `-m` yet; we've asked for one in
+[#1096](https://github.com/nooga/let-go/issues/1096)
+([draft](let-go-feedback/000-lg-main-option.md)). `lg -e` works too but prints the last value, an extra
 line of output. Build `lg` from let-go's `main`: Niva's runtime needs
 [#1085](https://github.com/nooga/let-go/pull/1085), merged 2026-10-22.

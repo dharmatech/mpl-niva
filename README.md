@@ -77,4 +77,6 @@ Binary messages have no precedence and go left to right, so
   folder per change, in order, with what was done and why.
 - [Niva feedback](docs/niva-feedback/README.md): bugs found, and the ones
   filed.
+- [let-go feedback](docs/let-go-feedback/README.md): suggestions for
+  let-go, found running Niva's Clojure output on it.
 - [Lineage](docs/lineage.md): the simplifiers this one descends from.
