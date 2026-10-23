@@ -6,6 +6,9 @@
 ([draft](003-go-statement-match-fixes-pr.md)), which it builds on, was
 merged. Its "Fixes #435" links it from the issue. Meant as something
 concrete to discuss the design around, whether or not he takes it.
+Announced on Discord as a draft for discussion; Gavr: "hmm, nice, on the
+first glance, especially on tests its exactly the thing, will look more
+thoughtful later". No GitHub review yet.
 **Issue:** [#435](https://github.com/gavr123456789/Niva/issues/435) ([draft](002-go-return-inside-value.md))
 **Branch:** [`dharmatech/Niva:fix-435-go-match-temp`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:fix-435-go-match-temp),
 two commits on `self-host` at `cf25e6af` (#436, squashed): `5d30f8cc`
