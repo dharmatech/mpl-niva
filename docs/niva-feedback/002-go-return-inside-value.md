@@ -1,8 +1,11 @@
 # 002 Go: a `^` inside a value doesn't return from the method
 
 **Status:** Filed 2026-10-23 as [#435](https://github.com/gavr123456789/Niva/issues/435),
-after #433 and its follow-up #434 were merged. The PR waits for Gavr to
-pick an option.
+after #433 and its follow-up #434 were merged. Gavr proposed his own
+design on Discord; a [sketch](002-go-return-inside-value-pr-temp.md) of
+it is drafted as a draft PR, to open once
+[#436](https://github.com/gavr123456789/Niva/pull/436), which it builds
+on, is merged.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `b00ec027` (2026-10-23), first found
 at `6af8f9f6` (2026-10-19)
@@ -39,6 +42,13 @@ nah, here the problem is different, its just about IrMatchExpr" and
 "^= is not implemented yet, but here its not an IrCall anyway". So he
 sees it as the Go backend's handling of a match whose value is used,
 which is what A changes. Whether to open A's PR was still open.
+
+Then he proposed his own fix: "replacing each match expression not with
+lambda that calls itself and returns the value, but with a temp
+variable, and assign that variable in each branch", for every match,
+"since lambdas is overhead". He's aware that evaluation order and `&&`
+/ `||` need care. A sketch of it, built on A's branch, is drafted as a
+draft PR ([draft](002-go-return-inside-value-pr-temp.md)).
 
 Both are spiked, unpushed, in `~/src/Niva-self-host-go-value`, a
 worktree of the self-host clone, rebased on `b00ec027`, after Gavr moved

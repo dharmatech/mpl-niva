@@ -15,7 +15,8 @@ filed. Once filed, the header links the issue.
 |---|---|
 | [000 negative literal as a unary receiver](000-negative-literal-unary-receiver.md) | Filed as [#430](https://github.com/gavr123456789/Niva/issues/430) (2026-10-22). Fixed by [#431](https://github.com/gavr123456789/Niva/pull/431) ([draft](000-negative-literal-unary-receiver-pr.md)), merged the same day into `main` and `self-host`. |
 | [001 Clojure: an early `^` is silently dropped](001-clojure-early-return.md) | Filed as [#432](https://github.com/gavr123456789/Niva/issues/432) (2026-10-22), closed the same day. Fixed by [#433](https://github.com/gavr123456789/Niva/pull/433) ([draft](001-clojure-early-return-pr.md)), cut down to the compile error after Gavr agreed it needs at least that, and merged into `self-host` the same day. Follow-up for his review: [#434](https://github.com/gavr123456789/Niva/pull/434) ([draft](001-clojure-early-return-followup-pr.md)), merged 2026-10-23. |
-| [002 Go: a `^` inside a value doesn't return from the method](002-go-return-inside-value.md) | Filed as [#435](https://github.com/gavr123456789/Niva/issues/435) (2026-10-23). The PR waits for Gavr to pick an option. A PR is drafted for each option: [make it work](002-go-return-inside-value-pr.md), the one suggested, or [forbid it](002-go-return-inside-value-pr-forbid.md). |
+| [002 Go: a `^` inside a value doesn't return from the method](002-go-return-inside-value.md) | Filed as [#435](https://github.com/gavr123456789/Niva/issues/435) (2026-10-23). Gavr proposed his own design on Discord: every match whose value is used becomes a temp variable assigned in each branch. A [sketch of it](002-go-return-inside-value-pr-temp.md) is drafted as a draft PR, to open once 003 ([#436](https://github.com/gavr123456789/Niva/pull/436)) is merged. The drafts for the issue's options, [make it work](002-go-return-inside-value-pr.md) and [forbid it](002-go-return-inside-value-pr-forbid.md), stay as fallbacks. |
+| [003 Go: three bugs in a match used as a statement](003-go-statement-match-fixes-pr.md) | A PR without an issue: opened as [#436](https://github.com/gavr123456789/Niva/pull/436) (2026-10-23). Split out of the 002 sketch, which waits for it to be merged. |
 
 ## Self-hosted compiler
 
@@ -70,14 +71,14 @@ filed so far:
     `| this parse | Bad => it text echo |=> ("parsed " + it toString) echo`
     prints `negative`, then `parsed 0`. Two in one block declare `it`
     twice, and an `it` a branch doesn't use stops the build. Found while
-    spiking 002, whose option A fixes it first.
+    spiking 002, and fixed in [#436](https://github.com/gavr123456789/Niva/pull/436) ([draft](003-go-statement-match-fixes-pr.md)).
 15. **Go:** a `throw` that ends a block, as in
     `this < 0 ifTrue: [(Bad text: "negative") throw]`, becomes
     `core.Error__throw()` without the error: the build fails, or the
     error is lost. Found while spiking 002.
 16. **Go:** `ifTrue:` alone as a value, `s = this > 0 ifTrue: ["x" echo]`,
     doesn't build: `func() {…}() (no value) used as value`. Found while
-    spiking 002.
+    spiking 002, and fixed in its [sketch](002-go-return-inside-value-pr-temp.md).
 
 Gaps rather than bugs: neither runtime has `sortedWith:` or `all:`.
 
