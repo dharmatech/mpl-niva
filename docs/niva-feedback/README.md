@@ -15,6 +15,7 @@ filed. Once filed, the header links the issue.
 |---|---|
 | [000 negative literal as a unary receiver](000-negative-literal-unary-receiver.md) | Filed as [#430](https://github.com/gavr123456789/Niva/issues/430) (2026-10-22). Fixed by [#431](https://github.com/gavr123456789/Niva/pull/431) ([draft](000-negative-literal-unary-receiver-pr.md)), merged the same day into `main` and `self-host`. |
 | [001 Clojure: an early `^` is silently dropped](001-clojure-early-return.md) | Filed as [#432](https://github.com/gavr123456789/Niva/issues/432) (2026-10-22), closed the same day. Fixed by [#433](https://github.com/gavr123456789/Niva/pull/433) ([draft](001-clojure-early-return-pr.md)), cut down to the compile error after Gavr agreed it needs at least that, and merged into `self-host` the same day. |
+| [002 Go: a `^` inside a value doesn't return from the method](002-go-return-inside-value.md) | Drafted, to be filed now that #433 is merged, after re-checking it on the new `self-host`. A PR is drafted for each option: [make it work](002-go-return-inside-value-pr.md), the one suggested, or [forbid it](002-go-return-inside-value-pr-forbid.md). |
 
 ## Self-hosted compiler
 
@@ -32,31 +33,51 @@ filed so far:
    ([draft](001-clojure-early-return.md)). Since
    [#433](https://github.com/gavr123456789/Niva/pull/433), merged the
    same day, such a `^` is a compile error instead.
-2. **Clojure:** a type declared in one file can't be used from another.
+2. **Go:** a `^` inside a value doesn't return from the method. In
+   `s = this > 0 ifTrue: [^ "returned"] ifFalse: ["kept"]` the value
+   is an anonymous function, which the `^` only leaves, so `s` is
+   `"returned"` and the method carries on. Drafted as
+   [002](002-go-return-inside-value.md), to be filed after
+   re-checking it on the new `self-host`, with a fix and a check
+   spiked.
+3. **Clojure:** a type declared in one file can't be used from another.
    The generated code names a class that doesn't exist:
    `niva.generated.mpl.tree.mpl.tree_Num` for a file in a folder (the
    path is doubled), an unresolved `niva.generated.tree/tree_Num` for one
    at the root.
-3. **Both:** compile errors exit 0. On Clojure, a run-time error exits 0
+4. **Both:** compile errors exit 0. On Clojure, a run-time error exits 0
    too.
-4. **Go:** a list literal of branch values given as a `List(Expr)`, such
+5. **Go:** a list literal of branch values given as a `List(Expr)`, such
    as `Sum terms: {(Sym name: "x")}`, becomes a Go `[]main_Sym`, which
    doesn't compile.
-5. **Go:** `^ (…) any: […], not` generates an empty `return` before the
+6. **Go:** `^ (…) any: […], not` generates an empty `return` before the
    real one, so the Go build fails.
-6. **Go:** `==` on two sums doesn't compile when both are literals, and
+7. **Go:** `==` on two sums doesn't compile when both are literals, and
    fails at run time when they're `Expr` values (Go can't compare the
    slices inside). The type checker accepts both.
-7. **Clojure:** `any:` passes the type checker but isn't in the runtime.
-8. **Clojure:** `e toString` ignores a `toString` declared on the union's
+8. **Clojure:** `any:` passes the type checker but isn't in the runtime.
+9. **Clojure:** `e toString` ignores a `toString` declared on the union's
    branches.
-9. `indexOfFirst:` is in both runtimes, but the type checker doesn't know
-   it.
-10. A file named `test.niva` at the root is silently left out of the
+10. `indexOfFirst:` is in both runtimes, but the type checker doesn't
+    know it.
+11. A file named `test.niva` at the root is silently left out of the
     sources, so it can't be the entry file.
-11. Top-level code in a file other than the entry file isn't
+12. Top-level code in a file other than the entry file isn't
     type-checked.
-12. The first parse error we hit gave a line and column but no file.
+13. The first parse error we hit gave a line and column but no file.
+14. **Go:** a match on errors used as a statement runs its else branch
+    after an error branch too, with the zero value as `it`: for -5,
+    `| this parse | Bad => it text echo |=> ("parsed " + it toString) echo`
+    prints `negative`, then `parsed 0`. Two in one block declare `it`
+    twice, and an `it` a branch doesn't use stops the build. Found while
+    spiking 002, whose option A fixes it first.
+15. **Go:** a `throw` that ends a block, as in
+    `this < 0 ifTrue: [(Bad text: "negative") throw]`, becomes
+    `core.Error__throw()` without the error: the build fails, or the
+    error is lost. Found while spiking 002.
+16. **Go:** `ifTrue:` alone as a value, `s = this > 0 ifTrue: ["x" echo]`,
+    doesn't build: `func() {…}() (no value) used as value`. Found while
+    spiking 002.
 
 Gaps rather than bugs: neither runtime has `sortedWith:` or `all:`.
 
