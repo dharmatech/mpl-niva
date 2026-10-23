@@ -45,9 +45,13 @@ filed so far:
    The generated code names a class that doesn't exist:
    `niva.generated.mpl.tree.mpl.tree_Num` for a file in a folder (the
    path is doubled), an unresolved `niva.generated.tree/tree_Num` for one
-   at the root.
+   at the root. The record is declared with a dot in its name,
+   `(defrecord mpl.tree_Num [value])`, which Babashka and JVM Clojure
+   read as a class. let-go accepts it, so MPL runs as laid out on `lg`
+   ([series 002](../design/implementation/002-let-go/README.md)).
 4. **Both:** compile errors exit 0. On Clojure, a run-time error exits 0
-   too.
+   too, though `bb` and `lg` exit 1 when run directly: `nin run` drops
+   it.
 5. **Go:** a list literal of branch values given as a `List(Expr)`, such
    as `Sum terms: {(Sym name: "x")}`, becomes a Go `[]main_Sym`, which
    doesn't compile.
@@ -79,6 +83,19 @@ filed so far:
 16. **Go:** `ifTrue:` alone as a value, `s = this > 0 ifTrue: ["x" echo]`,
     doesn't build: `func() {…}() (no value) used as value`. Found while
     spiking 002, and fixed in its [sketch](002-go-return-inside-value-pr-temp.md).
+17. **Clojure:** `+` on two lists calls `niva.core/List__+`, which the
+    runtime doesn't define. It has `List__plus`, the name Go uses: the
+    Go backend turns `+` into `plus` (`goNames.niva`), and the Clojure
+    backend doesn't. `check.niva`'s `PrintingChecks all + EqualityChecks all`
+    stops there. Found trying let-go
+    ([series 002](../design/implementation/002-let-go/README.md)).
+18. **Clojure:** `/` on two `Int`s becomes Clojure's `/`, which makes a
+    ratio: `17 / 5` is `17/5` and `-7 / 2` is `-7/2`, where Go gives 3
+    and -3. A loop halving `n` while it's over 1 ends at `5/8`. Found
+    trying let-go.
+19. **Clojure:** a set literal with a repeated item, `#(1 2 2 3)`,
+    becomes `#{1 2 2 3}`, which Clojure won't read, so the program
+    doesn't load. Found trying let-go.
 
 Gaps rather than bugs: neither runtime has `sortedWith:` or `all:`.
 

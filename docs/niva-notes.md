@@ -2,8 +2,11 @@
 
 What to know when writing Niva for this project, with the self-hosted
 compiler at `self-host` `6af8f9f6` (2026-10-19). The Go backend is the
-one we use; Clojure differences are marked. The bugs behind the
-workarounds are listed for filing in [Niva feedback](niva-feedback/README.md).
+one we use; Clojure differences are marked, and hold on Babashka and
+let-go alike unless noted
+([series 002](design/implementation/002-let-go/README.md)). The bugs
+behind the workarounds are listed for filing in
+[Niva feedback](niva-feedback/README.md).
 The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-legacy.md).
 
 ## The language
@@ -31,8 +34,15 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
 
 - **`^` inside `ifTrue:` is dropped on Clojure**, so the method carries
   on. Write the whole method as an `ifTrue:ifFalse:` expression instead.
-- **A type used from another file can't be found on Clojure.** No
-  workaround short of one file, so we don't use Clojure for now.
+- **A type used from another file can't be found on Babashka or JVM
+  Clojure.** let-go accepts the generated code. No workaround on the
+  others short of one file, so we don't use Clojure for now.
+- **`/` on two `Int`s gives a ratio on Clojure**: `17 / 5` is `17/5`,
+  where Go gives 3. Nothing in MPL divides yet; when it does, check it
+  on Go.
+- **A set literal with a repeated item doesn't load on Clojure**:
+  `#(1 2 2 3)` keeps the whole program from loading. Write each item
+  once.
 - **`^ (…) any: […], not` doesn't compile on Go** (a stray empty
   `return`). Name the value, then return it.
 - **A list literal of branch values**, such as `{(Sym name: "x")}` given
@@ -47,11 +57,15 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   writing our own sort.
 - No `all:`. `any:` passes the type checker but is missing from the
   Clojure runtime, so we use `filter:` and `isEmpty`.
+- `+` on two lists is missing from the Clojure runtime: the call is to
+  `List__+`, and the runtime has `List__plus`. `check.niva` uses it, so
+  the checks can't run on Clojure even in one file.
 - `indexOfFirst:` is in both runtimes, but the type checker doesn't know
   it.
 
 ## Exit codes
 
 Compile errors exit 0 on both backends. A run-time error exits 1 on Go
-and 0 on Clojure. So `tools/check` reads the output instead: it passes
-only when the last line is `all N checks passed`.
+and 0 on Clojure, though `bb` and `lg` themselves exit 1; it's
+`nin run` that drops it. So `tools/check` reads the output instead: it
+passes only when the last line is `all N checks passed`.

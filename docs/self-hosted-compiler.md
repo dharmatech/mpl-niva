@@ -54,3 +54,19 @@ ignores.
 
 `tools/check` runs the checks, on Go unless told otherwise. It reads the
 output rather than the exit code, which is 0 even when the build fails.
+
+### On let-go
+
+The Clojure output also runs on [let-go](https://github.com/nooga/let-go)
+(`lg`), which the compiler doesn't know about.
+[Series 002](design/implementation/002-let-go/README.md) has what we
+found. Generate the code with `tools/nin run … --backend=clj`, then in
+`.niva_clj/` give `lg` a file holding `(require 'main) (main/-main)`:
+
+```bash
+lg -source-paths generated:. run.lg
+```
+
+`lg` has no `-m`. `lg -e` works too but prints the last value, an extra
+line of output. Build `lg` from let-go's `main`: Niva's runtime needs
+[#1085](https://github.com/nooga/let-go/pull/1085), merged 2026-10-22.
