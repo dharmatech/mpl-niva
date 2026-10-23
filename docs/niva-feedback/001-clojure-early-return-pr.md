@@ -12,6 +12,7 @@ block), on `self-host` at `6af8f9f6`, then force-pushed back to
 two are on `clj-early-return` in
 `~/src/Niva-self-host-clj-return`, a worktree of the self-host clone.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
+**Follow-up:** [#434](https://github.com/gavr123456789/Niva/pull/434) ([draft](001-clojure-early-return-followup-pr.md)), the `:key` shorthand from his review
 
 Opened minutes after the issue, as an option rather than the answer:
 the first commit alone fixes the silent part, and the second moves the
