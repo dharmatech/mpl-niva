@@ -1,6 +1,6 @@
 # 001 Clojure: an early `^` is silently dropped
 
-**Status:** Filed 2026-10-22 as [#432](https://github.com/gavr123456789/Niva/issues/432).
+**Status:** Filed 2026-10-22 as [#432](https://github.com/gavr123456789/Niva/issues/432), closed the same day once [#433](https://github.com/gavr123456789/Niva/pull/433) was merged into `self-host`.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `6af8f9f6` (2026-10-19)
 

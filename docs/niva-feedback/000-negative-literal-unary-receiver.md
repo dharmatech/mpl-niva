@@ -1,6 +1,6 @@
 # 000 negative literal as a unary receiver
 
-**Status:** Filed 2026-10-22 as [#430](https://github.com/gavr123456789/Niva/issues/430).
+**Status:** Filed 2026-10-22 as [#430](https://github.com/gavr123456789/Niva/issues/430), closed the same day by [#431](https://github.com/gavr123456789/Niva/pull/431).
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `main` at `ece36eb7` (2026-10-20)
 

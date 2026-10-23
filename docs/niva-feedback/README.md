@@ -13,8 +13,8 @@ filed. Once filed, the header links the issue.
 
 | Draft | Status |
 |---|---|
-| [000 negative literal as a unary receiver](000-negative-literal-unary-receiver.md) | Filed as [#430](https://github.com/gavr123456789/Niva/issues/430) (2026-10-22). Fix opened as [#431](https://github.com/gavr123456789/Niva/pull/431) ([draft](000-negative-literal-unary-receiver-pr.md)). |
-| [001 Clojure: an early `^` is silently dropped](001-clojure-early-return.md) | Filed as [#432](https://github.com/gavr123456789/Niva/issues/432) (2026-10-22). Fix opened as [#433](https://github.com/gavr123456789/Niva/pull/433) ([draft](001-clojure-early-return-pr.md)). |
+| [000 negative literal as a unary receiver](000-negative-literal-unary-receiver.md) | Filed as [#430](https://github.com/gavr123456789/Niva/issues/430) (2026-10-22). Fixed by [#431](https://github.com/gavr123456789/Niva/pull/431) ([draft](000-negative-literal-unary-receiver-pr.md)), merged the same day into `main` and `self-host`. |
+| [001 Clojure: an early `^` is silently dropped](001-clojure-early-return.md) | Filed as [#432](https://github.com/gavr123456789/Niva/issues/432) (2026-10-22), closed the same day. Fixed by [#433](https://github.com/gavr123456789/Niva/pull/433) ([draft](001-clojure-early-return-pr.md)), cut down to the compile error after Gavr agreed it needs at least that, and merged into `self-host` the same day. |
 
 ## Self-hosted compiler
 
@@ -29,8 +29,9 @@ filed so far:
    `match`, and in loops: `this > 0 ifTrue: [^ "positive"]` followed by
    `"not positive"` always gives `"not positive"`. Filed as
    [#432](https://github.com/gavr123456789/Niva/issues/432)
-   ([draft](001-clojure-early-return.md)), fix in
-   [#433](https://github.com/gavr123456789/Niva/pull/433).
+   ([draft](001-clojure-early-return.md)). Since
+   [#433](https://github.com/gavr123456789/Niva/pull/433), merged the
+   same day, such a `^` is a compile error instead.
 2. **Clojure:** a type declared in one file can't be used from another.
    The generated code names a class that doesn't exist:
    `niva.generated.mpl.tree.mpl.tree_Num` for a file in a folder (the

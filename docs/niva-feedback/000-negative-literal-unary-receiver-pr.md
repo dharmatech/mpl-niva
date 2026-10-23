@@ -1,6 +1,6 @@
 # 000 negative literal as a unary receiver: pull request
 
-**Status:** Opened 2026-10-22 as [#431](https://github.com/gavr123456789/Niva/pull/431).
+**Status:** Opened 2026-10-22 as [#431](https://github.com/gavr123456789/Niva/pull/431), merged the same day into `main` (`d32d442e`). It's on `self-host` too, as `ad439a32`.
 **Issue:** [#430](https://github.com/gavr123456789/Niva/issues/430) ([draft](000-negative-literal-unary-receiver.md))
 **Branch:** [`dharmatech/Niva:fix-430-negative-literal-receiver`](https://github.com/gavr123456789/Niva/compare/main...dharmatech:Niva:fix-430-negative-literal-receiver),
 one commit (`7c74a5d8`) on `main` at `ece36eb7`
