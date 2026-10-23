@@ -54,6 +54,15 @@ Not verified: neither 1 nor 2 is spiked, and that fixing the `String`
 argument alone would still fail on Go is read from the code (`IrOpBin`
 becomes Go's `==`), not built.
 
+After it was filed, on Discord: "an interesting question", and with
+NIN's second backend "such little differences appears more and more".
+Comparing two collections item by item is costly, so he'd say the user
+should define it, and he's checking what other languages do. No
+comments on GitHub yet. That leans to option 1, but may go further
+than the issue does: all three options compare lists item by item,
+and "user should define it" could mean `{1 2} == {1 2}` too, which Go
+itself rejects for slices.
+
 Everything below the line is the issue as filed.
 
 ---
