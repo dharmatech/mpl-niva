@@ -1,9 +1,10 @@
 # 002 Go: a `^` inside a value doesn't return from the method
 
-**Status:** Drafted, not filed. #433 was merged on 2026-10-22, so this
-is next, after re-checking it on the new `self-host`.
+**Status:** Filed 2026-10-23 as [#435](https://github.com/gavr123456789/Niva/issues/435),
+after #433 and its follow-up #434 were merged. The PR waits for Gavr to
+pick an option.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
-**Checked against:** `self-host` at `ad439a32` (2026-10-22), first found
+**Checked against:** `self-host` at `b00ec027` (2026-10-23), first found
 at `6af8f9f6` (2026-10-19)
 
 Found while writing [#433](https://github.com/gavr123456789/Niva/pull/433)
@@ -32,34 +33,44 @@ So the issue leads with A, which keeps `^` working on Go, where his
 compiler runs and uses it 34 times. B is offered as the alternative,
 and the issue says his switch style isn't affected by either.
 
+After it was filed, on Discord: "yaa, I need true inlining", "so inline
+method would become hygienic macrossess, like in kotlin", then "wait
+nah, here the problem is different, its just about IrMatchExpr" and
+"^= is not implemented yet, but here its not an IrCall anyway". So he
+sees it as the Go backend's handling of a match whose value is used,
+which is what A changes. Whether to open A's PR was still open.
+
 Both are spiked, unpushed, in `~/src/Niva-self-host-go-value`, a
-worktree of the self-host clone, rebased on `ad439a32`. The versions on
-`6af8f9f6` are kept as `go-value-return-on-6af8f9f6` and
-`go-value-return-forbid-on-6af8f9f6`.
+worktree of the self-host clone, rebased on `b00ec027`, after Gavr moved
+the compiler to the `:key` shorthand; our new code uses it too. Earlier
+versions are kept as `go-value-return-on-6af8f9f6` and
+`go-value-return-on-ad439a32`, and the same for `-forbid`.
 
 - **A**, `go-value-return` ([PR draft](002-go-return-inside-value-pr.md)),
-  three commits that can be taken as a prefix: `6554dc9b` fixes a
+  three commits that can be taken as a prefix: `9f7368f2` fixes a
   separate bug in the statement form of a match on errors (item 14 in
-  the [README](README.md)), `86dc10f2` emits the value as statements,
-  `7da54ee7` fixes the match typing. 304 lines of code and 168 of
-  tests. The 354 existing tests and 6 new ones pass; the new ones fail
+  the [README](README.md)), `e4771c13` emits the value as statements,
+  `3e195bb8` fixes the match typing. 304 lines of code and 168 of
+  tests. The 357 existing tests and 6 new ones pass; the new ones fail
   without it, and each prefix passes on its own. It edits 6 lines of
   Gavr's 2026-10-19 `emitMatchErrorStatement`, and wraps the assignment
   code of his 2026-10-21 "fix go mut value semantics" in a check.
 - **B**, `go-value-return-forbid`
   ([PR draft](002-go-return-inside-value-pr-forbid.md)), one commit,
-  `6e98c9ee`: 99 lines of code and 55 of tests, none of it in code from
-  2026-10-19. The 354 existing tests and 2 new ones pass. It rejects 34
-  `^` in the compiler's own sources, 19 of them from Gavr's "adapt
-  compiler for go bootstrap" (2026-10-11).
+  `cdec8f2a`: 99 lines of code and 58 of tests, none of it in code from
+  2026-10-19. The 357 existing tests and 2 new ones pass, with one test
+  from #433 changed: its `^` inside a value is now a type error before
+  the Clojure backend sees it. It rejects 34 `^` in the compiler's own
+  sources, 19 of them written in Gavr's "adapt compiler for go
+  bootstrap" (2026-10-11).
 
 Both pass mpl-niva's checks unchanged. Compiling the compiler's own
-sources, A changes the Go of 17 of its 879 functions, and that Go still
+sources, A changes the Go of 17 of its 890 functions, and that Go still
 builds. A's typing commit can't go with B alone: without A's statements,
 a tail match like `| Num => ^ this |=> Sym name: "x"` would get the type
 `Sym` and stop building on Go.
 
-Everything below the line is the issue as it would be filed.
+Everything below the line is the issue as filed.
 
 ---
 
@@ -99,7 +110,7 @@ in return type`.
 A match used as a value becomes an anonymous function, and the `^`
 returns from that:
 
-https://github.com/gavr123456789/Niva/blob/ad439a32f1ada63aaaea17931831a01b461965d8/Niva/NivaInNiva/back/goBackend/goBack.niva#L1568-L1594
+https://github.com/gavr123456789/Niva/blob/b00ec027420e98b620e83f66996f4ba4e3931079/Niva/NivaInNiva/back/goBackend/goBack.niva#L1568-L1594
 
 ```go
 var s string = func() string {
@@ -116,7 +127,7 @@ var s string = func() string {
 
 6af8f9f6 inlined a match used as a statement for this reason:
 
-https://github.com/gavr123456789/Niva/blob/ad439a32f1ada63aaaea17931831a01b461965d8/Niva/NivaInNiva/back/goBackend/goBack.niva#L549-L550
+https://github.com/gavr123456789/Niva/blob/b00ec027420e98b620e83f66996f4ba4e3931079/Niva/NivaInNiva/back/goBackend/goBack.niva#L549-L550
 
 so what's left is a match whose value is used. The same happens with
 `x <- …`, in an argument (`((this > 0 ifTrue: [^ "returned"] ifFalse:
@@ -131,6 +142,11 @@ return statement`.
 A `^` in front of a switch, like `^ | true | mergeFailed => null |=>
 merged`, isn't affected: there the branches are plain values and the
 whole match is returned. That works today and stays as it is.
+
+Since the last expression of a body is its value, `^` is rarely needed,
+and the methods at the top can be written without it. But where it is
+used, Go quietly returns from the wrong place, including 34 times in
+the compiler itself (below).
 
 Related, in the type checker: a match branch that ends with `^` gives
 the match the type of the value returned. So an early exit on an error,
@@ -178,7 +194,9 @@ before, and on Go they then do what they do on the JVM.
 
 If you'd rather a `^` inside a value be an error on Go too, as you plan
 for Clojure, I have that as a branch as well: the type checker reports
-it for every backend. But then the 34 in the compiler would have to be
+it for every backend. If `^` doesn't belong inside a value anyway, this
+makes the compiler say so instead of compiling something that returns
+from the wrong place. But then the 34 in the compiler would have to be
 rewritten first.
 
 The first branch also starts with a fix for a separate bug in the
@@ -193,5 +211,5 @@ it to you.
 Related: #432 and #433 (Clojure; #433's first commit reports a `^`
 inside a value), #345 (a `^` in a lambda on Go).
 
-Niva `self-host` at `ad439a32`, Go 1.26, OpenJDK 25, Linux. Found while
+Niva `self-host` at `b00ec027`, Go 1.26, OpenJDK 25, Linux. Found while
 writing a small computer algebra library in Niva. Thanks for Niva!
