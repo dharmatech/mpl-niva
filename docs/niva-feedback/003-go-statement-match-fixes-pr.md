@@ -1,8 +1,12 @@
 # 003 Go: three bugs in a match used as a statement: pull request
 
 **Status:** Opened 2026-10-23 as [#436](https://github.com/gavr123456789/Niva/pull/436),
-with no issue of its own. The [#435 sketch](002-go-return-inside-value-pr-temp.md)
-builds on it and waits until it's merged.
+with no issue of its own, and merged into `self-host` within the hour,
+squashed as `cf25e6af`. Gavr retitled it "[go] fix regressions in a
+match used as a statement after "big chungus refactoring of early
+returns"". On Discord: "myah, looks like go test suit is pretty bad
+that it wasnt caught", then "lgtm, merged". The
+[#435 sketch](002-go-return-inside-value-pr-temp.md) builds on it.
 **Branch:** [`dharmatech/Niva:go-stmt-match-fixes`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:go-stmt-match-fixes),
 three commits on `self-host` at `b00ec027`: `d450c31f`, `1b94b4f3`,
 `cbc049ba`. Locally it's `go-stmt-match-fixes` in

@@ -3,9 +3,9 @@
 **Status:** Filed 2026-10-23 as [#435](https://github.com/gavr123456789/Niva/issues/435),
 after #433 and its follow-up #434 were merged. Gavr proposed his own
 design on Discord; a [sketch](002-go-return-inside-value-pr-temp.md) of
-it is drafted as a draft PR, to open once
-[#436](https://github.com/gavr123456789/Niva/pull/436), which it builds
-on, is merged.
+it is open as draft PR [#437](https://github.com/gavr123456789/Niva/pull/437),
+built on [#436](https://github.com/gavr123456789/Niva/pull/436), which
+was merged the same day.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `b00ec027` (2026-10-23), first found
 at `6af8f9f6` (2026-10-19)

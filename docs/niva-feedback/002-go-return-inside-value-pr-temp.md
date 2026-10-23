@@ -1,16 +1,16 @@
 # 002 Go: a `^` inside a value doesn't return from the method: Gavr's design, as a draft pull request
 
-**Status:** Drafted, not opened. Waits for
+**Status:** Opened 2026-10-23 as draft PR
+[#437](https://github.com/gavr123456789/Niva/pull/437), after
 [#436](https://github.com/gavr123456789/Niva/pull/436)
-([draft](003-go-statement-match-fixes-pr.md)), which it builds on, to
-be merged. Then: rebase on `self-host`, check again, and open it as a
-draft PR (`gh api -X POST repos/gavr123456789/Niva/pulls … -F
-draft=true`) linked from the issue, once the user says so.
+([draft](003-go-statement-match-fixes-pr.md)), which it builds on, was
+merged. Its "Fixes #435" links it from the issue. Meant as something
+concrete to discuss the design around, whether or not he takes it.
 **Issue:** [#435](https://github.com/gavr123456789/Niva/issues/435) ([draft](002-go-return-inside-value.md))
-**Branch:** local `go-match-temp` in `~/src/Niva-self-host-go-value`,
-to push as `dharmatech/Niva:fix-435-go-match-temp`. Today it's #436's
-three commits, then its own two, `075871d2` and `6c782cd9`; after the
-rebase only those two are left.
+**Branch:** [`dharmatech/Niva:fix-435-go-match-temp`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:fix-435-go-match-temp),
+two commits on `self-host` at `cf25e6af` (#436, squashed): `5d30f8cc`
+and `cb5f33db`. Locally it's `go-match-temp` in
+`~/src/Niva-self-host-go-value`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 After #435 was filed, Gavr proposed his own fix on Discord: replace
@@ -30,9 +30,14 @@ reported the positions it couldn't handle. Option B
 
 How it was checked, beyond what the PR says:
 
-- On top of #436's commits, each prefix builds and passes: 358, 359,
-  360, 368 and 370 tests, against 357 at `b00ec027`. Check again after
-  the rebase, especially if #436 is changed or squashed.
+- On top of #436's commits, each prefix built and passed: 358, 359,
+  360, 368 and 370 tests, against 357 at `b00ec027`. #436 was merged
+  squashed, with the same tree as our branch, so after the rebase the
+  two commits have the same trees as before and the results stand:
+  368 and 370. At the tip, `niva build` and
+  `java -jar main.jar build --backend=go` were run again and work. Only
+  the `[go]` commit's message changed, to say "#436's fixes" instead of
+  "the three commits before this one".
 - The first version had #436's fixes inside its `[go]` commit; splitting
   them out changed only a comment, a variable name, and #436's two new
   tests.
@@ -59,7 +64,7 @@ How it was checked, beyond what the PR says:
   the caller. So blocks stay functions; that's the `^=` question.
 - `~/src/Niva-self-host` and its pinned jar were left alone.
 
-Everything below the line is the pull request as it would be opened.
+Everything below the line is the pull request as opened.
 
 ---
 
