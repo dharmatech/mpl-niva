@@ -8,13 +8,56 @@ merged. Its "Fixes #435" links it from the issue. Meant as something
 concrete to discuss the design around, whether or not he takes it.
 Announced on Discord as a draft for discussion; Gavr: "hmm, nice, on the
 first glance, especially on tests its exactly the thing, will look more
-thoughtful later". No GitHub review yet.
+thoughtful later". Later that day he found an edge case with `()`
+([comment](https://github.com/gavr123456789/Niva/pull/437#issuecomment-6368339113)),
+"overall I really like it", and on Discord: "it wasn't possible to
+return different types from switch in the original niva, now it is,
+thats great". See [Review](#review).
 **Issue:** [#435](https://github.com/gavr123456789/Niva/issues/435) ([draft](002-go-return-inside-value.md))
 **Branch:** [`dharmatech/Niva:fix-435-go-match-temp`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:fix-435-go-match-temp),
 two commits on `self-host` at `cf25e6af` (#436, squashed): `5d30f8cc`
-and `cb5f33db`. Locally it's `go-match-temp` in
-`~/src/Niva-self-host-go-value`.
+and `cb5f33db`, then `93c335fb`, pushed the same day for his comment.
+Locally it's `go-match-temp` in `~/src/Niva-self-host-go-value`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
+
+## Review
+
+**Gavr's comment** (2026-10-23): with `| 0 => (^ "zero")`, the branch
+still decides the match's type, so `| this | 0 => (^ "zero") |=> 1` is
+rejected: "Match branches return incompatible types: String, Int".
+"Unwrapping of ExprInBracketsT should be added."
+
+**The fix,** `93c335fb`: `matchBranchType` looks through brackets, as
+he says, with a `withoutBrackets` helper on the typed AST. The IR
+needed it too: the body's last expression in brackets was lowered as a
+value, so the `^` became a block that returns, which on Go stays an
+anonymous function. With only the type fix, `x = | this | 0 => (^ "zero")
+|=> 1` built `x = func() string { return "zero" }()` for an int `x`,
+and Go rejected it. Now `toIrBlockWithPrefix` lowers `(^ x)` as the
+same statement as `^ x`. Checked:
+
+- 371 tests pass. The resolver test for branch types gets a bracketed
+  case, and `goValueMatchReturnInBracketsCodegen` is new; both fail
+  without the fix.
+- His program prints `zero` for 0 and `done` for 1; as a value it gives
+  `zero` and `value 1`.
+- `niva build` and `java -jar main.jar build --backend=go` work, the
+  #435 cases are unchanged, and mpl-niva's 31 checks pass on Go.
+- On Clojure, `(^ x)` and `^ x` are reported the same way by #433's
+  check. mpl-niva's Clojure check fails as before, on stock `self-host`
+  too (README item 3).
+
+**Reply,** posted on #437 with the push
+([comment](https://github.com/gavr123456789/Niva/pull/437#issuecomment-6368831633)):
+
+> Thanks, and good catch! Fixed in 93c335fb: `matchBranchType` now looks
+> through brackets, as you suggested. The IR needed the same: `(^ x)`
+> at the end of a branch was lowered as a value, a block wrapping the
+> return, so with only the type fix
+> `x = | this | 0 => (^ "zero") |=> 1` became
+> `x = func() string { return "zero" }()` for an int `x`. Now `(^ x)`
+> is the same statement as `^ x`, on both backends. There's a test for
+> each.
 
 After #435 was filed, Gavr proposed his own fix on Discord: replace
 each match expression with a temp variable assigned in each branch,
