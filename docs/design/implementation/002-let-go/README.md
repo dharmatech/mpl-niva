@@ -1,7 +1,7 @@
 # 002 let-go
 
-**Status:** Done (2026-10-23). An experiment: nothing in `mpl/`,
-`tests/` or `tools/` changed.
+**Status:** Done; landed at `4087f92` (2026-10-23). An experiment:
+nothing in `mpl/`, `tests/` or `tools/` changed.
 
 Tries [let-go](https://github.com/nooga/let-go), a Clojure dialect
 written in Go, as the runtime for Niva's Clojure output in place of
