@@ -63,6 +63,38 @@ than the issue does: all three options compare lists item by item,
 and "user should define it" could mean `{1 2} == {1 2}` too, which Go
 itself rejects for slices.
 
+Later that evening, on the issue's options: 1 is "abstraction
+leaking", and 3 would mean storing each type as a pointer and wrapping
+the collections, which is costly. Then his own list, numbered
+differently from the issue's:
+
+- His 1, every type stored as a pointer, as Java and JS do: too
+  costly on Go, though Go's escape analysis might help.
+- His 2, identity as `&a == &b`: the simplest, but Go copies structs
+  on assignment and on a call, so `same(p, p)` is false.
+- His 3, the issue's 2: structural by default, with a compare function
+  generated for each type that holds a collection. The cost is hidden
+  in those types, but comparing sizes first would rule out most.
+- His 3.1, the issue's 1: a compile error that asks for a custom `==`,
+  on the grounds that comparing collections can be expensive.
+- His 4: his 3, plus `===` for identity.
+- His 5: a `record` keyword. Records compare structurally, and types
+  are stored and compared by reference, like classes in C#, Swift and
+  Vala.
+
+nooga added, on his 2, that Go code usually takes `*Person` and builds
+it as `&Person{…}`, so identity works there.
+
+So 3 has his pros and cons, and the issue's 1 and 3 have his
+objections. In his 3, collections compare by content, which would
+answer the open point above. Not decided yet.
+
+Found on 2026-10-24, while preparing a sketch of his 3: a nullable or
+`mut` field of a struct type is a Go pointer, so Go's `==` compares
+addresses, and two equal values holding one are `false` on Go and
+`true` on Clojure. His 3 would have to cover those fields too.
+
+
 Everything below the line is the issue as filed.
 
 ---

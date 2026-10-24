@@ -17,7 +17,8 @@ filed. Once filed, the header links the issue.
 | [001 Clojure: an early `^` is silently dropped](001-clojure-early-return.md) | Filed as [#432](https://github.com/gavr123456789/Niva/issues/432) (2026-10-22), closed the same day. Fixed by [#433](https://github.com/gavr123456789/Niva/pull/433) ([draft](001-clojure-early-return-pr.md)), cut down to the compile error after Gavr agreed it needs at least that, and merged into `self-host` the same day. Follow-up for his review: [#434](https://github.com/gavr123456789/Niva/pull/434) ([draft](001-clojure-early-return-followup-pr.md)), merged 2026-10-23. |
 | [002 Go: a `^` inside a value doesn't return from the method](002-go-return-inside-value.md) | Filed as [#435](https://github.com/gavr123456789/Niva/issues/435) (2026-10-23). Gavr proposed his own design on Discord: every match whose value is used becomes a temp variable assigned in each branch. A [sketch of it](002-go-return-inside-value-pr-temp.md), built on 003 ([#436](https://github.com/gavr123456789/Niva/pull/436)), was opened as draft PR [#437](https://github.com/gavr123456789/Niva/pull/437) and merged into `self-host` the same day (2026-10-23). The issue is still open. The drafts for the issue's options, [make it work](002-go-return-inside-value-pr.md) and [forbid it](002-go-return-inside-value-pr-forbid.md), stay as fallbacks. |
 | [003 Go: three bugs in a match used as a statement](003-go-statement-match-fixes-pr.md) | A PR without an issue: opened as [#436](https://github.com/gavr123456789/Niva/pull/436) (2026-10-23) and merged into `self-host` the same day. Split out of the 002 sketch, which builds on it. |
-| [004 Go: `==` on a type that holds a list](004-go-equality.md) | Filed as [#439](https://github.com/gavr123456789/Niva/issues/439) (2026-10-23). Asks what `==` should mean in NIN, with three options: content with a type error where Go can't compare, content everywhere, or identity. On Discord, Gavr leans to the user defining `==` for collections, and is checking what other languages do. |
+| [004 Go: `==` on a type that holds a list](004-go-equality.md) | Filed as [#439](https://github.com/gavr123456789/Niva/issues/439) (2026-10-23). Asks what `==` should mean in NIN, with three options: content with a type error where Go can't compare, content everywhere, or identity. On Discord, Gavr then listed five options of his own. His 3, structural by default with a generated compare function for types that hold collections, is sketched in the row below. He hasn't picked one. |
+| [004 Go: `==` by content, Gavr's option 3, as a draft pull request](004-go-equality-pr.md) | Opened 2026-10-24 as draft PR [#440](https://github.com/gavr123456789/Niva/pull/440), "For #439". A sketch of the third option Gavr listed on Discord: structural `==`, with a generated compare function on Go where Go's `==` can't compare by content, plus a type's own `==` as a commit he can drop. For discussion, not to push him toward it. |
 
 ## Self-hosted compiler
 
@@ -123,6 +124,15 @@ filed.
     runtime: Go stops at `undefined: core.List__contains`, Clojure at
     `Unable to resolve symbol: niva.core/List__contains`. The Kotlin
     compiler has it. Found while drafting 004.
+23. **Go:** `ifNotNull:` on a nullable union, map or list value doesn't
+    build ("cannot infer T"): it expects a pointer, which only nullable
+    structs and numbers are. Found while sketching
+    [004's PR](004-go-equality-pr.md), as are 24 and 25.
+24. **Go:** two nullable locals compare as pointers: `x::Int? = 5`,
+    `y::Int? = 5`, then `x == y` is `false` (Clojure `true`), and
+    `x == 5` doesn't build ("mismatched types *int and untyped int").
+25. A nullable block type, `f: [Int -> Int]?`, doesn't parse: "Got
+    invalid token after CloseBracket".
 
 Gaps rather than bugs: neither runtime has `sortedWith:`, which the
 Kotlin compiler has, or `all:`, which it doesn't either.
