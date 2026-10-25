@@ -1,4 +1,4 @@
-# 004 Go: `==` by content, Gavr's option 3, as a draft pull request
+# 004 Go: `==` by content, Gavr's option 3, as a pull request
 
 **Status:** Opened 2026-10-24 as draft PR
 [#440](https://github.com/gavr123456789/Niva/pull/440). Meant as
@@ -8,6 +8,10 @@ hasn't picked one. The body links the issue with "For #439" rather than
 when it was opened, and `self-host` was still at `390d06b6`. The PR has
 no CI checks. Gavr commented the same day; the fixes for it were pushed,
 with a reply and an updated body, at 15:45 UTC. See [Review](#review).
+He took it out of draft and merged it into `self-host` on 2026-10-25
+(03:36 UTC), squashed as `f7979fd4`, after adding three commits of his
+own: style updates and the fix for 200aa83a's six failing tests. #439
+stays open: "For #439" doesn't close it.
 **Issue:** [#439](https://github.com/gavr123456789/Niva/issues/439) ([draft](004-go-equality.md))
 **Branch:** [`dharmatech/Niva:go-structural-eq`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:go-structural-eq),
 two commits on `self-host` at `390d06b6`: `9f4a4506` and `4ae4dc44`.
@@ -134,6 +138,29 @@ comment as a line break:
 > `goStatementMatchOnTrueWithConditions`,
 > `goUnitMatchBranchResultIsEmitted`, `goCoreAnyMethodOwnerCodegen` and
 > `goUnitMatchValueRunsBranchesAsStatements`. I left them alone.
+
+**Before merging,** Gavr commented twice more
+([1](https://github.com/gavr123456789/Niva/pull/440#issuecomment-6390223776),
+[2](https://github.com/gavr123456789/Niva/pull/440#issuecomment-6390467793)):
+the 6 failing codegen tests just need updating, and he "did some style
+updates, no semantic changed": `$` for interpolating single values, and
+newlines for `ifTrue:ifFalse:` with complex conditions. His commits on
+our branch:
+
+- `f313eb10` "Update goEquality.niva": `$` interpolation, `.method:` in
+  place of `this method:`, comma cascades (`x, not`,
+  `cond, ifTrue: [...]`) in place of brackets, `ifTrue:` and `ifFalse:`
+  on their own lines after a complex condition, `| x | null => []` on
+  one line, and short trailing comments (`// is block`). One comment
+  lost "that some `==` reaches".
+- `3abf8047` "Update goBack.niva": the same style in our `IrOpBin`
+  change.
+- `213841c8` "fix go tests": the six tests 200aa83a broke now expect
+  `core.Any__echo[int](...)` and the like.
+
+He didn't answer the question on blocks on Clojure, so two different
+blocks of the same type are still `true` on Go and `false` on Clojure.
+The style points are in Claude's memory for this project.
 
 After #439 was filed, Gavr listed his own options on Discord. His 3:
 always compare by structure, and generate a compare function for each

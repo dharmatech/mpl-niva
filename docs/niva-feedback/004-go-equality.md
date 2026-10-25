@@ -1,6 +1,9 @@
 # 004 Go: `==` on a type that holds a list
 
 **Status:** Filed 2026-10-23 as [#439](https://github.com/gavr123456789/Niva/issues/439).
+Resolved by [#440](https://github.com/gavr123456789/Niva/pull/440)
+([draft](004-go-equality-pr.md)), a sketch of his option 3, merged into
+`self-host` on 2026-10-25. The issue is still open.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `3746ffb7` (2026-10-23), first found
 at `6af8f9f6` (2026-10-19)
