@@ -5,7 +5,7 @@
 //
 // Not `test.niva`: the compiler leaves a file with that name out.
 
-checks = PrintingChecks all + EqualityChecks all
+checks = PrintingChecks all + EqualityChecks all + OrderChecks all
 failed = checks filter: [it ok not]
 failed forEach: [("FAIL " + it name + ": " + it detail) echo]
 

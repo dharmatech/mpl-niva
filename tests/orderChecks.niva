@@ -1,0 +1,48 @@
+type OrderChecks
+
+constructor OrderChecks all -> List(Check) = [
+  a = "a" sym
+  b = "b" sym
+  c = "c" sym
+  d = "d" sym
+  x = "x" sym
+  y = "y" sym
+  l::List(Expr) = {(x * y) y (1 num + x) (x pow: 2 num) x (2 num)}
+  sorted = (l sortedWith: [p, q -> p compare: q]) map: [it text], joinWith: ", "
+  // Items with a partner where the signs of the two compares don't add
+  // up to 0, as opposite signs or two 0s do.
+  lopsided = l filter: [p -> (l filter: [q -> ((p compare: q) compare: 0) + ((q compare: p) compare: 0) != 0]) isNotEmpty]
+  {
+    (Check named: "O-1: -1 before 2" holds: (-1 num before: 2 num))
+    (Check named: "O-1: 3 not before 2" holds: (3 num before: 2 num) not)
+    (Check named: "O-1: 3 compares equal to 3" holds: (3 num compare: 3 num) == 0)
+
+    (Check named: "O-2: a before b" holds: (a before: b))
+    (Check named: "O-2: v1 before v2" holds: ("v1" sym before: "v2" sym))
+    (Check named: "O-2: x1 before xa" holds: ("x1" sym before: "xa" sym))
+
+    (Check named: "O-3: a + b before a + c" holds: ((a + b) before: (a + c)))
+    (Check named: "O-3: a + c + d before b + c + d" holds: ((Sum terms: {a c d}) before: (Sum terms: {b c d})))
+    (Check named: "O-3: c + d before b + c + d" holds: ((c + d) before: (Sum terms: {b c d})))
+    (Check named: "O-3: a * b before a * c" holds: ((a * b) before: (a * c)))
+
+    (Check named: "O-4: (1 + x)^3 before (1 + y)^2" holds: (((1 num + x) pow: 3 num) before: ((1 num + y) pow: 2 num)))
+    (Check named: "O-4: (1 + x)^2 before (1 + x)^3" holds: (((1 num + x) pow: 2 num) before: ((1 num + x) pow: 3 num)))
+
+    (Check named: "O-7: 2 before x" holds: (2 num before: x))
+
+    (Check named: "O-8: a * x^2 before x^3" holds: ((a * (x pow: 2 num)) before: (x pow: 3 num)))
+    (Check named: "O-8: x before x * y" holds: (x before: (x * y)))
+
+    (Check named: "O-9: (1 + x)^3 before 1 + y" holds: (((1 num + x) pow: 3 num) before: (1 num + y)))
+    (Check named: "O-9: x before x^2" holds: (x before: (x pow: 2 num)))
+
+    (Check named: "O-10: 1 + x before y" holds: ((1 num + x) before: y))
+    (Check named: "O-10: y before x + y" holds: (y before: (x + y)))
+
+    (Check named: "equal: x + y compares equal to x + y" holds: ((x + y) compare: (x + y)) == 0)
+
+    (Check named: "sort" got: sorted want: "2, x, x^2, 1 + x, y, x * y")
+    (Check named: "antisymmetry" holds: lopsided isEmpty)
+  }
+]

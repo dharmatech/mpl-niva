@@ -1,7 +1,7 @@
 # 008 simplifier
 
 **Status:** Spec agreed (2026-10-25). Increment 001, the order
-relation, is issued.
+relation, is done.
 
 Cohen's automatic simplification, built up in small increments: the
 order relation, flattening, canonical order, numbers and identities,
@@ -21,7 +21,7 @@ runs as a charter, a spec and checkpoints.
 
 | # | Increment | Checkpoint | Status | Commit |
 |---|---|---|---|---|
-| 001 | order relation | [001](checkpoints/001-order-relation.md) | Issued (2026-10-25). | |
+| 001 | order relation | [001](checkpoints/001-order-relation.md) | Done (2026-10-25). | |
 | 002 | flattening | | | |
 | 003 | canonical order | | | |
 | 004 | numbers and identities | | | |

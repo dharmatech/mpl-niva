@@ -1,0 +1,71 @@
+// The order relation: Cohen's ≺, as a three-way compare. It's the order
+// a simplified sum keeps its terms in, and a product its factors:
+// numbers first, then the rest mostly by their last operands. Sorted,
+// `x * y`, `y`, `1 + x`, `x^2`, `x` and `2` are `2, x, x^2, 1 + x, y, x * y`.
+//
+// `compare:` is defined on every pair, but it's an order only on
+// simplified expressions: `Product factors: {x}` and `x` compare equal.
+// The rule numbers are Cohen's; O-5, O-6, O-11 and O-12 are for
+// factorials and functions, which `Expr` doesn't have.
+
+/// -1, 0 or 1, as this is less than, equal to or greater than `other`.
+Int compare(other): Int -> Int =
+  this < other ifTrue: [-1] ifFalse: [this > other ifTrue: [1] ifFalse: [0]]
+
+/// -1, 0 or 1, as this sorts before, with or after `other`.
+String compare(other): String -> Int =
+  this < other ifTrue: [-1] ifFalse: [this > other ifTrue: [1] ifFalse: [0]]
+
+extend Expr [
+  /// Negative when this comes first, 0 when they're equal, and positive
+  /// when `other` comes first. A pair no branch covers is O-13: `other`
+  /// compared with this, negated.
+  on compare(other): Expr -> Int = | this
+  | Num => | other
+    | Num => value compare: other value // O-1
+    |=> -1 // O-7
+  | Sym => | other
+    | Num => 1
+    | Sym => name compare: other name // O-2
+    |=> 0 - (other compare: this)
+  | Sum => | other
+    | Num => 1
+    | Sum => terms compareFromLast: other terms // O-3
+    | Sym => terms compareFromLast: {other} // O-10
+    |=> 0 - (other compare: this)
+  | Product => | other
+    | Num => 1
+    | Product => factors compareFromLast: other factors // O-3
+    |=> factors compareFromLast: {other} // O-8
+  | Power => | other
+    | Num => 1
+    // O-4: by base, then by exponent.
+    | Power => [
+      c = base compare: other base
+      c == 0 ifTrue: [exp compare: other exp] ifFalse: [c]
+    ]
+    | Product => 0 - (other compare: this)
+    // O-9: against `other^1`.
+    |=> [
+      c = base compare: other
+      c == 0 ifTrue: [exp compare: 1 num] ifFalse: [c]
+    ]
+
+  /// Cohen's ≺: this comes first.
+  on before(other): Expr -> Bool = (this compare: other) < 0
+]
+
+extend List(Expr) [
+  /// O-3: two operand lists, compared from the last. The first pair that
+  /// differs decides. If one runs out first, it's the shorter and comes
+  /// first; if both do, they're equal.
+  on compareFromLast(other): List(Expr) -> Int =
+    this isEmpty || other isEmpty
+      ifTrue: [this count compare: other count]
+      ifFalse: [
+        c = this last compare: other last
+        c == 0
+          ifTrue: [(this dropLast: 1) compareFromLast: (other dropLast: 1)]
+          ifFalse: [c]
+      ]
+]
