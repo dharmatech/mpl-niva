@@ -1,6 +1,6 @@
 # simplifier 004: numbers and identities
 
-**Status:** Issued (2026-10-25).
+**Status:** Done at `5dd2b01` and reviewed (2026-10-25).
 
 If you've been told to read this file, this is the whole assignment.
 Build it, check it, commit it, report, and stop.

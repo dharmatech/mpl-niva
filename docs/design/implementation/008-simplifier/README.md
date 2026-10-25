@@ -24,7 +24,7 @@ runs as a charter, a spec and checkpoints.
 | 001 | order relation | [001](checkpoints/001-order-relation.md) | Done, reviewed (2026-10-25). | `c277081` |
 | 002 | flattening | [002](checkpoints/002-flattening.md) | Done, reviewed (2026-10-25). | `68906c4` |
 | 003 | canonical order | [003](checkpoints/003-canonical-order.md) | Done, reviewed (2026-10-25). | `35e803d` |
-| 004 | numbers and identities | [004](checkpoints/004-numbers-and-identities.md) | Done (2026-10-25). | |
-| 005 | like terms | | | |
+| 004 | numbers and identities | [004](checkpoints/004-numbers-and-identities.md) | Done, reviewed (2026-10-25). | `5dd2b01` |
+| 005 | like terms | [005](checkpoints/005-like-terms.md) | Issued (2026-10-25). | |
 | 006 | powers | | | |
 | 007 | like factors | | | |
