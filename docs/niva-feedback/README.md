@@ -24,7 +24,7 @@ filed. Once filed, the header links the issue.
 | [006 `String` has no ordering](006-string-ordering.md) | Filed as [#451](https://github.com/gavr123456789/Niva/issues/451) (2026-10-25). README item 26: neither compiler has `<` on strings, so it's new, and the form is Gavr's call. Options: 1 `<`, `>`, `<=`, `>=` (Go's operators, Clojure's `compare`), 2 that and a `compareTo:`, 3 no change. Suggests 1, pointing to draft PR [#452](https://github.com/gavr123456789/Niva/pull/452) (row below). Gavr took 1, merging #452 the same day, and we closed the issue with a comment leaving `Char` and a `compareTo:` for when they're needed. |
 | [006 `String` ordering, option 1 as a draft pull request](006-string-ordering-pr.md) | Opened 2026-10-25 as draft PR [#452](https://github.com/gavr123456789/Niva/pull/452), "For #451", right after the issue, whose last paragraph was then edited to name it. Branch `dharmatech/Niva:string-ordering` at `69e688aa` on `self-host` `4e809716`, locally in `~/src/Niva-self-host-string-ordering`. Four lines in the `String` protocol and a `compare` case on Clojure, with three tests that fail without it. Approved without comments and merged into `self-host` the same day (15:52 UTC), squashed as `e823f7fe`, with Gavr's restyle of the Clojure case. |
 | [007 `inject:into:` has the wrong name in both runtimes, as a pull request](007-inject-into-pr.md) | Opened 2026-10-25 as [#454](https://github.com/gavr123456789/Niva/pull/454): a PR without an issue, as 003 was, since there's nothing to decide. README item 30. Branch `dharmatech/Niva:inject-into` at `a210b4df` on `self-host` `e823f7fe`, locally in `~/src/Niva-self-host-inject-into`: `List__injectInto` renamed to `List__inject__into` in both runtimes, with two tests that fail without it. Approved without comments and merged into `self-host` the same day (16:50 UTC), squashed as `2ad4f629`, unchanged. |
-| [008 `sortedWith:` on lists, as on the JVM compiler, as a pull request](008-sorted-with-pr.md) | Drafted, not opened or pushed: a PR without an issue, since matching the JVM compiler's signature (a block `[a, b -> Int]`) leaves nothing to decide. From the gaps below the list. Branch `sorted-with` at `b2ff55a2` on `self-host` `2ad4f629`, in `~/src/Niva-self-host-sorted-with`: the protocol entry next to `sortedBy:` and `List__sortedWith` in both runtimes, with three tests that fail without it. |
+| [008 `sortedWith:` on lists, as on the JVM compiler, as a pull request](008-sorted-with-pr.md) | Opened 2026-10-25 as [#455](https://github.com/gavr123456789/Niva/pull/455): a PR without an issue, since matching the JVM compiler's signature (a block `[a, b -> Int]`) leaves nothing to decide. From the gaps below the list. Branch `dharmatech/Niva:sorted-with` at `b2ff55a2` on `self-host` `2ad4f629`, locally in `~/src/Niva-self-host-sorted-with`: the protocol entry next to `sortedBy:` and `List__sortedWith` in both runtimes, with three tests that fail without it. |
 
 ## Self-hosted compiler
 
@@ -224,7 +224,9 @@ and 7 are filed by us, 23 by Gavr.
     `2ad4f629`, after #454.
 
 Gaps rather than bugs: neither runtime has `sortedWith:`, which the
-Kotlin compiler has (drafted as [008](008-sorted-with-pr.md)), or
+Kotlin compiler has (opened as
+[#455](https://github.com/gavr123456789/Niva/pull/455),
+[draft](008-sorted-with-pr.md)), or
 `all:`, which it doesn't either. Neither
 compiler has `flatMap:`, `flatten`, `groupBy:`, `max` or `zip:`
 (probed at `e823f7fe`).

@@ -1,13 +1,14 @@
 # 008 `sortedWith:` on lists, as on the JVM compiler: pull request
 
-**Status:** Draft, not opened. A PR without an issue, as
-[007](007-inject-into-pr.md) (#454) was: the JVM compiler already has
-`sortedWith:`, so matching its signature leaves nothing for Gavr to
-decide.
-**Branch:** `sorted-with`, one commit on `self-host` at `2ad4f629`:
-`b2ff55a2`. Locally in `~/src/Niva-self-host-sorted-with`, a worktree
-of `~/src/Niva-self-host`. Not pushed; it goes to `dharmatech/Niva`
-like #454's branch.
+**Status:** Opened 2026-10-25 as
+[#455](https://github.com/gavr123456789/Niva/pull/455), not as a draft.
+A PR without an issue, as [007](007-inject-into-pr.md) (#454) was: the
+JVM compiler already has `sortedWith:`, so matching its signature
+leaves nothing for Gavr to decide. No CI checks. Each paragraph went in
+on one line.
+**Branch:** [`dharmatech/Niva:sorted-with`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:sorted-with),
+one commit on `self-host` at `2ad4f629`: `b2ff55a2`. Locally in
+`~/src/Niva-self-host-sorted-with`, a worktree of `~/src/Niva-self-host`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 From the gaps at the end of the [README](README.md) list, picked as
@@ -61,7 +62,19 @@ and a copy of its home:
 Not covered: `sortedWith:` on a set or a map. As on the JVM compiler,
 it's declared for lists only, next to `sortedBy:`.
 
-Everything below the line is the pull request as it would be opened.
+**Compared with Smalltalk,** before opening: the JVM compiler compiles
+`sortedWith:` to Kotlin's own, `listOf(3, 1, 2).sortedWith { a, b -> a
+- b }`, so the convention is Kotlin's. Pharo (`Pharo15`,
+`SequenceableCollection.class.st`) and Squeak (trunk commit
+Collections-ul.346, 2010) call it `sorted:`, a copy, and `sort:`, in
+place, with a block that answers true if the first element should come
+first: `#(3 9 1) sorted: [:a :b | a <= b]`. Pharo's SortFunctions also
+take a two-argument block that returns -1, 0 or 1, through `ascending`,
+and `threeWayCompareTo:`. A Smalltalk-style `sorted:` would read well in
+Niva, `sorted: [a, b -> a name < b name]`, but it's a design question,
+so it's left out of this PR.
+
+Everything below the line is the pull request as opened.
 
 ---
 
