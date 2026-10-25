@@ -15,9 +15,9 @@ products is a case in a pair rule, and a power has rules of its own.
 ## Rules so far
 
 Simplifying flattens, sorts, works out numbers, combines like terms and
-simplifies powers to integers for now. Numbers combine, as do terms that
-differ only in their number, and `0` and `1` drop out. Factors don't
-combine yet: `x * x` stays as it is.
+like factors, and simplifies powers to integers. Numbers combine, as do
+terms that differ only in their number and factors with the same base,
+and `0` and `1` drop out.
 
 | Rule | Example | Simplified |
 |---|---|---|
@@ -35,6 +35,8 @@ combine yet: `x * x` stays as it is.
 | A product with a 0 among its factors is 0. | `0 * (x + y)` | `0` |
 | Like terms in a sum combine, their numbers added. | `2 * x + 3 * x` | `5 * x` |
 | Like terms that make 0 drop out. | `(-3 * x + y) + 3 * x` | `y` |
+| Like factors in a product combine, their exponents added. | `x^2 * x^3` | `x^5` |
+| Like factors that make 1 drop out. | `x^2 * y * x^-2` | `y` |
 | Anything to 0 is 1, except 0 itself. | `x^0` | `1` |
 | Anything to 1 is itself. | `x^1` | `x` |
 | 1 to anything is 1. | `1^x` | `1` |
@@ -56,6 +58,15 @@ and term `x`. Two operands with the same term combine, their constants
 added: `x + x` is `2 * x`, `2 * x * y + x * y` is `3 * x * y`, and
 `2 * x + -1 * x` is `x`, since a 1 in a product drops out.
 
+Like factors are Cohen's too: an operand's base and exponent are a
+power's own, and for anything else that isn't a number, the operand
+itself and 1, so `x^2` has base `x` and exponent 2, and `x` has base
+`x` and exponent 1. Two factors with the same base combine, the base to
+the simplified sum of their exponents, simplified as a power: `x * x^2`
+is `x^3`, `x^y * x^z` is `x^(y + z)`, and `x^2 * x^-1` is `x`, since
+anything to 1 is itself. A number has neither, so `2 * 2^x` stays as it
+is, while `2^x * 2^y` is `2^(x + y)`.
+
 Powers are Cohen's simplify_power and simplify_integer_power, for
 integers. The base and exponent are simplified first, so `(1 + 1)^3` is
 `8` and `x^(2 + -2)` is `1`. A power of a power to a number is the base
@@ -70,7 +81,26 @@ so `(-1 * x)^2` is `x^2`. A sum's power stays, since nothing expands:
 Undefined, and so does a number to a negative power, such as `2^(-1)`,
 which is a fraction. Neither Undefined nor fractions are here yet.
 
+## A known gap
+
+Cohen's algorithm, and mpl's, takes what two like factors make as a
+single factor. When that's a product, it isn't spliced into the product
+around it. `(a * b)^y * (a * b)^(1 + -1 * y)` is `a * b`, as it should
+be, and `((a * b)^y * (a * b)^(1 + -1 * y)) * c` is `a * b * c`, since
+the inner product is simplified first and its `a * b` then spliced. But
+`c * (a * b)^y * (a * b)^(1 + -1 * y)`, which `*` builds as
+`(c * (a * b)^y) * (a * b)^(1 + -1 * y)`, merges the like factors beside
+`c`, and gives `(a * b) * c`: a product inside a product.
+`Product factors:` of the three gives the same.
+
+A number that like factors make stays apart from the product's number
+in the same way: `(3 * 2^x) * 2^(3 + -1 * x)` is `3 * 8`. Like terms
+have the gap too: `(c + 2 * (a + b)) + -1 * (a + b)` is `(a + b) + c`.
+The checks don't pin any of these.
+
 ## What's coming
 
-Like factors, so `x * x` is `x^2`: see the
-[spec](design/implementation/008-simplifier/spec.md).
+The spec's seven increments are done. Undefined, fractions, `-` and `/`
+are to be decided: more increments in the
+[spec](design/implementation/008-simplifier/spec.md), or a series of
+their own.

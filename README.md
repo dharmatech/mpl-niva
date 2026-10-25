@@ -14,11 +14,13 @@ products hold a list of operands, as in mpl and Symbolism, because
 Cohen's algorithms work on operand lists.
 
 **Status:** expressions can be built, printed and compared, and
-[simplifying](docs/simplifying.md) has begun: for now it flattens sums
-in sums and products in products, puts their operands in Cohen's order,
-works out numbers, so `0` and `1` drop out and a product with a `0` is
-`0`, combines like terms, so `x + x` is `2 * x`, and simplifies powers
-to integers, so `(x^2)^3` is `x^6` and `(x * y)^2` is `x^2 * y^2`.
+[simplified](docs/simplifying.md) to Cohen's canonical form for
+integers: `simplify` flattens sums in sums and products in products,
+puts their operands in Cohen's order, works out numbers, so `0` and `1`
+drop out and a product with a `0` is `0`, combines like terms, so
+`x + x` is `2 * x`, combines like factors, so `x * x` is `x^2`, and
+simplifies powers to integers, so `(x^2)^3` is `x^6` and `(x * y)^2` is
+`x^2 * y^2`. Undefined, fractions, `-` and `/` aren't here yet.
 
 ## Running
 
@@ -47,6 +49,7 @@ x + y + z   =>   (x + y) + z
 (x + 2) + 3   =>   5 + x
 (x + y) + x   =>   2 * x + y
 (x * y)^2   =>   x^2 * y^2
+(x * y) * x   =>   x^2 * y
 ```
 
 And the checks, which end with `all N checks passed` when they do:
@@ -79,8 +82,8 @@ Binary messages have no precedence and go left to right, so
 
 ## Docs
 
-- [Simplifying](docs/simplifying.md): what `simplify` does, and the
-  rules that hold so far.
+- [Simplifying](docs/simplifying.md): what `simplify` does, the rules
+  that hold, and a known gap.
 - [Niva notes](docs/niva-notes.md): the language as this project meets
   it, and workarounds for its bugs.
 - [The self-hosted compiler](docs/self-hosted-compiler.md): building and

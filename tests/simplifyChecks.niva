@@ -126,5 +126,29 @@ constructor SimplifyChecks all -> List(Check) = [
     (Check named: "powers: ((x * y)^2)^3" got: (((x * y) pow: 2 num) pow: 3 num) simplify text want: "x^6 * y^6")
     // A power rule, then like terms.
     (Check named: "powers: (x^1)^2 + x^2" got: (((x pow: 1 num) pow: 2 num) + (x pow: 2 num)) simplify text want: "2 * x^2")
+
+    // Factors with the same base combine in a product, their exponents
+    // added, and drop out if they make 1. A number has no base, so it
+    // stays apart from a power of it.
+    (Check named: "like factors: x * x" got: (x * x) simplify text want: "x^2")
+    (Check named: "like factors: x^2 * x^3" got: ((x pow: 2 num) * (x pow: 3 num)) simplify text want: "x^5")
+    (Check named: "like factors: x * x^2" got: (x * (x pow: 2 num)) simplify text want: "x^3")
+    (Check named: "like factors: x^2 * x^-2" got: ((x pow: 2 num) * (x pow: -2 num)) simplify text want: "1")
+    (Check named: "like factors: x^2 * x^-1" got: ((x pow: 2 num) * (x pow: -1 num)) simplify text want: "x")
+    (Check named: "like factors: x * y * x" got: (x * y * x) simplify text want: "x^2 * y")
+    (Check named: "like factors: x^y * x^z" got: ((x pow: y) * (x pow: z)) simplify text want: "x^(y + z)")
+    (Check named: "like factors: 2 * x * 3 * x" got: (2 num * x * 3 num * x) simplify text want: "6 * x^2")
+    (Check named: "like factors: (x + y) * (x + y)" got: ((x + y) * (x + y)) simplify text want: "(x + y)^2")
+    (Check named: "like factors: 2^x * 2^y" got: ((2 num pow: x) * (2 num pow: y)) simplify text want: "2^(x + y)")
+    (Check named: "like factors: 2 * 2^x" got: (2 num * (2 num pow: x)) simplify text want: "2 * 2^x")
+    (Check named: "like factors: x * x + x^2" got: ((x * x) + (x pow: 2 num)) simplify text want: "2 * x^2")
+    (Check named: "like factors: x * x * x" got: (x * x * x) simplify text want: "x^3")
+    // Factors that make 1 drop out, leaving the rest.
+    (Check named: "like factors: x^2 * y * x^-2" got: ((x pow: 2 num) * y * (x pow: -2 num)) simplify text want: "y")
+    // A power of a product, then like factors.
+    (Check named: "like factors: (x * y)^2 * x" got: (((x * y) pow: 2 num) * x) simplify text want: "x^3 * y^2")
+    (Check named: "like factors: (x * y) * (x * y)^-1" got: ((x * y) * ((x * y) pow: -1 num)) simplify text want: "1")
+    // The number second, so it's `other` in the pair rule.
+    (Check named: "like factors: 2^x * 2" got: ((2 num pow: x) * 2 num) simplify text want: "2 * 2^x")
   }
 ]

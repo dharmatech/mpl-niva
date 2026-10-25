@@ -7,16 +7,19 @@
 // A sum's terms are merged two lists at a time, and what two terms
 // become is up to the pair rule, `sumPair:`; a product's factors
 // likewise, with `productPair:`. The algebra of sums and products goes in
-// the pair rules. For now two numbers add in a sum and multiply in a
-// product, a 0 drops out of a sum and a 1 out of a product, two terms
-// that differ only in their number combine, and any other two operands
-// are kept and put in Cohen's order, from `order.niva`. So simplifying
-// flattens, sorts, works out numbers and combines like terms: a sum's
-// sums are spliced into it, a product's products, the merge leaves the
-// operands in order, and the numbers, which that order puts first,
-// become one or none, as do like terms, which it puts together. A
-// product with a 0 among its factors is 0. The two sides are kept apart,
-// as in mpl, since their pair rules differ.
+// the pair rules. Two numbers add in a sum and multiply in a product, a
+// 0 drops out of a sum and a 1 out of a product, two terms that differ
+// only in their number combine, two factors with the same base combine,
+// and any other two operands are kept and put in Cohen's order, from
+// `order.niva`. So simplifying flattens, sorts, works out numbers and
+// combines like terms and like factors: a sum's sums are spliced into
+// it, a product's products, the merge leaves the operands in order, and
+// the numbers, which that order puts first, become one or none, as do
+// like terms and like factors, which it puts together. A product with a
+// 0 among its factors is 0. The two sides are kept apart, as in mpl,
+// since their pair rules differ. What two like operands make is taken as
+// one operand, as in Cohen's algorithm and mpl: a product that like
+// factors make isn't spliced into the product around them.
 //
 // A power's rules are Cohen's for integers, in `simplifiedPower:` and
 // `integerPower:`: to 0 it's 1 and to 1 its base, 1 to anything is 1, 0
@@ -52,8 +55,8 @@ extend Expr [
   |=> 0
 
   /// This as a list of one, or none if it's the number `n`: what two
-  /// numbers or like terms make, gone if it's 0 in a sum or 1 in a
-  /// product.
+  /// numbers, like terms or like factors make, gone if it's 0 in a sum or
+  /// 1 in a product.
   on listUnless(n): Int -> List(Expr) =
     this == n num ifTrue: [{}] ifFalse: [{this}]
 ]
@@ -169,13 +172,18 @@ extend Expr [
 
   /// The pair rule: the base case of Cohen's simplify_product_rec, two
   /// operands that aren't products. The first case that applies: two
-  /// numbers multiply, and drop out if they make 1; a 1 drops out; and
-  /// any other two are kept, swapped if `other` comes first. Later
-  /// increments add cases ahead of that last one.
+  /// numbers multiply, and drop out if they make 1; a 1 drops out; two
+  /// that aren't numbers and have the same base combine, the base to the
+  /// simplified sum of their exponents, simplified, and drop out if
+  /// that's 1; and any other two are kept, swapped if `other` comes first.
   on productPair(other): Expr -> List(Expr) = | true
   | this isNum && other isNum => (this numValue * other numValue) num listUnless: 1
   | this == 1 num => {other}
   | other == 1 num => {this}
+  | this isNum not && other isNum not && (this powerBase == other powerBase) => [
+    w = {(this powerExp) (other powerExp)} simplifiedSum
+    (this powerBase simplifiedPower: w) listUnless: 1
+  ]
   | (other before: this) => {other this}
   |=> {this other}
 ]
@@ -245,14 +253,17 @@ extend Expr [
   | Power => true
   |=> false
 
-  /// A power's base. `integerPower:` asks it only of powers; anything
-  /// else gives itself.
+  /// Cohen's base, for an operand that isn't a number: a power's base,
+  /// and anything else itself. `integerPower:` asks it of powers, and the
+  /// product pair rule of any two operands that aren't numbers.
   on powerBase -> Expr = | this
   | Power => base
   |=> this
 
-  /// A power's exponent. `integerPower:` asks it only of powers;
-  /// anything else gives 1.
+  /// Cohen's exponent, for an operand that isn't a number: a power's
+  /// exponent, and 1 for anything else. `integerPower:` asks it of
+  /// powers, and the product pair rule of any two operands that aren't
+  /// numbers.
   on powerExp -> Expr = | this
   | Power => exp
   |=> 1 num
