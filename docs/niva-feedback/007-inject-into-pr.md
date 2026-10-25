@@ -1,12 +1,14 @@
 # 007 `inject:into:` has the wrong name in both runtimes: pull request
 
-**Status:** Draft, not opened. A PR without an issue, as
-[003](003-go-statement-match-fixes-pr.md) (#436) was: it's a plain bug
-with one obvious fix, so there's no decision to ask Gavr for.
-**Branch:** `inject-into`, one commit on `self-host` at `e823f7fe`:
-`a210b4df`. Locally in `~/src/Niva-self-host-inject-into`, a worktree of
-`~/src/Niva-self-host`. Not pushed; it goes to `dharmatech/Niva` like
-#452's branch.
+**Status:** Opened 2026-10-25 as
+[#454](https://github.com/gavr123456789/Niva/pull/454), not as a draft.
+A PR without an issue, as [003](003-go-statement-match-fixes-pr.md)
+(#436) was: it's a plain bug with one obvious fix, so there's no
+decision to ask Gavr for. No CI checks. Each paragraph went in on one
+line.
+**Branch:** [`dharmatech/Niva:inject-into`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:inject-into),
+one commit on `self-host` at `e823f7fe`: `a210b4df`. Locally in
+`~/src/Niva-self-host-inject-into`, a worktree of `~/src/Niva-self-host`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 It's item 30 in the [README](README.md), found at `e823f7fe` while
@@ -53,7 +55,7 @@ and a copy of its home:
   function in `core.go`.
 - mpl-niva's 31 checks pass on Go with the branch.
 
-Everything below the line is the pull request as it would be opened.
+Everything below the line is the pull request as opened.
 
 ---
 
