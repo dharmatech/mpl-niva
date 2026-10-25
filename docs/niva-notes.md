@@ -1,13 +1,15 @@
 # Niva notes
 
 What to know when writing Niva for this project, with the self-hosted
-compiler at `self-host` `2ad4f629` (2026-10-25). Each note was
+compiler at `self-host` `781c5b05` (2026-10-25). Each note was
 re-checked at `4e809716`
 ([series 004](design/implementation/004-notes-recheck/README.md));
 since then come only #452, string ordering
 ([series 005](design/implementation/005-string-ordering-pin/README.md)),
-and #454, `inject:into:`
-([series 006](design/implementation/006-inject-into-pin/README.md)). The
+#454, `inject:into:`
+([series 006](design/implementation/006-inject-into-pin/README.md)),
+and #455, `sortedWith:`
+([series 007](design/implementation/007-sorted-with-pin/README.md)). The
 Go backend is the one we use; Clojure differences are marked, and hold
 on Babashka and let-go alike unless noted
 ([series 002](design/implementation/002-let-go/README.md)). The bugs
@@ -48,6 +50,13 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   to be the items' type, so `map:` first to fold into something else:
   `(words map: [it count]) inject: 0 into: [acc, n -> acc + n]`. The Kotlin
   compiler doesn't ask that.
+- A list sorts by a key with `sortedBy:` and by a comparator with
+  `sortedWith:`, a block of two items that returns a negative number if
+  `a` comes first, 0 if they're equal, and a positive one if `b` does:
+  `{3 1 2} sortedWith: [a, b -> b - a]` is `{3 2 1}`. Both are stable
+  and return a new list. `sortedWith:` is since
+  [#455](https://github.com/gavr123456789/Niva/pull/455), merged as
+  `781c5b05`. `sortedBy:`'s keys have to be numbers or strings on Go.
 - A type name of one capital letter is read as a type parameter:
   `type P n: Int`, then `P n: 1`, gives "Missing constructor table for
   Type(P)". Use two letters or more.
@@ -91,8 +100,6 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
 
 ## Library gaps
 
-- No `sortedWith:`, only `sortedBy:`. Sorting by a comparator means
-  writing our own sort.
 - No `all:`. `any:` passes the type checker but is missing from the
   Clojure runtime, so we use `filter:` and `isEmpty`.
 - `contains:` on a list passes the type checker but is in neither
