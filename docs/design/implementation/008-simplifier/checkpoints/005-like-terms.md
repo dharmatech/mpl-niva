@@ -1,6 +1,6 @@
 # simplifier 005: like terms
 
-**Status:** Issued (2026-10-25).
+**Status:** Done at `ad0bb27` and `f5a3efe`, and reviewed (2026-10-25).
 
 If you've been told to read this file, this is the whole assignment.
 Build it, check it, commit it, report, and stop.
