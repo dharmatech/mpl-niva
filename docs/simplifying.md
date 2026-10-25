@@ -14,9 +14,10 @@ rule.
 
 ## Rules so far
 
-Simplifying flattens, sorts and works out numbers for now. Numbers
-combine, and `0` and `1` drop out, but nothing else does yet: `x + x`
-stays as it is.
+Simplifying flattens, sorts, works out numbers and combines like terms
+for now. Numbers combine, as do terms that differ only in their number,
+and `0` and `1` drop out. Factors don't combine yet: `x * x` stays as it
+is.
 
 | Rule | Example | Simplified |
 |---|---|---|
@@ -32,16 +33,26 @@ stays as it is.
 | Numbers in a product that make 1 drop out. | `(-1 * x) * -1` | `x` |
 | A 1 in a product drops out. | `x * 1` | `x` |
 | A product with a 0 among its factors is 0. | `0 * (x + y)` | `0` |
+| Like terms in a sum combine, their numbers added. | `2 * x + 3 * x` | `5 * x` |
+| Like terms that make 0 drop out. | `(-3 * x + y) + 3 * x` | `y` |
 
 The canonical order is Cohen's, `before:` in `mpl/order.niva`: numbers
 first, by value; symbols alphabetically; and sums, products and powers
 mostly by their last operands, so `x * y + y` is `y + x * y`. It's what
-brings a sum's numbers together, at the front, so they combine.
+brings a sum's numbers together, at the front, and its like terms side
+by side, so they combine.
+
+Like terms are Cohen's: an operand's constant is its number, if it's a
+product that starts with one, and 1 otherwise, and its term is the rest,
+so `2 * x * y` has constant 2 and term `x * y`, and `x` has constant 1
+and term `x`. Two operands with the same term combine, their constants
+added: `x + x` is `2 * x`, `2 * x * y + x * y` is `3 * x * y`, and
+`2 * x + -1 * x` is `x`, since a 1 in a product drops out.
 
 A power simplifies its base and exponent, so `(a + (b + c))^2` is
 `(a + b + c)^2` and `x^(1 + 1)` is `x^2`.
 
 ## What's coming
 
-Like terms, powers and like factors, one increment each: see the
+Powers and like factors, one increment each: see the
 [spec](design/implementation/008-simplifier/spec.md).

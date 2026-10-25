@@ -66,5 +66,29 @@ constructor SimplifyChecks all -> List(Check) = [
     (Check named: "numbers: 0 * (x + y)" got: (0 num * (x + y)) simplify text want: "0")
     (Check named: "numbers: (2 + 3) * x" got: ((2 num + 3 num) * x) simplify text want: "5 * x")
     (Check named: "numbers: x^(1 + 1)" got: (x pow: 1 num + 1 num) simplify text want: "x^2")
+
+    // Terms that differ only in their number combine in a sum, their
+    // numbers added; a 1 then drops out, and a 0 makes the term go. Each
+    // result is final: no two factors with the same base in a term.
+    (Check named: "like terms: x + x" got: (x + x) simplify text want: "2 * x")
+    (Check named: "like terms: 2 * x + 3 * x" got: ((2 num * x) + (3 num * x)) simplify text want: "5 * x")
+    (Check named: "like terms: -3 * x + 3 * x" got: ((-3 num * x) + (3 num * x)) simplify text want: "0")
+    (Check named: "like terms: x + y + x" got: (x + y + x) simplify text want: "2 * x + y")
+    (Check named: "like terms: x * y + y * x" got: ((x * y) + (y * x)) simplify text want: "2 * x * y")
+    (Check named: "like terms: 2 * x + -1 * x" got: ((2 num * x) + (-1 num * x)) simplify text want: "x")
+    (Check named: "like terms: x^2 + x^2" got: ((x pow: 2 num) + (x pow: 2 num)) simplify text want: "2 * x^2")
+    (Check named: "like terms: (a + b) + (a + b)" got: ((a + b) + (a + b)) simplify text want: "2 * a + 2 * b")
+    // A constant of 1 on one side.
+    (Check named: "like terms: x + 2 * x" got: (x + (2 num * x)) simplify text want: "3 * x")
+    // The numbers cancel, then the terms combine.
+    (Check named: "like terms: (x + 1) + (x + -1)" got: ((x + 1 num) + (x + -1 num)) simplify text want: "2 * x")
+    // Terms that make 0 drop out, leaving the rest.
+    (Check named: "like terms: (-3 * x + y) + 3 * x" got: ((-3 num * x) + y + (3 num * x)) simplify text want: "y")
+    (Check named: "like terms: Sum terms: {x y x y x}" got: (Sum terms: {x y x y x}) simplify text want: "3 * x + 2 * y")
+    // A term of two factors.
+    (Check named: "like terms: 2 * (x * y) + x * y" got: ((2 num * (x * y)) + (x * y)) simplify text want: "3 * x * y")
+    // Unlike terms stay apart.
+    (Check named: "like terms: x + x * y" got: (x + (x * y)) simplify text want: "x + x * y")
+    (Check named: "like terms: 2 * x + 2 * y" got: ((2 num * x) + (2 num * y)) simplify text want: "2 * x + 2 * y")
   }
 ]

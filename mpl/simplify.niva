@@ -8,14 +8,15 @@
 // become is up to the pair rule, `sumPair:`; a product's factors
 // likewise, with `productPair:`. The algebra goes in the pair rules. For
 // now two numbers add in a sum and multiply in a product, a 0 drops out
-// of a sum and a 1 out of a product, and any other two operands are kept
-// and put in Cohen's order, from `order.niva`. So simplifying flattens,
-// sorts and works out numbers: a sum's sums are spliced into it, a
+// of a sum and a 1 out of a product, two terms that differ only in their
+// number combine, and any other two operands are kept and put in Cohen's
+// order, from `order.niva`. So simplifying flattens, sorts, works out
+// numbers and combines like terms: a sum's sums are spliced into it, a
 // product's products, the merge leaves the operands in order, and the
-// numbers, which that order puts first, become one or none. A product
-// with a 0 among its factors is 0. The two sides are kept apart, as in
-// mpl, since their pair rules differ. The names in the comments are
-// Cohen's.
+// numbers, which that order puts first, become one or none, as do like
+// terms, which it puts together. A product with a 0 among its factors is
+// 0. The two sides are kept apart, as in mpl, since their pair rules
+// differ. The names in the comments are Cohen's.
 
 extend Expr [
   /// Cohen's automatic_simplify: the operands first, then the node.
@@ -42,8 +43,9 @@ extend Expr [
   | Num => value
   |=> 0
 
-  /// This as a list of one, or none if it's the number `n`: two numbers
-  /// worked out, gone if they make 0 in a sum or 1 in a product.
+  /// This as a list of one, or none if it's the number `n`: what two
+  /// numbers or like terms make, gone if it's 0 in a sum or 1 in a
+  /// product.
   on listUnless(n): Int -> List(Expr) =
     this == n num ifTrue: [{}] ifFalse: [{this}]
 ]
@@ -61,15 +63,33 @@ extend Expr [
   | Sum => terms
   |=> {this}
 
+  /// Cohen's term, for an operand that isn't a number: a product's
+  /// factors after its number, if it starts with one; any other
+  /// product's factors; and anything else as a list of one.
+  on termFactors -> List(Expr) = | this
+  | Product => factors first isNum ifTrue: [factors drop: 1] ifFalse: [factors]
+  |=> {this}
+
+  /// Cohen's constant, for an operand that isn't a number: a product's
+  /// number, if it starts with one, and 1 otherwise.
+  on constant -> Int = | this
+  | Product => factors first isNum ifTrue: [factors first numValue] ifFalse: [1]
+  |=> 1
+
   /// The pair rule: the base case of Cohen's simplify_sum_rec, two
   /// operands that aren't sums. The first case that applies: two numbers
-  /// add, and drop out if they make 0; a 0 drops out; and any other two
-  /// are kept, swapped if `other` comes first. Later increments add
-  /// cases ahead of that last one.
+  /// add, and drop out if they make 0; a 0 drops out; two that aren't
+  /// numbers and have the same term combine, the sum of their constants
+  /// times the term, simplified, and drop out if that's 0; and any other
+  /// two are kept, swapped if `other` comes first.
   on sumPair(other): Expr -> List(Expr) = | true
   | this isNum && other isNum => (this numValue + other numValue) num listUnless: 0
   | this == 0 num => {other}
   | other == 0 num => {this}
+  | this isNum not && other isNum not && (this termFactors == other termFactors) => [
+    c = (this constant + other constant) num
+    ({c} + this termFactors) simplifiedProduct listUnless: 0
+  ]
   | (other before: this) => {other this}
   |=> {this other}
 ]

@@ -1,7 +1,7 @@
 // `tools/nin run --backend=go`: builds a few expressions and prints each
 // one beside the Niva that built it, then simplifies a few. For now
 // simplifying flattens sums and products, puts their operands in Cohen's
-// order, and works out their numbers.
+// order, works out their numbers, and combines like terms.
 
 String show(e): Expr -> Unit = [
   (this + "   =>   " + e text) echo
@@ -42,3 +42,4 @@ z = "z" sym
 (x * y + y) showSimplified
 (x + 2 num + 3 num) showSimplified
 (x * 2 num * 3 num) showSimplified
+(x + y + x) showSimplified
