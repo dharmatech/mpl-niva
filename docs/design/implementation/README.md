@@ -20,4 +20,4 @@ series: **expression-tree**, **collect-terms 001**.
 | [`000-expression-tree`](000-expression-tree/README.md) | `Expr`, building it with operators, printing, structural equality, and the project setup. | Done at `7cc033f` (2026-10-22). |
 | [`001-self-hosted`](001-self-hosted/README.md) | The move to Niva's self-hosted compiler: the port, checks in place of `niva test`, and scripts to build and run the compiler. | Done at `5cbdef7` (2026-10-22). |
 | [`002-let-go`](002-let-go/README.md) | An experiment: Niva's Clojure output on let-go instead of Babashka. MPL runs there as laid out, but for one function missing from Niva's runtime. | Done at `4087f92` (2026-10-23). |
-| [`003-equals`](003-equals/README.md) | MPL compares expressions with `==` in place of its own `same:`, on a self-hosted compiler pinned past #440. | Done (2026-10-24). |
+| [`003-equals`](003-equals/README.md) | MPL compares expressions with `==` in place of its own `same:`, on a self-hosted compiler pinned past #440. | Done at `1fbabc9` (2026-10-24). |

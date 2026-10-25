@@ -1,6 +1,6 @@
 # 003 equals
 
-**Status:** Done (2026-10-24).
+**Status:** Done; landed at `1fbabc9` (2026-10-24).
 
 MPL compares expressions with Niva's `==` instead of its own `same:`,
 now that the self-hosted compiler compares by content on Go too. That
