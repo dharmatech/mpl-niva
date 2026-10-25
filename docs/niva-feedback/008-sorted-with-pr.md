@@ -5,7 +5,9 @@
 A PR without an issue, as [007](007-inject-into-pr.md) (#454) was: the
 JVM compiler already has `sortedWith:`, so matching its signature
 leaves nothing for Gavr to decide. No CI checks. Each paragraph went in
-on one line.
+on one line. Gavr approved it without comments and merged it into
+`self-host` the same day (17:39 UTC), squashed as `781c5b05`, unchanged
+and under our title.
 **Branch:** [`dharmatech/Niva:sorted-with`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:sorted-with),
 one commit on `self-host` at `2ad4f629`: `b2ff55a2`. Locally in
 `~/src/Niva-self-host-sorted-with`, a worktree of `~/src/Niva-self-host`.
