@@ -7,7 +7,9 @@ Option 1 was opened right after as draft PR
 saying a draft PR for 1 would follow, then edited with `gh api -X
 PATCH` to name #452, and each paragraph went in on one line. Gavr took
 option 1: #452 was merged into `self-host` the same day as `e823f7fe`.
-The issue is still open.
+We closed the issue that day, as for #449: "Fixed by #452, merged into
+`self-host`. `Char` and a `compareTo:` (option 2) are left for when
+they're needed."
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `4e809716` (2026-10-25), first found
 at `a56f659c` (2026-10-25)

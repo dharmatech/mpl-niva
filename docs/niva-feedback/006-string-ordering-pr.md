@@ -9,7 +9,8 @@ merged it into `self-host` the same day (15:52 UTC), squashed as
 checked first, with an `ifTrue:` match on `op` whose arms hold the
 conditions themselves, in place of our named `isStrPlus` and
 `isStrOrder`, and a TODO for a cheaper check of default types. Same
-behavior. #451 stays open: "For #451" doesn't close it.
+behavior. "For #451" doesn't close the issue, so we closed it with a
+comment the same day.
 **Issue:** [#451](https://github.com/gavr123456789/Niva/issues/451) ([draft](006-string-ordering.md))
 **Branch:** [`dharmatech/Niva:string-ordering`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:string-ordering),
 one commit on `self-host` at `4e809716`: `69e688aa`. Locally in
