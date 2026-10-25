@@ -1,6 +1,6 @@
 # simplifier 001: order relation
 
-**Status:** Issued (2026-10-25).
+**Status:** Done at `c277081` and reviewed (2026-10-25).
 
 If you've been told to read this file, this is the whole assignment.
 Build it, check it, commit it, report, and stop.
