@@ -1,6 +1,6 @@
 # 005 string-ordering-pin
 
-**Status:** Done; landed at `PENDING` (2026-10-25).
+**Status:** Done; landed at `dae19a8` (2026-10-25).
 
 Moves the pin from `4e809716` to `self-host` at `e823f7fe`, our
 [#452](https://github.com/gavr123456789/Niva/pull/452), so strings have
