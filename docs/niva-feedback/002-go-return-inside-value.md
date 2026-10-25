@@ -3,10 +3,12 @@
 **Status:** Filed 2026-10-23 as [#435](https://github.com/gavr123456789/Niva/issues/435),
 after #433 and its follow-up #434 were merged. Gavr proposed his own
 design on Discord; a [sketch](002-go-return-inside-value-pr-temp.md) of
-it, opened as draft PR [#437](https://github.com/gavr123456789/Niva/pull/437)
-on top of [#436](https://github.com/gavr123456789/Niva/pull/436), was
-merged into `self-host` the same day. The issue is still open, since
-"Fixes" only closes it on the default branch.
+it, opened as draft PR
+[#437](https://github.com/gavr123456789/Niva/pull/437) on top of
+[#436](https://github.com/gavr123456789/Niva/pull/436), was merged into
+`self-host` the same day. "Fixes" only closes an issue on the default
+branch, so it stayed open until we closed it on 2026-10-25: "Fixed by
+#437, merged into `self-host`."
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `b00ec027` (2026-10-23), first found
 at `6af8f9f6` (2026-10-19)

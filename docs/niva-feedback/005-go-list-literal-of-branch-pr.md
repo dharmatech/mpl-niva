@@ -5,11 +5,12 @@
 issue, linking it with "For #449" rather than "Fixes #449", since the
 issue asks which option Gavr prefers. No CI checks. Each paragraph went
 in on one line, since GitHub shows a newline as a line break. Gavr
-approved it without comments and merged it into `self-host` the same
-day (13:32 UTC), squashed as `ab69e59b`, with the same tree as
-`e01dc22d`. Right after, his `4e809716` moved the Go tests, this PR's
-included, to `Assert nivaToGo: … containsAll:` (#445), and `5e347c29`
-fixed the 5 bind tests. #449 stays open: "For #449" doesn't close it.
+approved it without comments and merged it into `self-host` the same day
+(13:32 UTC), squashed as `ab69e59b`, with the same tree as `e01dc22d`.
+Right after, his `4e809716` moved the Go tests, this PR's included, to
+`Assert nivaToGo: … containsAll:` (#445), and `5e347c29` fixed the 5
+bind tests. #449 stayed open, since "For #449" doesn't close it, until
+we closed it on 2026-10-25.
 **Issue:** [#449](https://github.com/gavr123456789/Niva/issues/449) ([draft](005-go-list-literal-of-branch.md))
 **Branch:** [`dharmatech/Niva:literal-expected-type`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:literal-expected-type),
 one commit on `self-host` at `a56f659c`: `e01dc22d`. Locally in

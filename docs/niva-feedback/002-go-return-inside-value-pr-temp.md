@@ -17,7 +17,8 @@ merged it into `self-host` the same evening (21:26 UTC), squashed as
 `3746ffb7`, after adding his own commit, "fix a few comments": the
 header comment became "transforms matchExpr (not statement) from … to
 …", and our comments wrapped over several lines became single lines.
-#435 stays open: "Fixes" only closes an issue on the default branch.
+#435 stayed open, since "Fixes" only closes an issue on the default
+branch, until we closed it on 2026-10-25.
 **Issue:** [#435](https://github.com/gavr123456789/Niva/issues/435) ([draft](002-go-return-inside-value.md))
 **Branch:** [`dharmatech/Niva:fix-435-go-match-temp`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:fix-435-go-match-temp),
 two commits on `self-host` at `cf25e6af` (#436, squashed): `5d30f8cc`

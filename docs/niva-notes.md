@@ -50,9 +50,9 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
 - **A list with nothing expected of it** keeps the type of its items:
   `l = {(Sym name: "x")}` is a `List(Sym)`, and passing it on as a
   `List(Expr)` doesn't build on Go. Declare it, `l::List(Expr) = …`, or
-  build it where it's used. The rest of this bug was fixed by #450; this
-  part is still open in
-  [#449](https://github.com/gavr123456789/Niva/issues/449).
+  build it where it's used. The rest of this bug was fixed by #450, and
+  [#449](https://github.com/gavr123456789/Niva/issues/449) was closed
+  with this case noted, to be filed on its own if a program needs it.
 - **`^` inside `ifTrue:` is a compile error on Clojure**: "the Clojure
   backend can't return from here yet". Until
   [#433](https://github.com/gavr123456789/Niva/pull/433) it was silently

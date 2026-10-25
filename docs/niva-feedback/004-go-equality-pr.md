@@ -11,7 +11,8 @@ with a reply and an updated body, at 15:45 UTC. See [Review](#review).
 He took it out of draft and merged it into `self-host` on 2026-10-25
 (03:36 UTC), squashed as `f7979fd4`, after adding three commits of his
 own: style updates and the fix for 200aa83a's six failing tests. #439
-stays open: "For #439" doesn't close it.
+stayed open, since "For #439" doesn't close it, until we closed it on
+2026-10-25.
 **Issue:** [#439](https://github.com/gavr123456789/Niva/issues/439) ([draft](004-go-equality.md))
 **Branch:** [`dharmatech/Niva:go-structural-eq`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:go-structural-eq),
 two commits on `self-host` at `390d06b6`: `9f4a4506` and `4ae4dc44`.
