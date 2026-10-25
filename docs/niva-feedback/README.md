@@ -233,6 +233,15 @@ and 7 are filed by us, 23 by Gavr.
     in `typeDB.niva`); `sortedBy:` and `map:` escape it only because
     their `g` is inside a block. So a fix needs a rule for naming
     built-in generic methods too, which is Gavr's call.
+35. A keyword message named `try:` can be declared but not sent:
+    `Int try(x): Int -> Int = this + x`, then `(3 try: 4) echo`, gives
+    "keyword try at main.niva:2:2 on Type(Int) expects 0 arguments but
+    got 1". NIN looks up any message named `try` as the error-handling
+    `try` (`findTryMethod:byName:` in `typeDB.niva`), whatever its kind,
+    and the declaration alone passes without a word. The Kotlin compiler
+    takes the send but generates `fun Int.try(…)`, which Kotlin rejects,
+    `try` being a Kotlin keyword. Found at `781c5b05` naming a scratch
+    helper while building simplifier 002; MPL doesn't use the name.
 
 Gaps rather than bugs: `sortedWith:`, which the Kotlin compiler has,
 was missing from NIN until

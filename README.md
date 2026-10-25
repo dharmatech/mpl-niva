@@ -13,8 +13,9 @@ and the algorithms `match` on it, as in the Lean version. Sums and
 products hold a list of operands, as in mpl and Symbolism, because
 Cohen's algorithms work on operand lists.
 
-**Status:** expressions can be built, printed and compared. Nothing is
-simplified yet.
+**Status:** expressions can be built, printed and compared, and
+[simplifying](docs/simplifying.md) has begun: for now it flattens sums
+in sums and products in products.
 
 ## Running
 
@@ -27,7 +28,7 @@ tools/build-self-hosted-niva
 ```
 
 Then run the demo, which builds a few expressions and prints each
-beside the Niva that built it:
+beside the Niva that built it, then simplifies a few:
 
 ```bash
 tools/nin run --backend=go
@@ -37,6 +38,8 @@ tools/nin run --backend=go
 x + (2 num * y)   =>   x + 2 * y
 x + y + z   =>   (x + y) + z
 (x + y) pow: 2 num   =>   (x + y)^2
+
+(x + y) + z   =>   x + y + z
 ```
 
 And the checks, which end with `all N checks passed` when they do:
@@ -62,13 +65,15 @@ Binary messages have no precedence and go left to right, so
 
 | Path | What |
 |---|---|
-| `mpl/` | The library: `Expr` and its operators (`tree`), printing (`notation`), and the order relation (`order`). |
+| `mpl/` | The library: `Expr` and its operators (`tree`), printing (`notation`), the order relation (`order`), and simplifying (`simplify`). |
 | `main.niva` | The demo. |
 | `check.niva`, `tests/` | The checks. |
 | `tools/` | Building and running the self-hosted compiler, and running the checks. |
 
 ## Docs
 
+- [Simplifying](docs/simplifying.md): what `simplify` does, and the
+  rules that hold so far.
 - [Niva notes](docs/niva-notes.md): the language as this project meets
   it, and workarounds for its bugs.
 - [The self-hosted compiler](docs/self-hosted-compiler.md): building and

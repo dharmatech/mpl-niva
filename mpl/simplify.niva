@@ -1,0 +1,167 @@
+// Simplifying: Cohen's automatic simplification, as `simplify`. It's
+// separate from the operators, which build what's written: `x + y + z`
+// is a sum inside a sum, and simplified it's one sum of three terms. It
+// works bottom-up, an expression's operands first and then the
+// expression.
+//
+// A sum's terms are merged two lists at a time, and what two terms
+// become is up to the pair rule, `sumPair:`; a product's factors
+// likewise, with `productPair:`. The algebra goes in the pair rules. For
+// now they keep both operands, so simplifying only flattens: a sum's
+// sums are spliced into it, and a product's products. The two sides are
+// kept apart, as in mpl, since their pair rules will differ. The names
+// in the comments are Cohen's.
+
+extend Expr [
+  /// Cohen's automatic_simplify: the operands first, then the node.
+  on simplify -> Expr = | this
+  | Num     => this
+  | Sym     => this
+  | Sum     => (terms map: [it simplify]) simplifiedSum
+  | Product => (factors map: [it simplify]) simplifiedProduct
+  // Cohen's simplify_power comes in 006.
+  | Power   => Power base: base simplify exp: exp simplify
+]
+
+// Sums.
+
+extend Expr [
+  /// Whether this is a sum.
+  on isSum -> Bool = | this
+  | Sum => true
+  |=> false
+
+  /// A sum's terms, or else a list of this one operand.
+  on asTerms -> List(Expr) = | this
+  | Sum => terms
+  |=> {this}
+
+  /// The pair rule: the base case of Cohen's simplify_sum_rec, two
+  /// operands that aren't sums. For now it keeps both as given; later
+  /// increments add cases above this one.
+  on sumPair(other): Expr -> List(Expr) = {this other}
+]
+
+extend List(Expr) [
+  /// Cohen's simplify_sum, on simplified terms: none is 0, one is
+  /// itself, and more are merged by `sumRec`.
+  on simplifiedSum -> Expr =
+    this count < 2
+      ifTrue: [this asSum]
+      ifFalse: [this sumRec asSum]
+
+  /// These terms as one expression: 0 if there are none, the term if
+  /// there's one, and their sum if more.
+  on asSum -> Expr =
+    this isEmpty
+      ifTrue: [0 num]
+      ifFalse: [this count == 1 ifTrue: [this first] ifFalse: [Sum terms: this]]
+
+  /// Cohen's simplify_sum_rec, on two simplified terms or more: what
+  /// they become, in order. Two that aren't sums go to the pair rule.
+  /// That test comes first, or merging them would call back here
+  /// forever.
+  on sumRec -> List(Expr) =
+    this count == 2
+      ifTrue: [
+        p = this first
+        q = this last
+        p isSum not && q isSum not
+          ifTrue: [p sumPair: q]
+          ifFalse: [p asTerms mergeSum: q asTerms]
+      ]
+      ifFalse: [this first asTerms mergeSum: (this drop: 1) sumRec]
+
+  /// Cohen's merge_sums: two lists of terms, each in order, merged. If
+  /// one is empty, it's the other. If not, the two first terms go to
+  /// `sumRec`: none back, and both are gone; one, and it goes next; both
+  /// in order, and this list's goes next; both swapped, and `q`'s does.
+  on mergeSum(q): List(Expr) -> List(Expr) =
+    this isEmpty || q isEmpty
+      ifTrue: [this + q]
+      ifFalse: [
+        p1 = this first
+        q1 = q first
+        ps = this drop: 1
+        qs = q drop: 1
+        h = {p1 q1} sumRec
+        | h count
+        | 0 => ps mergeSum: qs
+        | 1 => h + (ps mergeSum: qs)
+        |=> h == {p1 q1}
+          ifTrue: [{p1} + (ps mergeSum: q)]
+          ifFalse: [{q1} + (this mergeSum: qs)]
+      ]
+]
+
+// Products, the same with factors.
+
+extend Expr [
+  /// Whether this is a product.
+  on isProduct -> Bool = | this
+  | Product => true
+  |=> false
+
+  /// A product's factors, or else a list of this one operand.
+  on asFactors -> List(Expr) = | this
+  | Product => factors
+  |=> {this}
+
+  /// The pair rule: the base case of Cohen's simplify_product_rec, two
+  /// operands that aren't products. For now it keeps both as given;
+  /// later increments add cases above this one.
+  on productPair(other): Expr -> List(Expr) = {this other}
+]
+
+extend List(Expr) [
+  /// Cohen's simplify_product, on simplified factors: none is 1, one is
+  /// itself, and more are merged by `productRec`.
+  on simplifiedProduct -> Expr =
+    this count < 2
+      ifTrue: [this asProduct]
+      ifFalse: [this productRec asProduct]
+
+  /// These factors as one expression: 1 if there are none, the factor if
+  /// there's one, and their product if more.
+  on asProduct -> Expr =
+    this isEmpty
+      ifTrue: [1 num]
+      ifFalse: [this count == 1 ifTrue: [this first] ifFalse: [Product factors: this]]
+
+  /// Cohen's simplify_product_rec, on two simplified factors or more:
+  /// what they become, in order. Two that aren't products go to the
+  /// pair rule. That test comes first, or merging them would call back
+  /// here forever.
+  on productRec -> List(Expr) =
+    this count == 2
+      ifTrue: [
+        p = this first
+        q = this last
+        p isProduct not && q isProduct not
+          ifTrue: [p productPair: q]
+          ifFalse: [p asFactors mergeProduct: q asFactors]
+      ]
+      ifFalse: [this first asFactors mergeProduct: (this drop: 1) productRec]
+
+  /// Cohen's merge_products: two lists of factors, each in order,
+  /// merged. If one is empty, it's the other. If not, the two first
+  /// factors go to `productRec`: none back, and both are gone; one, and
+  /// it goes next; both in order, and this list's goes next; both
+  /// swapped, and `q`'s does.
+  on mergeProduct(q): List(Expr) -> List(Expr) =
+    this isEmpty || q isEmpty
+      ifTrue: [this + q]
+      ifFalse: [
+        p1 = this first
+        q1 = q first
+        ps = this drop: 1
+        qs = q drop: 1
+        h = {p1 q1} productRec
+        | h count
+        | 0 => ps mergeProduct: qs
+        | 1 => h + (ps mergeProduct: qs)
+        |=> h == {p1 q1}
+          ifTrue: [{p1} + (ps mergeProduct: q)]
+          ifFalse: [{q1} + (this mergeProduct: qs)]
+      ]
+]

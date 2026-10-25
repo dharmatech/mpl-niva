@@ -1,0 +1,32 @@
+type SimplifyChecks
+
+constructor SimplifyChecks all -> List(Check) = [
+  a = "a" sym
+  b = "b" sym
+  c = "c" sym
+  d = "d" sym
+  e = "e" sym
+  x = "x" sym
+  none::List(Expr) = {}
+  {
+    (Check named: "flatten: (a + b) + c" got: (a + b + c) simplify text want: "a + b + c")
+    (Check named: "flatten: a + (b + c)" got: (a + (b + c)) simplify text want: "a + b + c")
+    (Check named: "flatten: ((a + b) + c) + d" got: (a + b + c + d) simplify text want: "a + b + c + d")
+    (Check named: "flatten: (a * b) * c" got: (a * b * c) simplify text want: "a * b * c")
+    (Check named: "flatten: a * (b * c)" got: (a * (b * c)) simplify text want: "a * b * c")
+    (Check named: "flatten: (a + b) * (c + d)" got: ((a + b) * (c + d)) simplify text want: "(a + b) * (c + d)")
+    (Check named: "flatten: (a + (b + c))^2" got: ((a + (b + c)) pow: 2 num) simplify text want: "(a + b + c)^2")
+
+    // Three operands or more take another path through the merge.
+    (Check named: "flatten: (a + b) + c + (d + e)" got: (Sum terms: {(a + b) c (d + e)}) simplify text want: "a + b + c + d + e")
+    (Check named: "flatten: (a * b) * c * (d * e)" got: (Product factors: {(a * b) c (d * e)}) simplify text want: "a * b * c * d * e")
+
+    // One operand is that operand. Its text can't tell, so `==`.
+    (Check named: "one term: Sum terms: {x}" holds: (Sum terms: {x}) simplify == x)
+    (Check named: "one factor: Product factors: {x}" holds: (Product factors: {x}) simplify == x)
+    (Check named: "one term: Sum terms: {a + b}" got: (Sum terms: {(a + b)}) simplify text want: "a + b")
+
+    (Check named: "no terms: Sum terms: {}" got: (Sum terms: none) simplify text want: "0")
+    (Check named: "no factors: Product factors: {}" got: (Product factors: none) simplify text want: "1")
+  }
+]

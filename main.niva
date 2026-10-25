@@ -1,8 +1,15 @@
 // `tools/nin run --backend=go`: builds a few expressions and prints each
-// one beside the Niva that built it. Nothing is simplified yet.
+// one beside the Niva that built it, then simplifies a few. For now
+// simplifying only flattens sums and products.
 
 String show(e): Expr -> Unit = [
   (this + "   =>   " + e text) echo
+  ()
+]
+
+/// Prints this and what it simplifies to.
+Expr showSimplified -> Unit = [
+  (this text + "   =>   " + this simplify text) echo
   ()
 ]
 
@@ -25,3 +32,8 @@ z = "z" sym
 ((x + y) == (x + y)) echo
 "(x + y) == (y + x)" echo
 ((x + y) == (y + x)) echo
+
+"" echo
+(x + y + z) showSimplified
+(x * (y * z)) showSimplified
+((x + (y + z)) pow: 2 num) showSimplified
