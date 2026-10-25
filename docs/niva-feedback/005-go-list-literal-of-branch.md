@@ -1,8 +1,12 @@
 # 005 Go: a list literal of one union branch
 
-**Status:** Draft, not filed. Option 1 is drafted as a pull request in
-[005's PR](005-go-list-literal-of-branch-pr.md), to be opened right
-after the issue; `#PR` below gets its number then.
+**Status:** Filed 2026-10-25 as [#449](https://github.com/gavr123456789/Niva/issues/449).
+Option 1 was opened right after as draft PR
+[#450](https://github.com/gavr123456789/Niva/pull/450)
+([draft](005-go-list-literal-of-branch-pr.md)). The issue was filed
+saying a draft PR for 1 would follow, then edited with `gh api -X
+PATCH` to name #450, as below. Each paragraph went in on one line,
+since GitHub shows a newline as a line break.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `a56f659c` (2026-10-25), first found
 at `6af8f9f6` (2026-10-19)
@@ -133,7 +137,8 @@ lists that 3 avoids. The issue suggests 1, points to the draft PR
 rather than offering one, and leaves 2 and 3 for later, so there's one
 decision: is 1 the right direction.
 
-Everything below the line is the issue as it would be filed.
+Everything below the line is the issue as filed, with the PR's number
+put in.
 
 ---
 
@@ -237,7 +242,7 @@ fix should go:
    it.
 
 I'd suggest 1: it's small, changes no rule, and covers what comes up in
-practice; 2 or 3 could follow for the last case. Draft PR #PR shows
+practice; 2 or 3 could follow for the last case. Draft PR #450 shows
 what 1 looks like, with tests, so there's something concrete to look
 at. You don't have to take it, and if another option fits better,
 that's fine.

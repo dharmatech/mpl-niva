@@ -1,13 +1,14 @@
 # 005 Go: a list literal of one union branch, option 1 as a draft pull request
 
-**Status:** Draft, not opened. To be opened as a draft PR right after
-the issue is filed, linking it with "For #N" rather than "Fixes #N",
-since the issue asks which option Gavr prefers.
-**Issue:** not filed yet ([draft](005-go-list-literal-of-branch.md))
-**Branch:** `literal-expected-type`, one commit on `self-host` at
-`a56f659c`: `e01dc22d`. Locally in `~/src/Niva-self-host-literal`, a
-worktree of `~/src/Niva-self-host`. Not pushed; it goes to
-`dharmatech/Niva` like #440's branch.
+**Status:** Opened 2026-10-25 as draft PR
+[#450](https://github.com/gavr123456789/Niva/pull/450), right after the
+issue, linking it with "For #449" rather than "Fixes #449", since the
+issue asks which option Gavr prefers. No CI checks. Each paragraph went
+in on one line, since GitHub shows a newline as a line break.
+**Issue:** [#449](https://github.com/gavr123456789/Niva/issues/449) ([draft](005-go-list-literal-of-branch.md))
+**Branch:** [`dharmatech/Niva:literal-expected-type`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:literal-expected-type),
+one commit on `self-host` at `a56f659c`: `e01dc22d`. Locally in
+`~/src/Niva-self-host-literal`, a worktree of `~/src/Niva-self-host`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 The issue's option 1, built from the spike in the issue draft and
@@ -18,14 +19,16 @@ uses them for the items too, in place of the two inline matches it had.
 Same behavior as the spike.
 
 **Order of filing.** The issue says a draft PR shows option 1, and the
-PR says "For #N", so one of them has to be edited after the other
-exists:
+PR says "For #449", so one of them had to be edited after the other
+existed:
 
-1. File the issue, with the PR number left as `#PR` in its last
-   paragraph.
-2. Push the branch, and open the PR as a draft with the issue's number
-   in its title and body.
-3. Put the PR's number in the issue with `gh api -X PATCH`.
+1. The issue was filed saying "I'm opening a draft PR for 1 right after
+   this issue", rather than a `#PR` placeholder, since GitHub emails the
+   body as filed.
+2. The branch was pushed, and the PR opened as a draft with the issue's
+   number in its title and body.
+3. The issue's sentence was changed to "Draft PR #450 shows what 1 looks
+   like" with `gh api -X PATCH`.
 
 GitHub also links the two on its own, since the PR mentions the issue.
 
@@ -57,15 +60,15 @@ Not covered: a generic union, since writing `Result(Int)` as a type
 fails first (#447), and a nullable or `Any` item type, which the change
 leaves as it was.
 
-Everything below the line is the pull request as it would be opened.
+Everything below the line is the pull request as opened.
 
 ---
 
-**Title:** [resolver] a collection literal of union branches takes the union it's expected to hold (#N)
+**Title:** [resolver] a collection literal of union branches takes the union it's expected to hold (#449)
 
-Option 1 from #N, as a draft, to show what it looks like. You don't
+Option 1 from #449, as a draft, to show what it looks like. You don't
 have to take it, and if another option fits better, that's fine.
-For #N.
+For #449.
 
 A collection literal was typed from its items alone, so
 `{(Sym name: "x")}` is a `List(Sym)` even where a `List(Expr)` is
