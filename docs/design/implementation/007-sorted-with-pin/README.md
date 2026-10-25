@@ -1,6 +1,6 @@
 # 007 sorted-with-pin
 
-**Status:** Done; landed at `PENDING` (2026-10-25).
+**Status:** Done; landed at `e5874de` (2026-10-25).
 
 Moves the pin from `2ad4f629` to `self-host` at `781c5b05`, our
 [#455](https://github.com/gavr123456789/Niva/pull/455), so lists have
