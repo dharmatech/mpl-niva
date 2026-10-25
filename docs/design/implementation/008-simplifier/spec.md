@@ -1,6 +1,7 @@
 # 008 simplifier: spec
 
-**Status:** Agreed with the user (2026-10-25). Increment 001 is next.
+**Status:** Agreed with the user (2026-10-25). All seven increments
+are done and reviewed (2026-10-25).
 
 What `simplify` will do, in seven increments, one checkpoint each. The
 [charter](charter.md) has the background and the references; this page

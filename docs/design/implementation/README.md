@@ -25,4 +25,4 @@ series: **expression-tree**, **collect-terms 001**.
 | [`005-string-ordering-pin`](005-string-ordering-pin/README.md) | The pin moves to #452, so strings have `<`, `>`, `<=` and `>=`, and the notes say so. | Done at `dae19a8` (2026-10-25). |
 | [`006-inject-into-pin`](006-inject-into-pin/README.md) | The pin moves to #454, so `inject:into:` runs, and the notes say so. | Done at `ff82209` (2026-10-25). |
 | [`007-sorted-with-pin`](007-sorted-with-pin/README.md) | The pin moves to #455, so lists have `sortedWith:`, and the notes say so. | Done at `e5874de` (2026-10-25). |
-| [`008-simplifier`](008-simplifier/README.md) | Cohen's automatic simplification, in small increments, as a charter, a spec and checkpoints. | Spec agreed (2026-10-25). Increments 001 to 006 done; 007 issued. |
+| [`008-simplifier`](008-simplifier/README.md) | Cohen's automatic simplification, in small increments, as a charter, a spec and checkpoints. | The spec's seven increments done (2026-10-25), the last at `435dea7`. What comes next is open. |
