@@ -1,11 +1,13 @@
 # Niva notes
 
 What to know when writing Niva for this project, with the self-hosted
-compiler at `self-host` `e823f7fe` (2026-10-25). Each note was
+compiler at `self-host` `2ad4f629` (2026-10-25). Each note was
 re-checked at `4e809716`
 ([series 004](design/implementation/004-notes-recheck/README.md));
-`e823f7fe` adds only #452, string ordering
-([series 005](design/implementation/005-string-ordering-pin/README.md)). The
+since then come only #452, string ordering
+([series 005](design/implementation/005-string-ordering-pin/README.md)),
+and #454, `inject:into:`
+([series 006](design/implementation/006-inject-into-pin/README.md)). The
 Go backend is the one we use; Clojure differences are marked, and hold
 on Babashka and let-go alike unless noted
 ([series 002](design/implementation/002-let-go/README.md)). The bugs
@@ -39,6 +41,13 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   `e823f7fe`. Go uses its own operators, and Clojure `compare`. The two
   agree but for a character above U+FFFF compared with one from U+E000
   to U+FFFF. `Char` has no ordering, only `code`.
+- `inject:into:` folds a list: `{1 2 3} inject: 0 into: [acc, x -> acc +
+  x]` is 6. That's since
+  [#454](https://github.com/gavr123456789/Niva/pull/454), merged as
+  `2ad4f629`; before it, it didn't run on either backend. The total has
+  to be the items' type, so `map:` first to fold into something else:
+  `(words map: [it count]) inject: 0 into: [acc, n -> acc + n]`. The Kotlin
+  compiler doesn't ask that.
 - A type name of one capital letter is read as a type parameter:
   `type P n: Int`, then `P n: 1`, gives "Missing constructor table for
   Type(P)". Use two letters or more.
@@ -93,9 +102,6 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   the checks can't run on Clojure even in one file.
 - `indexOfFirst:` is in both runtimes, but the type checker doesn't know
   it.
-- `inject:into:` passes the type checker but doesn't run on either
-  backend: the runtimes call it `List__injectInto`. Use `reduce:` on a
-  list that isn't empty, or a loop with a `mut` total.
 - No `reversed` or `sum` on a list. `toSet` is missing from the Clojure
   runtime.
 - No `flatMap:`, `flatten`, `groupBy:`, `max` or `zip:` either, on

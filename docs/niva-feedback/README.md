@@ -214,6 +214,13 @@ and 7 are filed by us, 23 by Gavr.
     survives a run, one added to `core.go` doesn't. Found drafting 007,
     when a stock run in a folder the branch had built printed the
     branch's results.
+34. `inject:into:`'s total has to be the items' type: `{"a" "bb"}
+    inject: 0 into: [acc, s -> acc + s count]` gives "wrong arg type for
+    inject expected Type(String) but got Type(Int)". The protocol types
+    both the start and the block's accumulator as the item type, though
+    the Go runtime's `List__inject__into[T any, R any]` takes any. The
+    Kotlin compiler prints 3. Workaround: `map:` first. Found at
+    `2ad4f629`, after #454.
 
 Gaps rather than bugs: neither runtime has `sortedWith:`, which the
 Kotlin compiler has, or `all:`, which it doesn't either. Neither
