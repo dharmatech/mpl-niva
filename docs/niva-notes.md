@@ -1,9 +1,11 @@
 # Niva notes
 
 What to know when writing Niva for this project, with the self-hosted
-compiler at `self-host` `6af8f9f6` (2026-10-19). The Go backend is the
-one we use; Clojure differences are marked, and hold on Babashka and
-let-go alike unless noted
+compiler at `self-host` `a56f659c` (2026-10-25). Most notes date from
+`6af8f9f6` (2026-10-19) and weren't re-checked when the pin moved
+([series 003](design/implementation/003-equals/README.md)). The Go
+backend is the one we use; Clojure differences are marked, and hold on
+Babashka and let-go alike unless noted
 ([series 002](design/implementation/002-let-go/README.md)). The bugs
 behind the workarounds are listed for filing in
 [Niva feedback](niva-feedback/README.md).
@@ -22,9 +24,10 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   declare `-> Unit`. End it with `()`.
 - Interpolation takes a name only: `"$name"` works, `"${a b}"` is printed
   as written.
-- `==` compares structure. On Go, comparing two sums or products fails
-  at run time, because Go can't compare the lists inside them. Use
-  `same:`.
+- `==` compares structure, operands in order: `x + y` isn't `y + x`. It
+  works on lists, and a type's own `==` is called. On Go that's since
+  [#440](https://github.com/gavr123456789/Niva/pull/440), merged as
+  `f7979fd4`; before it, comparing two sums failed at run time.
 - Only the entry file's top-level code runs. Top-level code in other
   files isn't type-checked either, so keep it out of them.
 - A file named `test.niva` at the root is left out of the sources, which

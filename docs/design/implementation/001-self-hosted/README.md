@@ -28,7 +28,8 @@ one at a time, with fixes where we can.
   so a program spread over files fails; we'd need one file. Clojure
   comes back when that's fixed.
 - **Its own clone, pinned.** `tools/build-self-hosted-niva` builds the
-  compiler in `~/src/Niva-self-host` at `6af8f9f6`, without touching
+  compiler in `~/src/Niva-self-host` at `6af8f9f6` (moved in
+  [003](../003-equals/README.md)), without touching
   `~/.niva` or an installed `niva`. `tools/nin` runs it.
   [The self-hosted compiler](../../../self-hosted-compiler.md) has the
   details.

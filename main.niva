@@ -21,7 +21,7 @@ z = "z" sym
 "x * y pow: z + 1 num" show: (x * y pow: z + 1 num)
 
 "" echo
-"(x + y) same: (x + y)" echo
-((x + y) same: (x + y)) echo
-"(x + y) same: (y + x)" echo
-((x + y) same: (y + x)) echo
+"(x + y) == (x + y)" echo
+((x + y) == (x + y)) echo
+"(x + y) == (y + x)" echo
+((x + y) == (y + x)) echo

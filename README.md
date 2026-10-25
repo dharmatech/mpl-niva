@@ -62,7 +62,7 @@ Binary messages have no precedence and go left to right, so
 
 | Path | What |
 |---|---|
-| `mpl/` | The library: `Expr` and its operators (`tree`), printing (`notation`), and `same:` (`equality`). |
+| `mpl/` | The library: `Expr` and its operators (`tree`), and printing (`notation`). |
 | `main.niva` | The demo. |
 | `check.niva`, `tests/` | The checks. |
 | `tools/` | Building and running the self-hosted compiler, and running the checks. |

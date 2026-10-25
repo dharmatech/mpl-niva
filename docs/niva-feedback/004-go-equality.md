@@ -8,8 +8,10 @@ at `6af8f9f6` (2026-10-19)
 Found while porting to the self-hosted compiler in
 [series 001](../design/implementation/001-self-hosted/README.md): `==`
 on two sums failed on Go, so MPL compares expressions with its own
-structural `same:` ([`mpl/equality.niva`](../../mpl/equality.niva),
-checked in [`tests/equalityChecks.niva`](../../tests/equalityChecks.niva)).
+structural `same:` (in `mpl/equality.niva`, checked in
+[`tests/equalityChecks.niva`](../../tests/equalityChecks.niva), until
+[series 003](../design/implementation/003-equals/README.md) moved MPL to
+`==`).
 It's item 7 in the [README](README.md), picked as next after #437: a
 computer algebra library compares expressions all the time, and the
 compilers disagree on what `==` means, which NIN needs settled before it

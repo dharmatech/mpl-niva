@@ -1,5 +1,6 @@
 /// An algebraic expression, in the shape Cohen's algorithms use:
-/// sums and products hold a list of operands, not just two.
+/// sums and products hold a list of operands, not just two. `==`
+/// compares structure, operands in order: `x + y` isn't `y + x`.
 union Expr =
 | Num     value: Int
 | Sym     name: String
