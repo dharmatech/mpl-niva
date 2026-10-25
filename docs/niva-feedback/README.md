@@ -19,6 +19,7 @@ filed. Once filed, the header links the issue.
 | [003 Go: three bugs in a match used as a statement](003-go-statement-match-fixes-pr.md) | A PR without an issue: opened as [#436](https://github.com/gavr123456789/Niva/pull/436) (2026-10-23) and merged into `self-host` the same day. Split out of the 002 sketch, which builds on it. |
 | [004 Go: `==` on a type that holds a list](004-go-equality.md) | Filed as [#439](https://github.com/gavr123456789/Niva/issues/439) (2026-10-23). Asks what `==` should mean in NIN, with three options: content with a type error where Go can't compare, content everywhere, or identity. On Discord, Gavr then listed five options of his own. His 3, structural by default with a generated compare function for types that hold collections, was sketched as [#440](https://github.com/gavr123456789/Niva/pull/440) (row below) and merged into `self-host` on 2026-10-25. The issue is still open. |
 | [004 Go: `==` by content, Gavr's option 3, as a pull request](004-go-equality-pr.md) | Opened 2026-10-24 as draft PR [#440](https://github.com/gavr123456789/Niva/pull/440), "For #439". A sketch of the third option Gavr listed on Discord: structural `==`, with a generated compare function on Go where Go's `==` can't compare by content, plus a type's own `==` as a commit he can drop. For discussion, not to push him toward it. Gavr agreed on `mut` fields and generic types, and asked for null lists, blocks by signature and `Box(List(Int))`; fixed and pushed the same day, after merging his `200aa83a`, with a question back on blocks on Clojure. He added style updates and merged it on 2026-10-25, squashed as `f7979fd4`. |
+| [005 Go: a list literal of one union branch](005-go-list-literal-of-branch.md) | Draft, not filed. README item 5, re-checked at `a56f659c`: any literal whose items are all one branch, a narrowed `this` included, has that branch's type, which Go won't take as a list of the union. Asks how far a fix should go, suggesting 1: type a literal by what its context expects, spiked and working for all but an untyped local. |
 
 ## Self-hosted compiler
 
@@ -60,7 +61,11 @@ filed.
    it.
 5. **Go:** a list literal of branch values given as a `List(Expr)`, such
    as `Sum terms: {(Sym name: "x")}`, becomes a Go `[]main_Sym`, which
-   doesn't compile.
+   doesn't compile. At `a56f659c` it's any literal whose items are all
+   one branch, a value a match has narrowed included (`{this}` in
+   `| Num =>`), and sets and maps too. On Clojure, a `mut` list
+   declared from one loses its atom. Drafted as
+   [005](005-go-list-literal-of-branch.md).
 6. **Go:** `^ (…) any: […], not` generates an empty `return` before the
    real one, so the Go build fails. Works at `3746ffb7`, likely since
    #437.
