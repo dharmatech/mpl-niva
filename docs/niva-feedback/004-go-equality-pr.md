@@ -160,7 +160,6 @@ our branch:
 
 He didn't answer the question on blocks on Clojure, so two different
 blocks of the same type are still `true` on Go and `false` on Clojure.
-The style points are in Claude's memory for this project.
 
 After #439 was filed, Gavr listed his own options on Discord. His 3:
 always compare by structure, and generate a compare function for each
