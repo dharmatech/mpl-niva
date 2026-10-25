@@ -6,7 +6,9 @@ Option 1 was opened right after as draft PR
 ([draft](005-go-list-literal-of-branch-pr.md)). The issue was filed
 saying a draft PR for 1 would follow, then edited with `gh api -X
 PATCH` to name #450, as below. Each paragraph went in on one line,
-since GitHub shows a newline as a line break.
+since GitHub shows a newline as a line break. Gavr took option 1:
+#450 was merged into `self-host` the same day as `ab69e59b`, unchanged.
+The issue is still open.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `a56f659c` (2026-10-25), first found
 at `6af8f9f6` (2026-10-19)
