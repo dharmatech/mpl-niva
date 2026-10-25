@@ -130,8 +130,8 @@ Increments 3 to 6 are where Cohen's `simplify_sum_rec` and
 
 ## References
 
-The earlier versions are checked out in `~/src`
-([lineage](../../../lineage.md)):
+The earlier versions are checked out locally, three in `~/src` and
+Aloe's in `~/journal` ([lineage](../../../lineage.md)):
 
 - `~/src/mpl`, Scheme: `automatic-simplify.sls`, `order-relation.sls`,
   and `sum-product-power.sls`, which has `simplify-sum-rec`,
@@ -141,12 +141,25 @@ The earlier versions are checked out in `~/src`
   `Tests/Tests.cs`.
 - `~/src/symbolism.lean`: `Symbolism/Basic.lean`, a very basic
   simplifier over binary nodes, flattened to lists to work on sums.
+- `~/journal/2026-09-02-aloe-racket/examples/mpl`, Aloe, the language
+  closest to Niva of these: message sends to objects. Most of it is in
+  `core.aloe`, with a class per kind in `sym.aloe`, `num.aloe`,
+  `sum.aloe`, `prod.aloe` and `pow.aloe`. It simplifies as it builds:
+  a `Sum` keeps its terms and a separate integer `const`, a `Prod`
+  merges factors by base and exponent (`factor-base`, `factor-exp`,
+  `merge-factor`), and `unwrap` drops the identities. Its checks, in
+  `identities.aloe`, are a ready list of first rules: `x * x` is
+  `x^2`, `(x * 2) * 3` is `x * 6`, `(x + 2) + 3` is `x + 5`,
+  `x^2 * x^3` is `x^5`, `x * 1`, `x + 0` and `x^1` are `x`, `x * 0` is
+  `0`, and `-3x + 3x` is `0`.
 
 ## First steps in the new conversation
 
 1. Read this charter, the [Niva notes](../../../niva-notes.md), the
    [README](../../../../README.md), and `mpl/`.
-2. Read `~/src/mpl`'s `order-relation.sls` and `sum-product-power.sls`.
+2. Read `~/src/mpl`'s `order-relation.sls` and `sum-product-power.sls`,
+   and Aloe's `examples/mpl` (`core.aloe` and `identities.aloe`): the
+   closest in Niva's spirit, and the smallest.
 3. With the user: settle the design questions above, or which can
    wait, and pick the increments and their order.
 4. Write `spec.md`, then the first checkpoint, and start it.
