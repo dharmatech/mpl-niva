@@ -66,11 +66,12 @@ extend Expr [
   /// add, and drop out if they make 0; a 0 drops out; and any other two
   /// are kept, swapped if `other` comes first. Later increments add
   /// cases ahead of that last one.
-  on sumPair(other): Expr -> List(Expr) =
-    this isNum && other isNum ifTrue: [(this numValue + other numValue) num listUnless: 0] ifFalse: [
-    this == 0 num ifTrue: [{other}] ifFalse: [
-    other == 0 num ifTrue: [{this}] ifFalse: [
-    (other before: this) ifTrue: [{other this}] ifFalse: [{this other}]]]]
+  on sumPair(other): Expr -> List(Expr) = | true
+  | this isNum && other isNum => (this numValue + other numValue) num listUnless: 0
+  | this == 0 num => {other}
+  | other == 0 num => {this}
+  | (other before: this) => {other this}
+  |=> {this other}
 ]
 
 extend List(Expr) [
@@ -143,11 +144,12 @@ extend Expr [
   /// numbers multiply, and drop out if they make 1; a 1 drops out; and
   /// any other two are kept, swapped if `other` comes first. Later
   /// increments add cases ahead of that last one.
-  on productPair(other): Expr -> List(Expr) =
-    this isNum && other isNum ifTrue: [(this numValue * other numValue) num listUnless: 1] ifFalse: [
-    this == 1 num ifTrue: [{other}] ifFalse: [
-    other == 1 num ifTrue: [{this}] ifFalse: [
-    (other before: this) ifTrue: [{other this}] ifFalse: [{this other}]]]]
+  on productPair(other): Expr -> List(Expr) = | true
+  | this isNum && other isNum => (this numValue * other numValue) num listUnless: 1
+  | this == 1 num => {other}
+  | other == 1 num => {this}
+  | (other before: this) => {other this}
+  |=> {this other}
 ]
 
 extend List(Expr) [
