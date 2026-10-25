@@ -5,7 +5,9 @@
 A PR without an issue, as [003](003-go-statement-match-fixes-pr.md)
 (#436) was: it's a plain bug with one obvious fix, so there's no
 decision to ask Gavr for. No CI checks. Each paragraph went in on one
-line.
+line. Gavr approved it without comments and merged it into `self-host`
+the same day (16:50 UTC), squashed as `2ad4f629`, unchanged, retitled
+"[go, clj] fix `List inject:into:` emitted name `List__inject__into`".
 **Branch:** [`dharmatech/Niva:inject-into`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:inject-into),
 one commit on `self-host` at `e823f7fe`: `a210b4df`. Locally in
 `~/src/Niva-self-host-inject-into`, a worktree of `~/src/Niva-self-host`.

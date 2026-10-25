@@ -23,7 +23,7 @@ filed. Once filed, the header links the issue.
 | [005 Go: a list literal of one union branch, option 1 as a draft pull request](005-go-list-literal-of-branch-pr.md) | Opened 2026-10-25 as draft PR [#450](https://github.com/gavr123456789/Niva/pull/450), "For #449", right after the issue, whose last paragraph was then edited to name it. Branch `dharmatech/Niva:literal-expected-type` at `e01dc22d` on `self-host` `a56f659c`, locally in `~/src/Niva-self-host-literal`. The issue's option 1 in Gavr's style, with four tests that fail without it. Approved without comments and merged into `self-host` the same day (13:32 UTC), squashed as `ab69e59b`, unchanged. |
 | [006 `String` has no ordering](006-string-ordering.md) | Filed as [#451](https://github.com/gavr123456789/Niva/issues/451) (2026-10-25). README item 26: neither compiler has `<` on strings, so it's new, and the form is Gavr's call. Options: 1 `<`, `>`, `<=`, `>=` (Go's operators, Clojure's `compare`), 2 that and a `compareTo:`, 3 no change. Suggests 1, pointing to draft PR [#452](https://github.com/gavr123456789/Niva/pull/452) (row below). Gavr took 1, merging #452 the same day, and we closed the issue with a comment leaving `Char` and a `compareTo:` for when they're needed. |
 | [006 `String` ordering, option 1 as a draft pull request](006-string-ordering-pr.md) | Opened 2026-10-25 as draft PR [#452](https://github.com/gavr123456789/Niva/pull/452), "For #451", right after the issue, whose last paragraph was then edited to name it. Branch `dharmatech/Niva:string-ordering` at `69e688aa` on `self-host` `4e809716`, locally in `~/src/Niva-self-host-string-ordering`. Four lines in the `String` protocol and a `compare` case on Clojure, with three tests that fail without it. Approved without comments and merged into `self-host` the same day (15:52 UTC), squashed as `e823f7fe`, with Gavr's restyle of the Clojure case. |
-| [007 `inject:into:` has the wrong name in both runtimes, as a pull request](007-inject-into-pr.md) | Opened 2026-10-25 as [#454](https://github.com/gavr123456789/Niva/pull/454): a PR without an issue, as 003 was, since there's nothing to decide. README item 30. Branch `dharmatech/Niva:inject-into` at `a210b4df` on `self-host` `e823f7fe`, locally in `~/src/Niva-self-host-inject-into`: `List__injectInto` renamed to `List__inject__into` in both runtimes, with two tests that fail without it. |
+| [007 `inject:into:` has the wrong name in both runtimes, as a pull request](007-inject-into-pr.md) | Opened 2026-10-25 as [#454](https://github.com/gavr123456789/Niva/pull/454): a PR without an issue, as 003 was, since there's nothing to decide. README item 30. Branch `dharmatech/Niva:inject-into` at `a210b4df` on `self-host` `e823f7fe`, locally in `~/src/Niva-self-host-inject-into`: `List__injectInto` renamed to `List__inject__into` in both runtimes, with two tests that fail without it. Approved without comments and merged into `self-host` the same day (16:50 UTC), squashed as `2ad4f629`, unchanged. |
 
 ## Self-hosted compiler
 
@@ -200,7 +200,8 @@ and 7 are filed by us, 23 by Gavr.
     Kotlin compiler prints 6. Found at `e823f7fe`, probing the list
     operations a simplifier would use, as are 31 and 32. Opened as
     [#454](https://github.com/gavr123456789/Niva/pull/454), a PR without
-    an issue ([draft](007-inject-into-pr.md)).
+    an issue ([draft](007-inject-into-pr.md)), and merged into
+    `self-host` 2026-10-25 as `2ad4f629`.
 31. `reversed` and `sum` on a list aren't in the type checker. The
     Kotlin compiler has both: `{1 2 3} reversed` and `{1 2 3} sum`.
 32. **Clojure:** `toSet` on a list passes the type checker but isn't in
