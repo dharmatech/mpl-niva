@@ -26,5 +26,5 @@ runs as a charter, a spec and checkpoints.
 | 003 | canonical order | [003](checkpoints/003-canonical-order.md) | Done, reviewed (2026-10-25). | `35e803d` |
 | 004 | numbers and identities | [004](checkpoints/004-numbers-and-identities.md) | Done, reviewed (2026-10-25). | `5dd2b01` |
 | 005 | like terms | [005](checkpoints/005-like-terms.md) | Done, reviewed (2026-10-25). | `ad0bb27`, `f5a3efe` |
-| 006 | powers | [006](checkpoints/006-powers.md) | Done (2026-10-25). | |
-| 007 | like factors | | | |
+| 006 | powers | [006](checkpoints/006-powers.md) | Done, reviewed (2026-10-25). | `9bbdd02` |
+| 007 | like factors | [007](checkpoints/007-like-factors.md) | Issued (2026-10-25). | |
