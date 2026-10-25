@@ -1,12 +1,14 @@
 # 006 `String` ordering, option 1 as a draft pull request
 
-**Status:** Draft, not opened. To be opened as a draft PR right after
-the issue, linking it with "For #N", as 005 was.
-**Issue:** not filed yet ([draft](006-string-ordering.md))
-**Branch:** `string-ordering`, one commit on `self-host` at `4e809716`:
-`69e688aa`. Locally in `~/src/Niva-self-host-string-ordering`, a
-worktree of `~/src/Niva-self-host`. Not pushed; it goes to
-`dharmatech/Niva` like #450's branch.
+**Status:** Opened 2026-10-25 as draft PR
+[#452](https://github.com/gavr123456789/Niva/pull/452), right after the
+issue, linking it with "For #451", as 005 was. No CI checks. Each
+paragraph went in on one line.
+**Issue:** [#451](https://github.com/gavr123456789/Niva/issues/451) ([draft](006-string-ordering.md))
+**Branch:** [`dharmatech/Niva:string-ordering`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:string-ordering),
+one commit on `self-host` at `4e809716`: `69e688aa`. Locally in
+`~/src/Niva-self-host-string-ordering`, a worktree of
+`~/src/Niva-self-host`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 The issue's option 1, in Gavr's style:
@@ -58,15 +60,15 @@ the home.
 Not covered: `Char`, which has no ordering either, and a three-way
 `compareTo:`, the issue's option 2.
 
-Everything below the line is the pull request as it would be opened.
+Everything below the line is the pull request as opened.
 
 ---
 
-**Title:** [resolver] strings get < > <= >=, which clojure orders with compare (#N)
+**Title:** [resolver] strings get < > <= >=, which clojure orders with compare (#451)
 
-Option 1 from #N, as a draft, to show what it looks like. You don't
+Option 1 from #451, as a draft, to show what it looks like. You don't
 have to take it, and if another option fits better, that's fine.
-For #N.
+For #451.
 
 `String` gets `<`, `>`, `<=` and `>=`, like `Int`:
 

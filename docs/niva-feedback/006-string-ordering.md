@@ -1,8 +1,11 @@
 # 006 `String` has no ordering
 
-**Status:** Draft, not filed. Option 1 is drafted as a pull request in
-[006's PR](006-string-ordering-pr.md), to be opened right after the
-issue, as for 005.
+**Status:** Filed 2026-10-25 as [#451](https://github.com/gavr123456789/Niva/issues/451).
+Option 1 was opened right after as draft PR
+[#452](https://github.com/gavr123456789/Niva/pull/452)
+([draft](006-string-ordering-pr.md)). As for 005, the issue was filed
+saying a draft PR for 1 would follow, then edited with `gh api -X
+PATCH` to name #452, and each paragraph went in on one line.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `4e809716` (2026-10-25), first found
 at `a56f659c` (2026-10-25)
@@ -60,7 +63,8 @@ there for completeness: it's what the workarounds are. `Char` has no
 ordering either; the issue mentions it but leaves it out, to keep to
 one decision.
 
-Everything below the line is the issue as it would be filed.
+Everything below the line is the issue as filed, with the PR's number
+put in.
 
 ---
 
@@ -118,7 +122,7 @@ What should strings have?
    or with a bind, and the docs say so.
 
 I'd suggest 1: it's small, and what most languages have; 2 could follow
-when there's a use for it. Draft PR #PR shows what 1 looks like, with
+when there's a use for it. Draft PR #452 shows what 1 looks like, with
 tests, so there's something concrete to look at. You don't have to take
 it, and if another option fits better, that's fine. `Char` could get
 the same, but I've left it out.
