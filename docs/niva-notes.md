@@ -78,6 +78,12 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   build it where it's used. The rest of this bug was fixed by #450, and
   [#449](https://github.com/gavr123456789/Niva/issues/449) was closed
   with this case noted, to be filed on its own if a program needs it.
+- **A chain of binary messages of more than one type** is typed on
+  each message's argument rather than on the one before it, so
+  `1 < 2 && true` looks for `&&` on `Int`, and `x == 0 num && b` on an
+  `Expr`. Parenthesize the part before: `(1 < 2) && true`. A chain of one
+  type, `x + y + z`, is fine. [Feedback](niva-feedback/README.md) item
+  36.
 - **`^` inside `ifTrue:` is a compile error on Clojure**: "the Clojure
   backend can't return from here yet". Until
   [#433](https://github.com/gavr123456789/Niva/pull/433) it was silently

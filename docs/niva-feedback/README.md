@@ -242,6 +242,21 @@ and 7 are filed by us, 23 by Gavr.
     takes the send but generates `fun Int.try(…)`, which Kotlin rejects,
     `try` being a Kotlin keyword. Found at `781c5b05` naming a scratch
     helper while building simplifier 002; MPL doesn't use the name.
+36. A chain of binary messages is typed on each one's argument, not on
+    the message before it: in `a = 1 < 2 && true`, `&&` is looked up on
+    `2`, so both backends stop at "Searching for && method but its not
+    found for type Type(Int)". The Kotlin compiler prints `true`. Where
+    the argument's type has the method, the chain passes with the wrong
+    type: `x = 2 < 3 + 1` types `x` as an `Int`, and Go stops later, at
+    "unknown Go IR func id: main.core_Bool.+", where the Kotlin compiler
+    says "Can't find binary message + for type Bool". A chain of one
+    type, `x + y + z` or `a && b && c`, doesn't show it. It's
+    `replaceArgsWithTypedfromDb2:withContext:` in
+    `front/resolver/messages/binary.niva`: after each message,
+    `lastReceiverTypedExpr <- typedArg expr` makes the argument the next
+    receiver. Workaround: parentheses, `(1 < 2) && true`. Found at
+    `781c5b05` writing simplifier 006's `simplifiedPower:`, whose
+    `this == 0 num && w isNum` looked for `&&` on an `Expr`.
 
 Gaps rather than bugs: `sortedWith:`, which the Kotlin compiler has,
 was missing from NIN until

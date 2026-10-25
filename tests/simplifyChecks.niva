@@ -8,6 +8,7 @@ constructor SimplifyChecks all -> List(Check) = [
   e = "e" sym
   x = "x" sym
   y = "y" sym
+  z = "z" sym
   none::List(Expr) = {}
   {
     (Check named: "flatten: (a + b) + c" got: (a + b + c) simplify text want: "a + b + c")
@@ -90,5 +91,40 @@ constructor SimplifyChecks all -> List(Check) = [
     // Unlike terms stay apart.
     (Check named: "like terms: x + x * y" got: (x + (x * y)) simplify text want: "x + x * y")
     (Check named: "like terms: 2 * x + 2 * y" got: ((2 num * x) + (2 num * y)) simplify text want: "2 * x + 2 * y")
+
+    // Powers, by Cohen's rules for integers. Each result is final: no
+    // product whose factors share a base, and no negative power of a
+    // number.
+    (Check named: "powers: x^0" got: (x pow: 0 num) simplify text want: "1")
+    (Check named: "powers: x^1" got: (x pow: 1 num) simplify text want: "x")
+    (Check named: "powers: 1^x" got: (1 num pow: x) simplify text want: "1")
+    (Check named: "powers: 0^3" got: (0 num pow: 3 num) simplify text want: "0")
+    (Check named: "powers: 2^3" got: (2 num pow: 3 num) simplify text want: "8")
+    (Check named: "powers: (-2)^3" got: (-2 num pow: 3 num) simplify text want: "-8")
+    (Check named: "powers: (x^2)^3" got: ((x pow: 2 num) pow: 3 num) simplify text want: "x^6")
+    (Check named: "powers: (x^y)^2" got: ((x pow: y) pow: 2 num) simplify text want: "x^(2 * y)")
+    (Check named: "powers: (x^-1)^-1" got: ((x pow: -1 num) pow: -1 num) simplify text want: "x")
+    (Check named: "powers: (x * y)^2" got: ((x * y) pow: 2 num) simplify text want: "x^2 * y^2")
+    (Check named: "powers: (2 * x)^3" got: ((2 num * x) pow: 3 num) simplify text want: "8 * x^3")
+    (Check named: "powers: (x^2)^y" got: ((x pow: 2 num) pow: y) simplify text want: "(x^2)^y")
+    (Check named: "powers: (x + y)^2" got: ((x + y) pow: 2 num) simplify text want: "(x + y)^2")
+    // Undefined will change what 0^0 and 0^(-1) are, so these don't pin
+    // them.
+    (Check named: "powers: 0^0 isn't 1" holds: ((0 num pow: 0 num) simplify == 1 num) not)
+    (Check named: "powers: 0^(-1) isn't 0" holds: ((0 num pow: -1 num) simplify == 0 num) not)
+    // A base or exponent that simplifies to a number.
+    (Check named: "powers: 2^0" got: (2 num pow: 0 num) simplify text want: "1")
+    (Check named: "powers: (1 + 1)^3" got: (1 num + 1 num pow: 3 num) simplify text want: "8")
+    (Check named: "powers: x^(2 + -2)" got: (x pow: 2 num + -2 num) simplify text want: "1")
+    // A power of a power: the exponents' product, a number or not.
+    (Check named: "powers: (x^2)^(-1)" got: ((x pow: 2 num) pow: -1 num) simplify text want: "x^(-2)")
+    (Check named: "powers: (x^y)^z" got: ((x pow: y) pow: z) simplify text want: "(x^y)^z")
+    (Check named: "powers: (x^(2 * y))^3" got: ((x pow: 2 num * y) pow: 3 num) simplify text want: "x^(6 * y)")
+    // A power of a product: its factors' powers, then their product
+    // simplified, so a 1 drops out.
+    (Check named: "powers: (-1 * x)^2" got: ((-1 num * x) pow: 2 num) simplify text want: "x^2")
+    (Check named: "powers: ((x * y)^2)^3" got: (((x * y) pow: 2 num) pow: 3 num) simplify text want: "x^6 * y^6")
+    // A power rule, then like terms.
+    (Check named: "powers: (x^1)^2 + x^2" got: (((x pow: 1 num) pow: 2 num) + (x pow: 2 num)) simplify text want: "2 * x^2")
   }
 ]

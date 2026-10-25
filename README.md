@@ -17,7 +17,8 @@ Cohen's algorithms work on operand lists.
 [simplifying](docs/simplifying.md) has begun: for now it flattens sums
 in sums and products in products, puts their operands in Cohen's order,
 works out numbers, so `0` and `1` drop out and a product with a `0` is
-`0`, and combines like terms, so `x + x` is `2 * x`.
+`0`, combines like terms, so `x + x` is `2 * x`, and simplifies powers
+to integers, so `(x^2)^3` is `x^6` and `(x * y)^2` is `x^2 * y^2`.
 
 ## Running
 
@@ -45,6 +46,7 @@ x + y + z   =>   (x + y) + z
 (y + x) + 2   =>   2 + x + y
 (x + 2) + 3   =>   5 + x
 (x + y) + x   =>   2 * x + y
+(x * y)^2   =>   x^2 * y^2
 ```
 
 And the checks, which end with `all N checks passed` when they do:

@@ -6,17 +6,26 @@
 //
 // A sum's terms are merged two lists at a time, and what two terms
 // become is up to the pair rule, `sumPair:`; a product's factors
-// likewise, with `productPair:`. The algebra goes in the pair rules. For
-// now two numbers add in a sum and multiply in a product, a 0 drops out
-// of a sum and a 1 out of a product, two terms that differ only in their
-// number combine, and any other two operands are kept and put in Cohen's
-// order, from `order.niva`. So simplifying flattens, sorts, works out
-// numbers and combines like terms: a sum's sums are spliced into it, a
-// product's products, the merge leaves the operands in order, and the
-// numbers, which that order puts first, become one or none, as do like
-// terms, which it puts together. A product with a 0 among its factors is
-// 0. The two sides are kept apart, as in mpl, since their pair rules
-// differ. The names in the comments are Cohen's.
+// likewise, with `productPair:`. The algebra of sums and products goes in
+// the pair rules. For now two numbers add in a sum and multiply in a
+// product, a 0 drops out of a sum and a 1 out of a product, two terms
+// that differ only in their number combine, and any other two operands
+// are kept and put in Cohen's order, from `order.niva`. So simplifying
+// flattens, sorts, works out numbers and combines like terms: a sum's
+// sums are spliced into it, a product's products, the merge leaves the
+// operands in order, and the numbers, which that order puts first,
+// become one or none, as do like terms, which it puts together. A
+// product with a 0 among its factors is 0. The two sides are kept apart,
+// as in mpl, since their pair rules differ.
+//
+// A power's rules are Cohen's for integers, in `simplifiedPower:` and
+// `integerPower:`: to 0 it's 1 and to 1 its base, 1 to anything is 1, 0
+// to a positive number is 0, a number to one that isn't negative is
+// worked out, and to a number, a power of a power multiplies the
+// exponents and a power of a product is the product of its factors'
+// powers. Where Cohen gives Undefined or a fraction, as for `0^0`,
+// `0^(-1)` and `2^(-1)`, the power stays as written, since neither is
+// here yet. The names in the comments are Cohen's.
 
 extend Expr [
   /// Cohen's automatic_simplify: the operands first, then the node.
@@ -25,11 +34,10 @@ extend Expr [
   | Sym     => this
   | Sum     => (terms map: [it simplify]) simplifiedSum
   | Product => (factors map: [it simplify]) simplifiedProduct
-  // Cohen's simplify_power comes in 006.
-  | Power   => Power base: base simplify exp: exp simplify
+  | Power   => base simplify simplifiedPower: exp simplify
 ]
 
-// Numbers, for the pair rules.
+// Numbers, for the pair rules and powers.
 
 extend Expr [
   /// Whether this is a number.
@@ -37,8 +45,8 @@ extend Expr [
   | Num => true
   |=> false
 
-  /// A number's value. The pair rules ask it only of numbers; anything
-  /// else gives 0.
+  /// A number's value. The rules ask it only of numbers; anything else
+  /// gives 0.
   on numValue -> Int = | this
   | Num => value
   |=> 0
@@ -223,4 +231,64 @@ extend List(Expr) [
           ifTrue: [{p1} + (ps mergeProduct: q)]
           ifFalse: [{q1} + (this mergeProduct: qs)]
       ]
+]
+
+// Powers.
+
+/// This to the power `n`, for an `n` that isn't negative.
+Int raisedTo(n): Int -> Int =
+  n == 0 ifTrue: [1] ifFalse: [this * (this raisedTo: n - 1)]
+
+extend Expr [
+  /// Whether this is a power.
+  on isPower -> Bool = | this
+  | Power => true
+  |=> false
+
+  /// A power's base. `integerPower:` asks it only of powers; anything
+  /// else gives itself.
+  on powerBase -> Expr = | this
+  | Power => base
+  |=> this
+
+  /// A power's exponent. `integerPower:` asks it only of powers;
+  /// anything else gives 1.
+  on powerExp -> Expr = | this
+  | Power => exp
+  |=> 1 num
+
+  /// Cohen's simplify_power, on a simplified base, this, and exponent
+  /// `w`. The first case that applies: a 0 base is 0 if `w` is a positive
+  /// number, and any other power of 0 is as written, since Cohen's
+  /// Undefined isn't here yet; a 1 base is 1; a number `w` goes to
+  /// `integerPower:`; and anything else is as written.
+  on simplifiedPower(w): Expr -> Expr = | true
+  // `(this == 0 num)` in parentheses: NIN types each binary message in a
+  // chain on the argument before it, so it would look for `&&` on an Expr
+  // (Niva feedback 36).
+  | (this == 0 num) && w isNum && (w numValue > 0) => 0 num
+  | this == 0 num => Power base: this exp: w
+  | this == 1 num => 1 num
+  | w isNum => this integerPower: w numValue
+  |=> Power base: this exp: w
+
+  /// Cohen's simplify_integer_power, on a simplified base, this, and an
+  /// integer `n`. The first case that applies: a number to an `n` that
+  /// isn't negative is worked out, and to a negative one falls through to
+  /// the last case until there are fractions; to 0 anything is 1, and to
+  /// 1 itself; a power `r^s` is `r` to the simplified product `s * n`, an
+  /// integer power again if that's a number; a product is the simplified
+  /// product of its factors, each to `n`; and anything else is `this^n`.
+  on integerPower(n): Int -> Expr = | true
+  | this isNum && (n >= 0) => (this numValue raisedTo: n) num
+  | n == 0 => 1 num
+  | n == 1 => this
+  | this isPower => [
+    p = {(this powerExp) (n num)} simplifiedProduct
+    p isNum
+      ifTrue: [this powerBase integerPower: p numValue]
+      ifFalse: [Power base: this powerBase exp: p]
+  ]
+  | this isProduct => (this asFactors map: [it integerPower: n]) simplifiedProduct
+  |=> Power base: this exp: n num
 ]
