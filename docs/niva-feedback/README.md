@@ -221,7 +221,18 @@ and 7 are filed by us, 23 by Gavr.
     both the start and the block's accumulator as the item type, though
     the Go runtime's `List__inject__into[T any, R any]` takes any. The
     Kotlin compiler prints 3. Workaround: `map:` first. Found at
-    `2ad4f629`, after #454.
+    `2ad4f629`, after #454. The Kotlin compiler types the start, the
+    accumulator and the result with a second type parameter
+    (`differentGenericType`) and compiles it to Kotlin's `fold`. Spiked
+    at `781c5b05` by doing the same with NIN's `g`: the type checker
+    then takes a fold into another type and still rejects a wrong one,
+    but the call is named `core.List__inject__into__core_Int[string,
+    int]`, which neither runtime has. A generic method's specialized
+    name gets the concrete type of each type parameter that isn't the
+    receiver's (`replaceGenericsFromTable: … dontMangle: receiverNames`
+    in `typeDB.niva`); `sortedBy:` and `map:` escape it only because
+    their `g` is inside a block. So a fix needs a rule for naming
+    built-in generic methods too, which is Gavr's call.
 
 Gaps rather than bugs: `sortedWith:`, which the Kotlin compiler has,
 was missing from NIN until
