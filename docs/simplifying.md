@@ -14,7 +14,9 @@ rule.
 
 ## Rules so far
 
-Simplifying flattens and sorts for now: nothing combines yet.
+Simplifying flattens, sorts and works out numbers for now. Numbers
+combine, and `0` and `1` drop out, but nothing else does yet: `x + x`
+stays as it is.
 
 | Rule | Example | Simplified |
 |---|---|---|
@@ -23,16 +25,23 @@ Simplifying flattens and sorts for now: nothing combines yet.
 | A sum's terms, and a product's factors, are in canonical order. | `(y + x) + 2` | `2 + x + y` |
 | A sum or product of one operand is that operand. | `Sum terms: {x}` | `x` |
 | A sum of none is 0, and a product of none is 1. | `Product factors: {}` | `1` |
+| Numbers in a sum add. | `(x + 2) + 3` | `5 + x` |
+| Numbers in a sum that make 0 drop out. | `(x + 2) + -2` | `x` |
+| A 0 in a sum drops out. | `x + 0` | `x` |
+| Numbers in a product multiply. | `(x * 2) * 3` | `6 * x` |
+| Numbers in a product that make 1 drop out. | `(-1 * x) * -1` | `x` |
+| A 1 in a product drops out. | `x * 1` | `x` |
+| A product with a 0 among its factors is 0. | `0 * (x + y)` | `0` |
 
 The canonical order is Cohen's, `before:` in `mpl/order.niva`: numbers
 first, by value; symbols alphabetically; and sums, products and powers
-mostly by their last operands, so `x * y + y` is `y + x * y`.
+mostly by their last operands, so `x * y + y` is `y + x * y`. It's what
+brings a sum's numbers together, at the front, so they combine.
 
 A power simplifies its base and exponent, so `(a + (b + c))^2` is
-`(a + b + c)^2`.
+`(a + b + c)^2` and `x^(1 + 1)` is `x^2`.
 
 ## What's coming
 
-Numbers and identities, like terms, powers and like factors, one
-increment each: see the
+Like terms, powers and like factors, one increment each: see the
 [spec](design/implementation/008-simplifier/spec.md).

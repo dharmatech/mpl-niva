@@ -44,5 +44,27 @@ constructor SimplifyChecks all -> List(Check) = [
     (Check named: "order: Product factors: {c a b}" got: (Product factors: {c a b}) simplify text want: "a * b * c")
     // The list 001's sort check sorts, as a sum.
     (Check named: "order: x * y + y + x^2 + x + 2" got: (Sum terms: {(x * y) y (x pow: 2 num) x (2 num)}) simplify text want: "2 + x + x^2 + y + x * y")
+
+    // Numbers add in a sum and multiply in a product, a 0 drops out of
+    // a sum and a 1 out of a product, and a product with a 0 is 0. Each
+    // result is final: no two operands with the same term or base.
+    (Check named: "numbers: 2 + 3" got: (2 num + 3 num) simplify text want: "5")
+    (Check named: "numbers: 2 + -2" got: (2 num + -2 num) simplify text want: "0")
+    (Check named: "numbers: (x + 2) + 3" got: (x + 2 num + 3 num) simplify text want: "5 + x")
+    (Check named: "numbers: x + 0" got: (x + 0 num) simplify text want: "x")
+    (Check named: "numbers: 0 + x" got: (0 num + x) simplify text want: "x")
+    (Check named: "numbers: (x + 2) + -2" got: (x + 2 num + -2 num) simplify text want: "x")
+    (Check named: "numbers: Sum terms: {1 x 2 y 3}" got: (Sum terms: {(1 num) x (2 num) y (3 num)}) simplify text want: "6 + x + y")
+    (Check named: "numbers: 2 * 3" got: (2 num * 3 num) simplify text want: "6")
+    (Check named: "numbers: (x * 2) * 3" got: (x * 2 num * 3 num) simplify text want: "6 * x")
+    (Check named: "numbers: x * 1" got: (x * 1 num) simplify text want: "x")
+    (Check named: "numbers: 1 * x" got: (1 num * x) simplify text want: "x")
+    // Two numbers that make 1 drop out, leaving one factor.
+    (Check named: "numbers: (-1 * x) * -1" got: (-1 num * x * -1 num) simplify text want: "x")
+    (Check named: "numbers: Product factors: {2 x 3 y}" got: (Product factors: {(2 num) x (3 num) y}) simplify text want: "6 * x * y")
+    (Check named: "numbers: x * 0" got: (x * 0 num) simplify text want: "0")
+    (Check named: "numbers: 0 * (x + y)" got: (0 num * (x + y)) simplify text want: "0")
+    (Check named: "numbers: (2 + 3) * x" got: ((2 num + 3 num) * x) simplify text want: "5 * x")
+    (Check named: "numbers: x^(1 + 1)" got: (x pow: 1 num + 1 num) simplify text want: "x^2")
   }
 ]

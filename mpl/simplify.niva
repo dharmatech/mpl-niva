@@ -7,11 +7,15 @@
 // A sum's terms are merged two lists at a time, and what two terms
 // become is up to the pair rule, `sumPair:`; a product's factors
 // likewise, with `productPair:`. The algebra goes in the pair rules. For
-// now they keep both operands and put them in Cohen's order, from
-// `order.niva`, so simplifying flattens and sorts: a sum's sums are
-// spliced into it, a product's products, and the merge leaves the
-// operands in order. The two sides are kept apart, as in mpl, since
-// their pair rules will differ. The names in the comments are Cohen's.
+// now two numbers add in a sum and multiply in a product, a 0 drops out
+// of a sum and a 1 out of a product, and any other two operands are kept
+// and put in Cohen's order, from `order.niva`. So simplifying flattens,
+// sorts and works out numbers: a sum's sums are spliced into it, a
+// product's products, the merge leaves the operands in order, and the
+// numbers, which that order puts first, become one or none. A product
+// with a 0 among its factors is 0. The two sides are kept apart, as in
+// mpl, since their pair rules differ. The names in the comments are
+// Cohen's.
 
 extend Expr [
   /// Cohen's automatic_simplify: the operands first, then the node.
@@ -22,6 +26,26 @@ extend Expr [
   | Product => (factors map: [it simplify]) simplifiedProduct
   // Cohen's simplify_power comes in 006.
   | Power   => Power base: base simplify exp: exp simplify
+]
+
+// Numbers, for the pair rules.
+
+extend Expr [
+  /// Whether this is a number.
+  on isNum -> Bool = | this
+  | Num => true
+  |=> false
+
+  /// A number's value. The pair rules ask it only of numbers; anything
+  /// else gives 0.
+  on numValue -> Int = | this
+  | Num => value
+  |=> 0
+
+  /// This as a list of one, or none if it's the number `n`: two numbers
+  /// worked out, gone if they make 0 in a sum or 1 in a product.
+  on listUnless(n): Int -> List(Expr) =
+    this == n num ifTrue: [{}] ifFalse: [{this}]
 ]
 
 // Sums.
@@ -38,12 +62,15 @@ extend Expr [
   |=> {this}
 
   /// The pair rule: the base case of Cohen's simplify_sum_rec, two
-  /// operands that aren't sums. For now it keeps both, swapped if
-  /// `other` comes first; later increments add cases above this one.
+  /// operands that aren't sums. The first case that applies: two numbers
+  /// add, and drop out if they make 0; a 0 drops out; and any other two
+  /// are kept, swapped if `other` comes first. Later increments add
+  /// cases ahead of that last one.
   on sumPair(other): Expr -> List(Expr) =
-    (other before: this)
-      ifTrue: [{other this}]
-      ifFalse: [{this other}]
+    this isNum && other isNum ifTrue: [(this numValue + other numValue) num listUnless: 0] ifFalse: [
+    this == 0 num ifTrue: [{other}] ifFalse: [
+    other == 0 num ifTrue: [{this}] ifFalse: [
+    (other before: this) ifTrue: [{other this}] ifFalse: [{this other}]]]]
 ]
 
 extend List(Expr) [
@@ -112,21 +139,24 @@ extend Expr [
   |=> {this}
 
   /// The pair rule: the base case of Cohen's simplify_product_rec, two
-  /// operands that aren't products. For now it keeps both, swapped if
-  /// `other` comes first; later increments add cases above this one.
+  /// operands that aren't products. The first case that applies: two
+  /// numbers multiply, and drop out if they make 1; a 1 drops out; and
+  /// any other two are kept, swapped if `other` comes first. Later
+  /// increments add cases ahead of that last one.
   on productPair(other): Expr -> List(Expr) =
-    (other before: this)
-      ifTrue: [{other this}]
-      ifFalse: [{this other}]
+    this isNum && other isNum ifTrue: [(this numValue * other numValue) num listUnless: 1] ifFalse: [
+    this == 1 num ifTrue: [{other}] ifFalse: [
+    other == 1 num ifTrue: [{this}] ifFalse: [
+    (other before: this) ifTrue: [{other this}] ifFalse: [{this other}]]]]
 ]
 
 extend List(Expr) [
-  /// Cohen's simplify_product, on simplified factors: none is 1, one is
-  /// itself, and more are merged by `productRec`.
+  /// Cohen's simplify_product, on simplified factors: any 0 makes it 0,
+  /// none is 1, one is itself, and more are merged by `productRec`.
   on simplifiedProduct -> Expr =
-    this count < 2
-      ifTrue: [this asProduct]
-      ifFalse: [this productRec asProduct]
+    (this any: [it == 0 num])
+      ifTrue: [0 num]
+      ifFalse: [this count < 2 ifTrue: [this asProduct] ifFalse: [this productRec asProduct]]
 
   /// These factors as one expression: 1 if there are none, the factor if
   /// there's one, and their product if more.

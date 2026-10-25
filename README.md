@@ -15,8 +15,9 @@ Cohen's algorithms work on operand lists.
 
 **Status:** expressions can be built, printed and compared, and
 [simplifying](docs/simplifying.md) has begun: for now it flattens sums
-in sums and products in products, and puts their operands in Cohen's
-order.
+in sums and products in products, puts their operands in Cohen's order,
+and works out numbers, so `0` and `1` drop out and a product with a `0`
+is `0`.
 
 ## Running
 
@@ -42,6 +43,7 @@ x + y + z   =>   (x + y) + z
 
 (x + y) + z   =>   x + y + z
 (y + x) + 2   =>   2 + x + y
+(x + 2) + 3   =>   5 + x
 ```
 
 And the checks, which end with `all N checks passed` when they do:
