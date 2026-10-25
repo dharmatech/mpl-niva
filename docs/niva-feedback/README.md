@@ -23,6 +23,7 @@ filed. Once filed, the header links the issue.
 | [005 Go: a list literal of one union branch, option 1 as a draft pull request](005-go-list-literal-of-branch-pr.md) | Opened 2026-10-25 as draft PR [#450](https://github.com/gavr123456789/Niva/pull/450), "For #449", right after the issue, whose last paragraph was then edited to name it. Branch `dharmatech/Niva:literal-expected-type` at `e01dc22d` on `self-host` `a56f659c`, locally in `~/src/Niva-self-host-literal`. The issue's option 1 in Gavr's style, with four tests that fail without it. Approved without comments and merged into `self-host` the same day (13:32 UTC), squashed as `ab69e59b`, unchanged. |
 | [006 `String` has no ordering](006-string-ordering.md) | Filed as [#451](https://github.com/gavr123456789/Niva/issues/451) (2026-10-25). README item 26: neither compiler has `<` on strings, so it's new, and the form is Gavr's call. Options: 1 `<`, `>`, `<=`, `>=` (Go's operators, Clojure's `compare`), 2 that and a `compareTo:`, 3 no change. Suggests 1, pointing to draft PR [#452](https://github.com/gavr123456789/Niva/pull/452) (row below). Gavr took 1, merging #452 the same day, and we closed the issue with a comment leaving `Char` and a `compareTo:` for when they're needed. |
 | [006 `String` ordering, option 1 as a draft pull request](006-string-ordering-pr.md) | Opened 2026-10-25 as draft PR [#452](https://github.com/gavr123456789/Niva/pull/452), "For #451", right after the issue, whose last paragraph was then edited to name it. Branch `dharmatech/Niva:string-ordering` at `69e688aa` on `self-host` `4e809716`, locally in `~/src/Niva-self-host-string-ordering`. Four lines in the `String` protocol and a `compare` case on Clojure, with three tests that fail without it. Approved without comments and merged into `self-host` the same day (15:52 UTC), squashed as `e823f7fe`, with Gavr's restyle of the Clojure case. |
+| [007 `inject:into:` has the wrong name in both runtimes, as a pull request](007-inject-into-pr.md) | Drafted, not opened or pushed: a PR without an issue, as 003 was, since there's nothing to decide. README item 30. Branch `inject-into` at `a210b4df` on `self-host` `e823f7fe`, in `~/src/Niva-self-host-inject-into`: `List__injectInto` renamed to `List__inject__into` in both runtimes, with two tests that fail without it. |
 
 ## Self-hosted compiler
 
@@ -190,9 +191,32 @@ and 7 are filed by us, 23 by Gavr.
     program with that home replaces it. Then every NIN error also prints
     this, and exits 1. The re-check ran right after a rebuild, so it was
     clean. See [The self-hosted compiler](../self-hosted-compiler.md).
+30. `inject:into:` on a list passes the type checker but doesn't run on
+    either backend: `{1 2 3} inject: 0 into: [acc, x -> acc + x]` stops
+    at `undefined: core.List__inject__into` on Go and `Unable to resolve
+    symbol: niva.core/List__inject__into` on Clojure. Both runtimes
+    define it as `List__injectInto`, where every other two-part keyword
+    is `Type__first__second`, as `List__joinWith__transform` is. The
+    Kotlin compiler prints 6. Found at `e823f7fe`, probing the list
+    operations a simplifier would use, as are 31 and 32. Drafted as a
+    PR without an issue, [007](007-inject-into-pr.md).
+31. `reversed` and `sum` on a list aren't in the type checker. The
+    Kotlin compiler has both: `{1 2 3} reversed` and `{1 2 3} sum`.
+32. **Clojure:** `toSet` on a list passes the type checker but isn't in
+    the runtime: `Unable to resolve symbol: niva.core/List__toSet`. Go
+    has it.
+33. **Clojure:** `nin run` writes the runtime, `.niva_clj/niva/core.clj`,
+    only when it's missing, where Go's `.niva_go/build/core/core.go` is
+    rewritten on every run. So a project built before keeps the old
+    Clojure runtime after a newer compiler: a line added to `core.clj`
+    survives a run, one added to `core.go` doesn't. Found drafting 007,
+    when a stock run in a folder the branch had built printed the
+    branch's results.
 
 Gaps rather than bugs: neither runtime has `sortedWith:`, which the
-Kotlin compiler has, or `all:`, which it doesn't either.
+Kotlin compiler has, or `all:`, which it doesn't either. Neither
+compiler has `flatMap:`, `flatten`, `groupBy:`, `max` or `zip:`
+(probed at `e823f7fe`).
 
 ## Legacy compiler
 

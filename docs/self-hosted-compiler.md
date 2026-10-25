@@ -58,7 +58,10 @@ tools/nin --help
 
 Without `--backend=go` it uses Clojure on Babashka, its default. It
 writes the generated code to `.niva_go/` or `.niva_clj/`, which git
-ignores.
+ignores. After moving the pin, remove `.niva_clj/`: the Clojure runtime
+in it, `niva/core.clj`, is only written when it's missing, so it would
+stay the old compiler's (Niva feedback item 33). Go's is rewritten on
+every run.
 
 `tools/check` runs the checks, on Go unless told otherwise. It reads the
 output rather than the exit code, which is 0 even when the build fails.

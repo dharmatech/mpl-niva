@@ -93,6 +93,13 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   the checks can't run on Clojure even in one file.
 - `indexOfFirst:` is in both runtimes, but the type checker doesn't know
   it.
+- `inject:into:` passes the type checker but doesn't run on either
+  backend: the runtimes call it `List__injectInto`. Use `reduce:` on a
+  list that isn't empty, or a loop with a `mut` total.
+- No `reversed` or `sum` on a list. `toSet` is missing from the Clojure
+  runtime.
+- No `flatMap:`, `flatten`, `groupBy:`, `max` or `zip:` either, on
+  either compiler.
 
 ## Binding Go
 
