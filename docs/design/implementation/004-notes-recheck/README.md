@@ -1,6 +1,6 @@
 # 004 notes-recheck
 
-**Status:** Done; landed at `PENDING` (2026-10-25).
+**Status:** Done; landed at `7cae0ee` (2026-10-25).
 
 Moves the pin to `self-host` at `4e809716`, which has our
 [#450](https://github.com/gavr123456789/Niva/pull/450), and re-checks
