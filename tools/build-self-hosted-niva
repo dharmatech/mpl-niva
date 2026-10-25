@@ -9,7 +9,7 @@
 set -euo pipefail
 
 repo=https://github.com/gavr123456789/Niva.git
-commit=a56f659c   # self-host, 2026-10-25
+commit=4e809716   # self-host, 2026-10-25
 dir=${NIVA_SELF_HOST:-$HOME/src/Niva-self-host}
 
 if [ ! -d "$dir" ]; then

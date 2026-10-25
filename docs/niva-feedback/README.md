@@ -27,9 +27,10 @@ filed. Once filed, the header links the issue.
 Found while porting to the self-hosted compiler
 ([series 001](../design/implementation/001-self-hosted/README.md)), on
 `self-host` at `6af8f9f6`. Most likely to bite first. Re-checked on
-2026-10-23 at `3746ffb7`, after #437: each still reproduces unless
-noted, except 11 to 13, which weren't re-run. Items 1, 2 and 7 are
-filed.
+2026-10-23 at `3746ffb7`, after #437, and on 2026-10-25 at `4e809716`,
+after #450 ([series 004](../design/implementation/004-notes-recheck/README.md)),
+11 to 13 included: each still reproduces unless noted. Items 1, 2, 5
+and 7 are filed by us, 23 by Gavr.
 
 1. **Clojure:** a `^` before the end of a method is dropped, with no
    error, and the method carries on to return the wrong value. It
@@ -74,7 +75,7 @@ filed.
    `List(Expr)`, still doesn't build on Go.
 6. **Go:** `^ (…) any: […], not` generates an empty `return` before the
    real one, so the Go build fails. Works at `3746ffb7`, likely since
-   #437.
+   #437, and still at `4e809716`.
 7. **Go:** `==` on a type that holds a list doesn't build (`struct
    containing []int cannot be compared`), and on two union values that
    hold one, such as two `Sum`s, fails at run time (`comparing
@@ -98,6 +99,8 @@ filed.
 12. Top-level code in a file other than the entry file isn't
     type-checked.
 13. The first parse error we hit gave a line and column but no file.
+    Doesn't reproduce at `a56f659c` or `4e809716`: a parse error in a
+    file other than the entry file names it, `other.niva:2:19`.
 14. **Go:** a match on errors used as a statement runs its else branch
     after an error branch too, with the zero value as `it`: for -5,
     `| this parse | Bad => it text echo |=> ("parsed " + it toString) echo`
@@ -152,6 +155,29 @@ filed.
     `x == 5` doesn't build ("mismatched types *int and untyped int").
 25. A nullable block type, `f: [Int -> Int]?`, doesn't parse: "Got
     invalid token after CloseBracket".
+26. `String` has no `<` or other ordering, on either backend, and
+    `Char` has only `code`: `"x" < "y"` gives "Searching for < method
+    but its not found for type Type(String)". MPL's canonical order of
+    symbols needs one. The Kotlin compiler has none either; it can bind
+    Kotlin's `compareTo` ([series 000](../design/implementation/000-expression-tree/README.md)).
+    Found re-checking at `a56f659c`, as are 27 to 29.
+27. A type name of one capital letter is read as a type parameter, and
+    the error doesn't say so: `type P n: Int`, then `p = P n: 1`, gives
+    "Missing constructor table for Type(P)", and `union R = | Ok t: Int
+    | Fail`, then `r::R = Ok t: 4`, gives "Type declared for r is not
+    equal for it's value type Type(R) != Type(Ok t: Type(Int))". With
+    `Pt` and `Res` both work.
+28. `Bind` in a program's own file works only when `niva.bindings`
+    lists it with a module id ending in `.bind`, as in
+    `go|binds.str.bind|binds/str.niva`. With another id, or no entry,
+    the Go build fails at `core.Bind__imports__emit(, …)`, "syntax
+    error: unexpected comma", and Clojure at an undefined
+    `niva.core/Bind__imports__emit`. No error says what's missing.
+29. After a type error and after a Go build error, `a56f659c` also
+    printed a Java exception from mapping its own stack trace, "Cant
+    find niva line above 292 in file main/kotlin/Main.kt" (005's
+    programs). Not seen at `4e809716`, in any of the re-check's runs
+    that fail.
 
 Gaps rather than bugs: neither runtime has `sortedWith:`, which the
 Kotlin compiler has, or `all:`, which it doesn't either.
