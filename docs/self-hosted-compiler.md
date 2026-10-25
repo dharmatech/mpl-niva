@@ -34,6 +34,14 @@ The Kotlin compiler in step 4 keeps a project template under
 `local/` folder instead, so an installed `niva` and its `~/.niva` aren't
 touched. `local/` is listed in the clone's `.git/info/exclude`.
 
+That home also holds the Kotlin project made for NivaInNiva, which the
+jar reads to map its own stack traces. To run the Kotlin compiler on
+another program, say to compare it with NIN, give it a copy of the home
+(`JAVA_OPTS=-Duser.home=…`). Run with `local/home` itself, it replaces
+that project, and every NIN error after that also prints "Cant find
+niva line above … in file main/kotlin/Main.kt" and exits 1, until the
+script is run again.
+
 To move to a newer Niva, change `commit` in the script and run it again.
 
 ## Running it

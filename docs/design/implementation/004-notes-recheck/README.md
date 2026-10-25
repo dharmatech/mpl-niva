@@ -64,7 +64,8 @@ At `4e809716`:
   one-letter type name is a type parameter (27), and a bind needs a
   `.bind` module id (28). A bind listed as `go|binds.str.bind|…` works,
   so `strings.Compare` can order strings on Go. The Java exception from
-  `a56f659c` (29) didn't show in any failing run.
+  `a56f659c` (29) didn't show in any failing run. It later turned out
+  to be our setup, not Niva: see item 29.
 - Exit codes: a compile error exits 0 on both, a run-time error 1 on Go
   and 0 on Clojure, as before.
 

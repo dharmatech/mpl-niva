@@ -21,6 +21,8 @@ filed. Once filed, the header links the issue.
 | [004 Go: `==` by content, Gavr's option 3, as a pull request](004-go-equality-pr.md) | Opened 2026-10-24 as draft PR [#440](https://github.com/gavr123456789/Niva/pull/440), "For #439". A sketch of the third option Gavr listed on Discord: structural `==`, with a generated compare function on Go where Go's `==` can't compare by content, plus a type's own `==` as a commit he can drop. For discussion, not to push him toward it. Gavr agreed on `mut` fields and generic types, and asked for null lists, blocks by signature and `Box(List(Int))`; fixed and pushed the same day, after merging his `200aa83a`, with a question back on blocks on Clojure. He added style updates and merged it on 2026-10-25, squashed as `f7979fd4`. Right after, he filed our blocks question as [#446](https://github.com/gavr123456789/Niva/issues/446), and the generic union value the PR couldn't run (`r::Result(Int) = Ok t: 1`) as [#447](https://github.com/gavr123456789/Niva/issues/447). |
 | [005 Go: a list literal of one union branch](005-go-list-literal-of-branch.md) | Filed as [#449](https://github.com/gavr123456789/Niva/issues/449) (2026-10-25). README item 5, re-checked at `a56f659c`: any literal whose items are all one branch, a narrowed `this` included, has that branch's type, which Go won't take as a list of the union. Asks how far a fix should go, suggesting 1: type a literal by what its context expects, and points to draft PR [#450](https://github.com/gavr123456789/Niva/pull/450) (row below) instead of offering one. Gavr took 1, merging #450 the same day. The issue is still open. None of Gavr's #441 to #448 covers it; #447 (a generic union as a type) only means generic unions can't be tried yet. |
 | [005 Go: a list literal of one union branch, option 1 as a draft pull request](005-go-list-literal-of-branch-pr.md) | Opened 2026-10-25 as draft PR [#450](https://github.com/gavr123456789/Niva/pull/450), "For #449", right after the issue, whose last paragraph was then edited to name it. Branch `dharmatech/Niva:literal-expected-type` at `e01dc22d` on `self-host` `a56f659c`, locally in `~/src/Niva-self-host-literal`. The issue's option 1 in Gavr's style, with four tests that fail without it. Approved without comments and merged into `self-host` the same day (13:32 UTC), squashed as `ab69e59b`, unchanged. |
+| [006 `String` has no ordering](006-string-ordering.md) | Draft, not filed. README item 26: neither compiler has `<` on strings, so it's new, and the form is Gavr's call. Options: 1 `<`, `>`, `<=`, `>=` (Go's operators, Clojure's `compare`), 2 that and a `compareTo:`, 3 no change. Suggests 1, pointing to the draft PR in the row below. |
+| [006 `String` ordering, option 1 as a draft pull request](006-string-ordering-pr.md) | Drafted, not opened or pushed: branch `string-ordering` at `69e688aa` on `self-host` `4e809716`, in `~/src/Niva-self-host-string-ordering`. Four lines in the `String` protocol and a `compare` case on Clojure, with three tests that fail without it. To be opened as a draft right after the issue, as for 005. |
 
 ## Self-hosted compiler
 
@@ -160,7 +162,8 @@ and 7 are filed by us, 23 by Gavr.
     but its not found for type Type(String)". MPL's canonical order of
     symbols needs one. The Kotlin compiler has none either; it can bind
     Kotlin's `compareTo` ([series 000](../design/implementation/000-expression-tree/README.md)).
-    Found re-checking at `a56f659c`, as are 27 to 29.
+    Found re-checking at `a56f659c`, as are 27 to 29. Drafted as
+    [006](006-string-ordering.md), with a draft PR for its option 1.
 27. A type name of one capital letter is read as a type parameter, and
     the error doesn't say so: `type P n: Int`, then `p = P n: 1`, gives
     "Missing constructor table for Type(P)", and `union R = | Ok t: Int
@@ -177,7 +180,12 @@ and 7 are filed by us, 23 by Gavr.
     printed a Java exception from mapping its own stack trace, "Cant
     find niva line above 292 in file main/kotlin/Main.kt" (005's
     programs). Not seen at `4e809716`, in any of the re-check's runs
-    that fail.
+    that fail. **Not a Niva bug:** it's our setup, found drafting 006.
+    NIN maps its stack traces from the Kotlin project stage 2 leaves in
+    the clone's `local/home`, and running the JVM compiler on a test
+    program with that home replaces it. Then every NIN error also prints
+    this, and exits 1. The re-check ran right after a rebuild, so it was
+    clean. See [The self-hosted compiler](../self-hosted-compiler.md).
 
 Gaps rather than bugs: neither runtime has `sortedWith:`, which the
 Kotlin compiler has, or `all:`, which it doesn't either.
