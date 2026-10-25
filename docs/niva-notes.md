@@ -1,9 +1,11 @@
 # Niva notes
 
 What to know when writing Niva for this project, with the self-hosted
-compiler at `self-host` `4e809716` (2026-10-25). Each note was
-re-checked at that pin
-([series 004](design/implementation/004-notes-recheck/README.md)). The
+compiler at `self-host` `e823f7fe` (2026-10-25). Each note was
+re-checked at `4e809716`
+([series 004](design/implementation/004-notes-recheck/README.md));
+`e823f7fe` adds only #452, string ordering
+([series 005](design/implementation/005-string-ordering-pin/README.md)). The
 Go backend is the one we use; Clojure differences are marked, and hold
 on Babashka and let-go alike unless noted
 ([series 002](design/implementation/002-let-go/README.md)). The bugs
@@ -32,6 +34,11 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   `{this}` in `| Num =>`, given as a `List(Expr)`, is a `List(Expr)`.
   That's since [#450](https://github.com/gavr123456789/Niva/pull/450),
   merged as `ab69e59b`; for the case it leaves, see Workarounds.
+- Strings are ordered with `<`, `>`, `<=` and `>=`, since
+  [#452](https://github.com/gavr123456789/Niva/pull/452), merged as
+  `e823f7fe`. Go uses its own operators, and Clojure `compare`. The two
+  agree but for a character above U+FFFF compared with one from U+E000
+  to U+FFFF. `Char` has no ordering, only `code`.
 - A type name of one capital letter is read as a type parameter:
   `type P n: Int`, then `P n: 1`, gives "Missing constructor table for
   Type(P)". Use two letters or more.
@@ -75,9 +82,6 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
 
 ## Library gaps
 
-- `String` has no `<` or other ordering, and `Char` has none either,
-  only `code`. Comparing `code`s character by character works on both
-  backends. On Go, a bind works too (below).
 - No `sortedWith:`, only `sortedBy:`. Sorting by a comparator means
   writing our own sort.
 - No `all:`. `any:` passes the type checker but is missing from the
@@ -92,7 +96,7 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
 
 ## Binding Go
 
-A method can be Go code:
+A method can be Go code, as this one was before strings had `<`:
 
 ```Scala
 String before: String -> Bool = Bind imports: #("strings") emit: "strings.Compare($0, $1) < 0"
