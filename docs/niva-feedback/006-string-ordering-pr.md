@@ -3,7 +3,13 @@
 **Status:** Opened 2026-10-25 as draft PR
 [#452](https://github.com/gavr123456789/Niva/pull/452), right after the
 issue, linking it with "For #451", as 005 was. No CI checks. Each
-paragraph went in on one line.
+paragraph went in on one line. Gavr approved it without comments and
+merged it into `self-host` the same day (15:52 UTC), squashed as
+`e823f7fe`. He restyled the Clojure case on the way in: `isStr` is
+checked first, with an `ifTrue:` match on `op` whose arms hold the
+conditions themselves, in place of our named `isStrPlus` and
+`isStrOrder`, and a TODO for a cheaper check of default types. Same
+behavior. #451 stays open: "For #451" doesn't close it.
 **Issue:** [#451](https://github.com/gavr123456789/Niva/issues/451) ([draft](006-string-ordering.md))
 **Branch:** [`dharmatech/Niva:string-ordering`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:string-ordering),
 one commit on `self-host` at `4e809716`: `69e688aa`. Locally in

@@ -5,7 +5,9 @@ Option 1 was opened right after as draft PR
 [#452](https://github.com/gavr123456789/Niva/pull/452)
 ([draft](006-string-ordering-pr.md)). As for 005, the issue was filed
 saying a draft PR for 1 would follow, then edited with `gh api -X
-PATCH` to name #452, and each paragraph went in on one line.
+PATCH` to name #452, and each paragraph went in on one line. Gavr took
+option 1: #452 was merged into `self-host` the same day as `e823f7fe`.
+The issue is still open.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `4e809716` (2026-10-25), first found
 at `a56f659c` (2026-10-25)
