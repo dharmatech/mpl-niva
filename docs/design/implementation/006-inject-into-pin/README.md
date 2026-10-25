@@ -1,6 +1,6 @@
 # 006 inject-into-pin
 
-**Status:** Done; landed at `PENDING` (2026-10-25).
+**Status:** Done; landed at `ff82209` (2026-10-25).
 
 Moves the pin from `e823f7fe` to `self-host` at `2ad4f629`, our
 [#454](https://github.com/gavr123456789/Niva/pull/454), so

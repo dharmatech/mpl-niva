@@ -23,4 +23,4 @@ series: **expression-tree**, **collect-terms 001**.
 | [`003-equals`](003-equals/README.md) | MPL compares expressions with `==` in place of its own `same:`, on a self-hosted compiler pinned past #440. | Done at `1fbabc9` (2026-10-24). |
 | [`004-notes-recheck`](004-notes-recheck/README.md) | The pin moves past #450, and every Niva note and open feedback item is re-checked there. | Done at `7cae0ee` (2026-10-25). |
 | [`005-string-ordering-pin`](005-string-ordering-pin/README.md) | The pin moves to #452, so strings have `<`, `>`, `<=` and `>=`, and the notes say so. | Done at `dae19a8` (2026-10-25). |
-| [`006-inject-into-pin`](006-inject-into-pin/README.md) | The pin moves to #454, so `inject:into:` runs, and the notes say so. | Done at `PENDING` (2026-10-25). |
+| [`006-inject-into-pin`](006-inject-into-pin/README.md) | The pin moves to #454, so `inject:into:` runs, and the notes say so. | Done at `ff82209` (2026-10-25). |
