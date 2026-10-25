@@ -1,7 +1,7 @@
 # 008 simplifier
 
 **Status:** Spec agreed (2026-10-25). Increments 001 and 002 are done
-and reviewed; 003, canonical order, is issued.
+and reviewed; 003, canonical order, is done.
 
 Cohen's automatic simplification, built up in small increments: the
 order relation, flattening, canonical order, numbers and identities,
@@ -23,7 +23,7 @@ runs as a charter, a spec and checkpoints.
 |---|---|---|---|---|
 | 001 | order relation | [001](checkpoints/001-order-relation.md) | Done, reviewed (2026-10-25). | `c277081` |
 | 002 | flattening | [002](checkpoints/002-flattening.md) | Done, reviewed (2026-10-25). | `68906c4` |
-| 003 | canonical order | [003](checkpoints/003-canonical-order.md) | Issued (2026-10-25). | |
+| 003 | canonical order | [003](checkpoints/003-canonical-order.md) | Done (2026-10-25). | |
 | 004 | numbers and identities | | | |
 | 005 | like terms | | | |
 | 006 | powers | | | |

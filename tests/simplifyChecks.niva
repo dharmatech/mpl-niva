@@ -7,6 +7,7 @@ constructor SimplifyChecks all -> List(Check) = [
   d = "d" sym
   e = "e" sym
   x = "x" sym
+  y = "y" sym
   none::List(Expr) = {}
   {
     (Check named: "flatten: (a + b) + c" got: (a + b + c) simplify text want: "a + b + c")
@@ -28,5 +29,20 @@ constructor SimplifyChecks all -> List(Check) = [
 
     (Check named: "no terms: Sum terms: {}" got: (Sum terms: none) simplify text want: "0")
     (Check named: "no factors: Product factors: {}" got: (Product factors: none) simplify text want: "1")
+
+    // Operands in Cohen's order. Each result is final: one number at
+    // most, and no two operands with the same term or base.
+    (Check named: "order: y + x" got: (y + x) simplify text want: "x + y")
+    (Check named: "order: x + 2" got: (x + 2 num) simplify text want: "2 + x")
+    (Check named: "order: (c + a) + b" got: (c + a + b) simplify text want: "a + b + c")
+    (Check named: "order: y * x" got: (y * x) simplify text want: "x * y")
+    (Check named: "order: x * 3" got: (x * 3 num) simplify text want: "3 * x")
+    (Check named: "order: x^2 + x" got: ((x pow: 2 num) + x) simplify text want: "x + x^2")
+    (Check named: "order: x * y + y" got: (x * y + y) simplify text want: "y + x * y")
+    (Check named: "order: b * c + a * c" got: (b * c + (a * c)) simplify text want: "a * c + b * c")
+    (Check named: "order: Sum terms: {d b c a}" got: (Sum terms: {d b c a}) simplify text want: "a + b + c + d")
+    (Check named: "order: Product factors: {c a b}" got: (Product factors: {c a b}) simplify text want: "a * b * c")
+    // The list 001's sort check sorts, as a sum.
+    (Check named: "order: x * y + y + x^2 + x + 2" got: (Sum terms: {(x * y) y (x pow: 2 num) x (2 num)}) simplify text want: "2 + x + x^2 + y + x * y")
   }
 ]

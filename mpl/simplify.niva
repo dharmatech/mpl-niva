@@ -7,10 +7,11 @@
 // A sum's terms are merged two lists at a time, and what two terms
 // become is up to the pair rule, `sumPair:`; a product's factors
 // likewise, with `productPair:`. The algebra goes in the pair rules. For
-// now they keep both operands, so simplifying only flattens: a sum's
-// sums are spliced into it, and a product's products. The two sides are
-// kept apart, as in mpl, since their pair rules will differ. The names
-// in the comments are Cohen's.
+// now they keep both operands and put them in Cohen's order, from
+// `order.niva`, so simplifying flattens and sorts: a sum's sums are
+// spliced into it, a product's products, and the merge leaves the
+// operands in order. The two sides are kept apart, as in mpl, since
+// their pair rules will differ. The names in the comments are Cohen's.
 
 extend Expr [
   /// Cohen's automatic_simplify: the operands first, then the node.
@@ -37,9 +38,12 @@ extend Expr [
   |=> {this}
 
   /// The pair rule: the base case of Cohen's simplify_sum_rec, two
-  /// operands that aren't sums. For now it keeps both as given; later
-  /// increments add cases above this one.
-  on sumPair(other): Expr -> List(Expr) = {this other}
+  /// operands that aren't sums. For now it keeps both, swapped if
+  /// `other` comes first; later increments add cases above this one.
+  on sumPair(other): Expr -> List(Expr) =
+    (other before: this)
+      ifTrue: [{other this}]
+      ifFalse: [{this other}]
 ]
 
 extend List(Expr) [
@@ -108,9 +112,12 @@ extend Expr [
   |=> {this}
 
   /// The pair rule: the base case of Cohen's simplify_product_rec, two
-  /// operands that aren't products. For now it keeps both as given;
-  /// later increments add cases above this one.
-  on productPair(other): Expr -> List(Expr) = {this other}
+  /// operands that aren't products. For now it keeps both, swapped if
+  /// `other` comes first; later increments add cases above this one.
+  on productPair(other): Expr -> List(Expr) =
+    (other before: this)
+      ifTrue: [{other this}]
+      ifFalse: [{this other}]
 ]
 
 extend List(Expr) [
