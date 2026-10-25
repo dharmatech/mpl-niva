@@ -1,6 +1,8 @@
 # 005 Go: a list literal of one union branch
 
-**Status:** Draft, not filed.
+**Status:** Draft, not filed. Option 1 is drafted as a pull request in
+[005's PR](005-go-list-literal-of-branch-pr.md), to be opened right
+after the issue; `#PR` below gets its number then.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `a56f659c` (2026-10-25), first found
 at `6af8f9f6` (2026-10-19)
@@ -17,6 +19,16 @@ the first one MPL needs, flattening a sum. No existing issue covered it
 on 2026-10-25 (`gh search issues` for "list literal", "collection
 literal", "union branch list", "cannot use", "slice", "covariance",
 "covariant", "variance" and "List(Expr)").
+
+Gavr filed eight issues the evening #440 was merged, #441 to #448;
+none covers this. Most came out of #440: #443 and #444 (`ifNotNull:`
+in our `goEquality.niva`; #444 is README item 23), #445 (its failing
+codegen tests), #446 (our question on blocks on Clojure). Nearest is
+#447, a generic union root as a type: writing `Result(Int)` as a type
+fails anywhere, a field, a return type or a local, with an assertion
+in `astToType.niva`, before any literal is reached. It doesn't block
+this, but option 1 can't be tried with a generic union until it's
+fixed, which the issue and PR say.
 
 Checked with small programs, each run on NIN's Go and Clojure backends,
 on the JVM compiler (stage 1, `Niva/Niva`, at `a56f659c` too), and on
@@ -92,8 +104,8 @@ and its uses: `elemType = f widenedTo: expectedElem :db` before the
 list or set type is made from `elemType` instead of `f`, and
 `MapT k: (first widenedTo: expectedKey :db) v: (second widenedTo:
 expectedValue :db)`, with `expectedKey` and `expectedValue` taken from
-`expectedMap`. A PR would rewrite it in Gavr's style (a comma cascade
-for the `ifTrue:`).
+`expectedMap`. The PR rewrites it in Gavr's style and adds tests; see
+[005's PR](005-go-list-literal-of-branch-pr.md).
 
 Checked against stock `a56f659c`, each from an exported copy:
 
@@ -114,13 +126,11 @@ Checked against stock `a56f659c`, each from an exported copy:
   niva line above 292 in file main/kotlin/Main.kt", from mapping its
   own stack trace; that's left out of the issue.
 
-A PR would also need tests in `back/tests/goBackTests.niva`, as #436,
-#437 and #440 had.
-
-The options are about how far it should go. 1 is the spike. 2 and 3 are
-about the untyped local, the one row 1 leaves. 3 is there because Go
-already works that way. 2 has a catch for `mut` lists that 3 avoids.
-The issue suggests 1 and leaves 2 and 3 for later, so there's one
+The options are about how far it should go. 1 is the spike, and the
+draft PR. 2 and 3 are about the untyped local, the one row 1 leaves. 3
+is there because Go already works that way. 2 has a catch for `mut`
+lists that 3 avoids. The issue suggests 1, points to the draft PR
+rather than offering one, and leaves 2 and 3 for later, so there's one
 decision: is 1 the right direction.
 
 Everything below the line is the issue as it would be filed.
@@ -204,8 +214,8 @@ from the expected type, and its `List` is covariant.
 
 I'm writing a computer algebra library, where wrapping a narrowed value
 in a list, as `operands` does above, comes up in most rules. For now it
-builds leaves with methods typed `-> Expr`. I'd like to send a PR, and
-the question is how far it should go:
+builds leaves with methods typed `-> Expr`. The question is how far a
+fix should go:
 
 1. **Type a literal by what's expected of it.** Where the context gives
    a type (a field, an argument, a declared variable, a return type, an
@@ -214,7 +224,8 @@ the question is how far it should go:
    `List(Expr)`. It's about 20 lines in the resolver, and fixes all of
    the above on both backends. A list with nothing expected of it,
    `l = {(Sym name: "x")}`, is still a `List(Sym)`, and passing it on as
-   a `List(Expr)` still doesn't build on Go.
+   a `List(Expr)` still doesn't build on Go. A generic union, like
+   `Result` in #447, can't be tried until #447 is fixed.
 2. **1, and Go converts the rest.** Where a `List(Sym)` is passed as a
    `List(Expr)`, Go copies it into a new slice. That covers the last
    case, but a copy of a `mut` list doesn't see changes to the
@@ -226,8 +237,10 @@ the question is how far it should go:
    it.
 
 I'd suggest 1: it's small, changes no rule, and covers what comes up in
-practice; 2 or 3 could follow for the last case. Would 1 be OK? I have
-it working and can open it as a PR, or leave it to you.
+practice; 2 or 3 could follow for the last case. Draft PR #PR shows
+what 1 looks like, with tests, so there's something concrete to look
+at. You don't have to take it, and if another option fits better,
+that's fine.
 
 Niva `self-host` at `a56f659c`, Go 1.26, OpenJDK 25, Babashka 1.13,
 Linux. Found while writing a small computer algebra library in Niva.
