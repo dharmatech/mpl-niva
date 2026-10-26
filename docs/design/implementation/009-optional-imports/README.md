@@ -87,10 +87,11 @@ inference does the work of the suggestion, not of the edit. A command
 that writes the lines could still exist for his way of working, opt-in.
 Either way, increment 2, the derived report, is the heart of it.
 
-A version that works today, with no compiler change, is sketched as
-series 011 on the branch `sketch/comment-imports`: the imports are
-comments in this syntax, and `tools/check-imports` checks them against
-the uses that NIN's generated Go reveals.
+A version that works today, with no compiler change, is
+[series 011](../011-comment-imports/README.md), in MPL since
+2026-10-26: the imports are comments in this syntax, and
+`tools/check-imports` checks them against the uses that NIN's generated
+Go reveals.
 
 ## When to pick it up
 

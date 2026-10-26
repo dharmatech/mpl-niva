@@ -1,7 +1,8 @@
 # 011 comment-imports
 
-**Status:** Sketch on branch `sketch/comment-imports` (2026-10-26), for
-review before anything goes to `main`.
+**Status:** Done, merged into `main` (2026-10-26), after review as a
+sketch on the branch `sketch/comment-imports` (`e83e7bc`). `tools/check`
+now fails on a missing or unused import comment.
 
 Each MPL file lists the modules it uses, as comments in the syntax
 imports would have, `// Project import: "mpl.tree"`. A script,
