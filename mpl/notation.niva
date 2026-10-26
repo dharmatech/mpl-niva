@@ -10,7 +10,7 @@ extend Expr [
   on text -> String = | this
   | Num     => value toString
   | Sym     => name
-  | Sum     => this operands: terms joinedBy: " + " level: 1 ifNone: "0"
+  | Sum     => this operands: terms   joinedBy: " + " level: 1 ifNone: "0"
   | Product => this operands: factors joinedBy: " * " level: 2 ifNone: "1"
   | Power   => (base operandText: 3) + "^" + (exp operandText: 3)
 
@@ -28,12 +28,12 @@ extend Expr [
   /// binds tighter.
   on operandText(level): Int -> String =
     this precedence > level
-      ifTrue: [this text]
+      ifTrue:  [this text]
       ifFalse: ["(" + this text + ")"]
 
   /// A sum's or product's operands, joined; `none` when there are none.
   on operands(list): List(Expr) joinedBy: String level: Int ifNone(none): String -> String =
     list isEmpty
-      ifTrue: [none]
+      ifTrue:  [none]
       ifFalse: [list map: [it operandText: level], joinWith: joinedBy]
 ]
