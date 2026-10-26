@@ -19,6 +19,7 @@ filed, the header links the issue.
 | Draft | Status |
 |---|---|
 | [000 `lg -m`: run a namespace's `-main`](000-lg-main-option.md) | Filed as [#1096](https://github.com/nooga/let-go/issues/1096) (2026-10-23). |
+| [001 A record's class name from another namespace](001-record-class-name.md) | Drafted 2026-10-26, not filed. `lg` names another namespace's record only as `ns/Name`, which JVM Clojure and `bb` reject, so with Niva's fix for item 3 ([009](../niva-feedback/009-clj-record-names-pr.md)) MPL stops on `lg`. To be filed with or after that PR. |
 
 ## Held
 
@@ -27,4 +28,5 @@ filed, the header links the issue.
   JVM Clojure throws `ClassNotFoundException`, and Babashka rejects the
   `defrecord`. Niva's Clojure output depends on this today (Niva
   feedback item 3), so MPL would stop running on `lg` if let-go turned
-  strict first. It waits for Niva's fix.
+  strict first. It waits for Niva's fix, drafted as
+  [009](../niva-feedback/009-clj-record-names-pr.md), to be merged.

@@ -99,9 +99,12 @@ On 2026-10-26, each from an exported copy, with stage 1 at `781c5b05`
   niva.generated.model.model_Circle in this context". So does MPL. No
   spelling works on all three, and `lg` isn't one of NIN's runtimes, so
   the PR targets `bb` and JVM Clojure. On `lg` it would want let-go to
-  resolve `ns.Name` as Clojure does, a let-go issue not drafted yet
-  ([series 002](../design/implementation/002-let-go/README.md),
-  [let-go feedback](../let-go-feedback/README.md)).
+  resolve `ns.Name` as Clojure does
+  ([series 002](../design/implementation/002-let-go/README.md)). The
+  user chose this on 2026-10-26: fix Niva for `bb` and JVM Clojure
+  first, as drafted, and ask let-go for the class name, drafted as
+  [let-go 001](../let-go-feedback/001-record-class-name.md), to be
+  filed with or after this PR.
 
 Not covered: REPL and hot-reload modes beyond their existing tests,
 which pass. In REPL mode every package is one namespace, so nothing is
