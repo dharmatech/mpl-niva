@@ -25,6 +25,14 @@ says the clause is "Currently silently ignored", and step 4 of
 `docs/clojure-compat-roadmap.md` has it refer the matching var. Nothing
 there names a record by its class.
 
+It's framed as a gap in Clojure compatibility, not as something Niva
+needs: the forms `lg` rejects are documented Clojure, and code with
+nothing to do with Niva hits it too, such as `extend-protocol` on
+another namespace's record. let-go's stated target is full Clojure
+compatibility on the JVM-interop surface (`docs/contribution-policy.md`).
+The quote is from `defrecord`'s docstring, `(doc defrecord)` on Clojure
+1.12.
+
 The comparison was run with `clojure` (CLI 1.12.6.1673, JVM), `bb`
 1.13.226 and `lg` at `18df3ad5`, from the files below. `lg` ran
 `(require 'app) (app/-main)` from a `run.lg`, since it has no `-m` yet
@@ -40,15 +48,17 @@ Everything below the line is the issue as it would be filed.
 
 ---
 
-**Title:** A record from another namespace can't be named by its class, `ns.Record`, as on JVM Clojure and bb
+**Title:** Clojure compatibility: a record from another namespace can't be named by its class, `ns.Record`
 
 ## Summary
 
-On JVM Clojure and Babashka, a record defined in another namespace is
-named by its class, `geo.shapes.Circle`, or by the short name an
-`(:import [geo.shapes Circle])` brings in. `lg` resolves neither. It
-takes only the var form, `geo.shapes/Circle`, which the other two
-reject, so no spelling works on all three.
+In Clojure, `defrecord` makes a class "in a package with the same name
+as the current namespace". So another namespace names the record by
+that class, `geo.shapes.Circle`, or by the short name an
+`(:import [geo.shapes Circle])` brings in, as on JVM Clojure and
+Babashka. `lg` resolves neither. It takes only the var form,
+`geo.shapes/Circle`, which the other two reject, so code that names
+another namespace's record can't run on both `lg` and Clojure.
 
 ```clojure
 ;; src/geo/shapes.clj
@@ -68,6 +78,22 @@ reject, so no spelling works on all three.
 | `geo.shapes.Circle` | `true` | `true` | Can't resolve geo.shapes.Circle in this context |
 | `Circle`, with `(:import [geo.shapes Circle])` in the `ns` | `true` | `true` | Can't resolve Circle in this context |
 | `geo.shapes/Circle` | No such var: geo.shapes/Circle | Unable to resolve symbol: geo.shapes/Circle | `true` |
+| `geo.shapes.Circle` in `extend-protocol`, below | `12` | `12` | Can't resolve geo.shapes.Circle in this context |
+
+The last row is a protocol extended to the record, in place of the
+`instance?`:
+
+```clojure
+;; src/app.clj
+(ns app (:require [geo.shapes]))
+(defprotocol Area (area [s]))
+(extend-protocol Area geo.shapes.Circle
+  (area [c] (* 3 (:radius c) (:radius c))))
+(defn -main [& _] (println (area (geo.shapes/->Circle 2))))
+```
+
+There, the imported `Circle` and `geo.shapes/Circle` give what they give
+for `instance?`.
 
 `lg` ran `(require 'app) (app/-main)` from a `run.lg`, with
 `lg -source-paths src run.lg`.
@@ -91,7 +117,7 @@ two records with the same name in two namespaces print the same.
 
 ## Context
 
-Niva's Clojure backend now names another namespace's record by its
+We found this through Niva. Its Clojure backend now names another namespace's record by its
 class, as JVM Clojure and Babashka need (gavr123456789/Niva#NNN). It
 used to emit the var form, which only `lg` resolved, so a Niva program
 in several files that matches on records ran on `lg` and nowhere else.
