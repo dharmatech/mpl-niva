@@ -27,6 +27,7 @@ filed. Once filed, the header links the issue.
 | [008 `sortedWith:` on lists, as on the JVM compiler, as a pull request](008-sorted-with-pr.md) | Opened 2026-10-25 as [#455](https://github.com/gavr123456789/Niva/pull/455): a PR without an issue, since matching the JVM compiler's signature (a block `[a, b -> Int]`) leaves nothing to decide. From the gaps below the list. Branch `dharmatech/Niva:sorted-with` at `b2ff55a2` on `self-host` `2ad4f629`, locally in `~/src/Niva-self-host-sorted-with`: the protocol entry next to `sortedBy:` and `List__sortedWith` in both runtimes, with three tests that fail without it. Approved without comments and merged into `self-host` the same day (17:39 UTC), squashed as `781c5b05`, unchanged. |
 | [009 Clojure: a type from another file, as a pull request](009-clj-record-names-pr.md) | Opened 2026-10-26 as [#461](https://github.com/gavr123456789/Niva/pull/461): a PR without an issue, as 007 and 008 were. README item 3. Branch `dharmatech/Niva:clj-record-names` at `c6ade25a` on `self-host` `139a44e0`, locally in `~/src/Niva-self-host-clj-records`: type names without the package's dots, as on Go, a record's class from another namespace named with `.`, and a thrown branch without fields qualified, with four tests that fail without it and two updated. MPL then loads on `bb` and JVM Clojure up to items 17 and 8, and with those shimmed passes all 151 checks on both. It no longer runs on `lg`, which names another namespace's record only with `/`: chosen on 2026-10-26, with a let-go issue for it filed as [let-go #1101](https://github.com/nooga/let-go/issues/1101) ([draft](../let-go-feedback/001-record-class-name.md)). Merged into `self-host` the same day (17:36 UTC), without a review or comments, squashed as `6313be64`, unchanged. |
 | [010 Clojure: no class hint for a union or an enum, as a pull request](010-clj-hint-records-pr.md) | Opened 2026-10-26 as [#462](https://github.com/gavr123456789/Niva/pull/462): a PR without an issue, as 009 was. README item 39, from Gavr's type hints right after #461. Branch `dharmatech/Niva:clj-hint-records` at `11f91733` on `self-host` `03b69df4`, locally in `~/src/Niva-self-host-clj-hints`: the context gets every package's unions and enums, which a class hint skips, and a hint's package has a namespace's `-` as `_`, with four tests that fail without it. MPL then passes all 151 checks on JVM Clojure again, with items 17 and 8 shimmed. Approved without comments and merged into `self-host` the same day (20:22 UTC), squashed as `a4429c50`, unchanged. |
+| [011 Clojure: collection `+` and `-`, and `any:`, as a pull request](011-clj-collection-ops-pr.md) | Drafted 2026-10-26, not opened: a PR without an issue, as 009 and 010 were. README items 17 and 8. Branch `clj-collection-ops` at `8fe22164` on `self-host` `a4429c50`, locally in `~/src/Niva-self-host-clj-ops`, not pushed: a core call names an operator method with Go's word for it, which fixes `+` and `-` on lists, sets and maps, and the runtime gets `List__any`, with three tests that fail without it. With it, MPL's demo matches Go and all 151 checks pass on `bb` and JVM Clojure with nothing shimmed. |
 
 ## Self-hosted compiler
 
@@ -110,6 +111,7 @@ and 7 are filed by us, 23 by Gavr.
    option 3, merged into `self-host` 2026-10-25: `==` compares by content
    on Go too, and a type's own `==` is called.
 8. **Clojure:** `any:` passes the type checker but isn't in the runtime.
+   A fix is drafted as a PR in [011](011-clj-collection-ops-pr.md).
 9. **Clojure:** `e toString` ignores a `toString` declared on the union's
    branches.
 10. `indexOfFirst:` is in both runtimes, but the type checker doesn't
@@ -141,6 +143,11 @@ and 7 are filed by us, 23 by Gavr.
     backend doesn't. `check.niva`'s `PrintingChecks all + EqualityChecks all`
     stops there. Found trying let-go
     ([series 002](../design/implementation/002-let-go/README.md)).
+    At `a4429c50`, `+` and `-` on sets and maps fail the same way
+    (`Set__+`, `Set__-`, `Map__+`, `Map__-`), while the runtime has
+    `Set__plus`, `Set__minus`, `Map__plus` and `Map__minus`: every
+    operator method in it has Go's word. A fix in the emitter is drafted
+    as a PR in [011](011-clj-collection-ops-pr.md).
 18. **Clojure:** `/` on two `Int`s becomes Clojure's `/`, which makes a
     ratio: `17 / 5` is `17/5` and `-7 / 2` is `-7/2`, where Go gives 3
     and -3. A loop halving `n` while it's over 1 ends at `5/8`. Found
@@ -303,6 +310,10 @@ and 7 are filed by us, 23 by Gavr.
     hints, which name a record's class with `.` as #461 does. Fixed by
     [#462](https://github.com/gavr123456789/Niva/pull/462) ([draft](010-clj-hint-records-pr.md)), merged into
     `self-host` 2026-10-26 as `a4429c50`.
+40. **Go:** `echo` of a set prints the Go map that holds it:
+    `(#(1 2) - #(1)) echo` gives `#{ 2 => struct {}{}, }`, where Clojure
+    prints `#(2)`. Found at `a4429c50` writing
+    [011](011-clj-collection-ops-pr.md).
 
 Gaps rather than bugs: `sortedWith:`, which the Kotlin compiler has,
 was missing from NIN until
