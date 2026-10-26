@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Runs check.niva and fails unless its last line says every check passed.
 # The compiler exits 0 even when the build fails, so this reads the output.
+# Then it checks each file's import comments with tools/check-imports,
+# which prints nothing when they hold.
 #
 #   tools/check                  # Go backend
 #   tools/check --backend=clj
@@ -12,4 +14,7 @@ cd "$root"
 
 out=$("$root/tools/nin" run check.niva "$@" 2>&1)
 printf '%s\n' "$out"
-[[ $(printf '%s\n' "$out" | tail -n 1) =~ ^all\ [0-9]+\ checks\ passed$ ]]
+status=0
+[[ $(printf '%s\n' "$out" | tail -n 1) =~ ^all\ [0-9]+\ checks\ passed$ ]] || status=1
+"$root/tools/check-imports" || status=1
+exit $status

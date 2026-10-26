@@ -1,3 +1,9 @@
+// Project import: "tests.checking"
+// Project import: "tests.equalityChecks"
+// Project import: "tests.orderChecks"
+// Project import: "tests.printingChecks"
+// Project import: "tests.simplifyChecks"
+
 // `tools/check`: runs every check, prints each failure, and ends with a
 // summary. The last line is `all N checks passed` only when every check
 // passes; tools/check looks for it, since the compiler's exit code is 0

@@ -1,3 +1,5 @@
+// Project import: "mpl.tree"
+
 // Printing, in math notation with only the parentheses the structure
 // needs. A sum inside a sum keeps its parentheses, so unsimplified input
 // shows its shape: `(x + y) + z`.
