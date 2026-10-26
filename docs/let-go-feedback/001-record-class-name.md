@@ -1,10 +1,10 @@
 # 001 A record's class name from another namespace
 
-**Status:** Drafted 2026-10-26, not filed. To be filed with or after
-Niva PR [009](../niva-feedback/009-clj-record-names-pr.md), whose
-change it's about: until then it would bring up Niva feedback item 3
-before Gavr has it. The Niva PR's number goes in the last paragraph
-once it's open.
+**Status:** Drafted 2026-10-26, not filed. Ready to file: Niva PR
+[009](../niva-feedback/009-clj-record-names-pr.md), whose change it's
+about, is open as [#461](https://github.com/gavr123456789/Niva/pull/461), and the last paragraph cites it.
+Filed before it, it would have brought up Niva feedback item 3 before
+Gavr had it.
 **Repository:** [nooga/let-go](https://github.com/nooga/let-go/issues)
 **Checked against:** let-go `main` at `18df3ad5` (2026-10-22), still
 `main` on 2026-10-26
@@ -117,8 +117,9 @@ two records with the same name in two namespaces print the same.
 
 ## Context
 
-We found this through Niva. Its Clojure backend now names another namespace's record by its
-class, as JVM Clojure and Babashka need (gavr123456789/Niva#NNN). It
+We found this through Niva. Its Clojure backend is changing to name
+another namespace's record by its class, as JVM Clojure and Babashka
+need (gavr123456789/Niva#461). It
 used to emit the var form, which only `lg` resolved, so a Niva program
 in several files that matches on records ran on `lg` and nowhere else.
 After that change it runs on `bb` and JVM Clojure, and with 1 it would

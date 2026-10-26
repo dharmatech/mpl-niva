@@ -1,12 +1,14 @@
 # 009 Clojure: a type from another file, as a pull request
 
-**Status:** Drafted 2026-10-26, not opened. A PR without an issue, as
+**Status:** Opened 2026-10-26 as [#461](https://github.com/gavr123456789/Niva/pull/461), not as a draft. A PR
+without an issue, as
 [007](007-inject-into-pr.md) (#454) and [008](008-sorted-with-pr.md)
 (#455) were: the generated code names things Clojure can't resolve, and
-naming them as Clojure does leaves nothing for Gavr to decide.
-**Branch:** `clj-record-names`, one commit on `self-host` at
-`139a44e0`: `c6ade25a`. Locally in `~/src/Niva-self-host-clj-records`,
-a worktree of `~/src/Niva-self-host`. Not pushed.
+naming them as Clojure does leaves nothing for Gavr to decide. No CI
+checks. Each paragraph went in on one line.
+**Branch:** [`dharmatech/Niva:clj-record-names`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-record-names),
+one commit on `self-host` at `139a44e0`: `c6ade25a`. Locally in
+`~/src/Niva-self-host-clj-records`, a worktree of `~/src/Niva-self-host`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 It's item 3 in the [README](README.md), found at `6af8f9f6` while
@@ -104,7 +106,7 @@ On 2026-10-26, each from an exported copy, with stage 1 at `781c5b05`
   user chose this on 2026-10-26: fix Niva for `bb` and JVM Clojure
   first, as drafted, and ask let-go for the class name, drafted as
   [let-go 001](../let-go-feedback/001-record-class-name.md), to be
-  filed with or after this PR.
+  filed now that this PR is open.
 
 Not covered: REPL and hot-reload modes beyond their existing tests,
 which pass. In REPL mode every package is one namespace, so nothing is
@@ -113,7 +115,7 @@ qualified (items 37 and 38 are its own bugs).
 Left out of the PR on purpose: MPL, and that it needs items 17 and 8
 next, which is the following PR.
 
-Everything below the line is the pull request as it would be opened.
+Everything below the line is the pull request as opened.
 
 ---
 
