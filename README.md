@@ -65,7 +65,9 @@ Each line is an expression as built, then simplified.
 (x * y) * x   =>   x^2 * y
 ```
 
-And the checks, which end with `all N checks passed` when they do:
+And the checks, which end with `all N checks passed` when they do, then
+check each file's [import comments](docs/comment-imports.md) and print
+nothing more when they hold:
 
 ```bash
 tools/check
@@ -104,7 +106,7 @@ Binary messages have no precedence and go left to right, so
 | `mpl/` | The library: `Expr` and its operators (`tree`), printing (`notation`), the order relation (`order`), and simplifying (`simplify`). |
 | `main.niva` | The demo. |
 | `check.niva`, `tests/` | The checks. |
-| `tools/` | Building and running the self-hosted compiler, running the checks, and the REPL. |
+| `tools/` | Building and running the self-hosted compiler, running the checks, checking import comments (`check-imports`), and the REPL. |
 
 ## Docs
 
@@ -112,6 +114,8 @@ Binary messages have no precedence and go left to right, so
   that hold, and a known gap.
 - [The REPL](docs/repl.md): trying expressions a line at a time,
   and its limits.
+- [Comment imports](docs/comment-imports.md): each file's imports,
+  written as comments, and the script that checks them.
 - [Niva notes](docs/niva-notes.md): the language as this project meets
   it, and workarounds for its bugs.
 - [The self-hosted compiler](docs/self-hosted-compiler.md): building and

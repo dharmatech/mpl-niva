@@ -1,0 +1,136 @@
+#!/usr/bin/env python3
+# Checks each .niva file's import comments against what the file really
+# uses, as the self-hosted compiler's Go shows. It reports and suggests
+# the fix; it never edits a file. See docs/comment-imports.md.
+#
+#   tools/check-imports                # builds main.niva and check.niva
+#   tools/check-imports other.niva     # builds these entry files instead
+#
+# Prints nothing and exits 0 when every import is used, every use is
+# imported, and no modules form a cycle.
+import graphlib, os, re, subprocess, sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+os.chdir(ROOT)
+# The programs. Each build has every file's declarations, but a file's
+# top-level code only when it's the entry, so this builds each program.
+ENTRIES = [os.path.normpath(e) for e in sys.argv[1:]] or ["main.niva", "check.niva"]
+
+IMPORT = re.compile(r'^// Project import: "([^"]*)"')
+DIRECTIVE = re.compile(r"^//line (.+):(\d+)$")
+DECL = re.compile(r"^(?:func|type) (?:\(\w* ?(\w+)\) )?(\w+)")
+STRING = re.compile(r'"(?:\\.|[^"\\])*"' + r"|'(?:\\.|[^'\\])*'")
+IDENT = re.compile(r"\b[A-Za-z_]\w*")
+
+# Modules are NIN's: mpl/tree.niva is mpl.tree, and in Go mpl_tree.
+files = subprocess.run(["git", "ls-files", "--cached", "--others", "--exclude-standard", "*.niva"],
+                       capture_output=True, text=True, check=True).stdout.split()
+module = {f: f.removesuffix(".niva").replace("/", ".") for f in files}
+file_of = {m: f for f, m in module.items()}
+# Longest first, so mpl_tree_Expr is mpl.tree's even if there's an mpl.niva.
+prefixes = sorted(((m.replace(".", "_"), m) for m in file_of), key=lambda p: -len(p[0]))
+if len({p for p, _ in prefixes}) < len(prefixes):
+    sys.exit("check-imports: two modules have the same name in Go")
+
+
+def module_in(ident):
+    """The module a Go name is declared in: mpl_tree_Expr, a type, and
+    mpl_tree__Expr__plus, a method, are both mpl.tree's."""
+    return next((m for p, m in prefixes if ident.startswith(p + "_")), None)
+
+
+def describe(ident, prefix):
+    """mpl_simplify__mpl_tree_Expr__simplify as `Expr simplify`."""
+    rest = ident[len(prefix) + 1:]
+    if not rest.startswith("_"):  # a type, or what Go makes for one, like mpl_tree_Sum__eq
+        return rest.split("__")[0]
+    parts = rest[1:].split("__")
+    n = 0  # the receiver's type parts, such as core_List and mpl_tree_Expr
+    while n < len(parts) - 1 and parts[n].split("_")[-1][:1].isupper():
+        n += 1
+    types = [p.split("_")[-1] for p in parts[:n]]
+    receiver = types[0] + (f"({', '.join(types[1:])})" if len(types) > 1 else "")
+    selector = parts[n:]
+    return receiver + " " + (selector[0] if len(selector) == 1 else "".join(s + ":" for s in selector))
+
+
+def build(entry):
+    """NIN's Go for one entry file. The compiler exits 0 even when the
+    build fails, so this looks for the output."""
+    out = Path(".niva_go/build/main.go")
+    out.unlink(missing_ok=True)
+    r = subprocess.run(["tools/nin", "build", entry, "--backend=go"], capture_output=True, text=True)
+    if not out.exists():
+        sys.exit(f"check-imports: {entry} didn't build\n{r.stdout}{r.stderr}")
+    return out.read_text()
+
+
+# uses[module][used module][name] is the lines that use it, None where Go
+# doesn't say.
+# Each function is named after the module that declares it; //line
+# comments say which file and line each statement came from; and
+# top-level code is in func main(), which belongs to the entry file.
+uses, seen = {}, set()
+for entry in ENTRIES:
+    where, fresh = (None, None), False
+    for text in build(entry).splitlines():
+        if d := DIRECTIVE.match(text):
+            where, fresh = (d[1], int(d[2])), True
+            continue
+        if decl := DECL.match(text):
+            name = decl[1] or decl[2]
+            f = entry if name == "main" else file_of.get(module_in(name))
+            if not (fresh and where[0] == f):  # types and what Go makes for them have no //line
+                where = (f, None)
+        if not text.lstrip().startswith("//"):
+            fresh = False
+        f, line = where
+        if f not in module:
+            continue
+        seen.add(f)
+        for ident in IDENT.findall(STRING.sub('""', text).split("//")[0]):
+            m = module_in(ident)
+            if m and m != module[f]:
+                at = uses.setdefault(module[f], {}).setdefault(m, {})
+                at.setdefault(describe(ident, m.replace(".", "_")), set()).add(line)
+
+
+def examples(names, f, most=3):
+    """`Expr simplify` at main.niva:21, and a few more, each at its first line."""
+    first = {n: min((l for l in lines if l), default=None) for n, lines in names.items()}
+    found = sorted(first.items(), key=lambda kv: kv[1] or float("inf"))
+    shown = [f"`{n}` at {f}:{line}" if line else f"`{n}` in {f}" for n, line in found[:most]]
+    more = len(found) - most
+    return ", ".join(shown) + (f" and {more} more" if more > 0 else "")
+
+
+problems = []
+for f in sorted(files):
+    m = module[f]
+    if f not in seen:
+        problems.append(f"{f}: none of its code is in the Go for {', '.join(ENTRIES)}; "
+                        f"if it's a program, add it to ENTRIES in tools/check-imports")
+        continue
+    used = uses.get(m, {})
+    imported = {i[1]: n for n, text in enumerate(open(f), 1) if (i := IMPORT.match(text))}
+    for u in sorted(used.keys() - imported.keys()):
+        problems.append(f"{f}: uses {u} without importing it: {examples(used[u], f)}.\n"
+                        f"  Add at the top: // Project import: \"{u}\"")
+    for u in sorted(imported.keys() - used.keys()):
+        why = "but uses nothing from it" if u in file_of else "but there's no such module"
+        problems.append(f"{f}:{imported[u]}: imports {u} {why}.\n"
+                        f"  Remove: // Project import: \"{u}\"")
+
+# A module comes after the ones it uses; graphlib reports a cycle if
+# there's no such order, as each module used by the next.
+try:
+    graphlib.TopologicalSorter({m: set(u) for m, u in uses.items()}).prepare()
+except graphlib.CycleError as e:
+    cycle = e.args[1][::-1]
+    problems.append("cycle: " + " -> ".join(cycle) + "\n" + "\n".join(
+        f"  {a} uses {b}: {examples(uses[a][b], file_of[a], most=1)}" for a, b in zip(cycle, cycle[1:])))
+
+if problems:
+    print("\n".join(problems))
+    sys.exit(1)

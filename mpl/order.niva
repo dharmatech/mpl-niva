@@ -1,3 +1,5 @@
+// Project import: "mpl.tree"
+
 // The order relation: Cohen's ≺, as a three-way compare. It's the order
 // a simplified sum keeps its terms in, and a product its factors:
 // numbers first, then the rest mostly by their last operands. Sorted,

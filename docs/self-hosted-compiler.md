@@ -65,6 +65,8 @@ every run.
 
 `tools/check` runs the checks, on Go unless told otherwise. It reads the
 output rather than the exit code, which is 0 even when the build fails.
+Then it checks the [import comments](comment-imports.md), which builds on
+Go whatever the backend.
 
 ### On let-go
 

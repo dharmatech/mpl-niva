@@ -1,3 +1,7 @@
+// Project import: "mpl.notation"
+// Project import: "mpl.simplify"
+// Project import: "mpl.tree"
+
 // `tools/nin run --backend=go`: in three parts, each with a heading. It
 // builds a few expressions and prints each one beside the Niva that built
 // it, compares two, then simplifies a few. For now simplifying flattens
