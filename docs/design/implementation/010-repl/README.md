@@ -1,6 +1,6 @@
 # 010 repl
 
-**Status:** Done (2026-10-26), as a first step: `tools/repl`, a REPL on
+**Status:** Done at `d8b6a9a` (2026-10-26), as a first step: `tools/repl`, a REPL on
 the Go backend by replay. Editor support, such as F8 to send a line, is
 left until there's a better story for what to use.
 
