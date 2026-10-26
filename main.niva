@@ -1,11 +1,18 @@
-// `tools/nin run --backend=go`: builds a few expressions and prints each
-// one beside the Niva that built it, then simplifies a few. For now
-// simplifying flattens sums and products, puts their operands in Cohen's
-// order, works out their numbers, combines like terms and like factors,
-// and simplifies powers to integers.
+// `tools/nin run --backend=go`: in three parts, each with a heading. It
+// builds a few expressions and prints each one beside the Niva that built
+// it, compares two, then simplifies a few. For now simplifying flattens
+// sums and products, puts their operands in Cohen's order, works out
+// their numbers, combines like terms and like factors, and simplifies
+// powers to integers.
 
 String show(e): Expr -> Unit = [
   (this + "   =>   " + e text) echo
+  ()
+]
+
+/// Prints this and whether it holds.
+String showBool(b): Bool -> Unit = [
+  (this + "   =>   " + b toString) echo
   ()
 ]
 
@@ -19,32 +26,39 @@ x = "x" sym
 y = "y" sym
 z = "z" sym
 
-"x + (2 num * y)" show: x + (2 num * y)
-"x + 2 num * y" show: x + 2 num * y
-"x + y + z" show: x + y + z
-"x * (y * z)" show: x * (y * z)
-"(x + y) pow: 2 num" show: ((x + y) pow: 2 num)
-"x pow: -1 num" show: (x pow: -1 num)
-"-2 num pow: x" show: (-2 num pow: x)
+"Building: the operators build what's written, and nothing is simplified." echo
+"Binary messages go left to right, so x + 2 num * y is (x + 2) * y." echo
+"Each line is the Niva, then the expression it builds." echo
+"" echo
+"x + (2 num * y)"           show: x + (2 num * y)
+"x + 2 num * y"             show: x + 2 num * y
+"x + y + z"                 show: x + y + z
+"x * (y * z)"               show: x * (y * z)
+"(x + y) pow: 2 num"        show: ((x + y) pow: 2 num)
+"x pow: -1 num"             show: (x pow: -1 num)
+"-2 num pow: x"             show: (-2 num pow: x)
 "(x pow: 2 num) pow: 3 num" show: ((x pow: 2 num) pow: 3 num)
-"x * y pow: z + 1 num" show: (x * y pow: z + 1 num)
+"x * y pow: z + 1 num"      show: (x * y pow: z + 1 num)
 
 "" echo
-"(x + y) == (x + y)" echo
-((x + y) == (x + y)) echo
-"(x + y) == (y + x)" echo
-((x + y) == (y + x)) echo
+"Comparing: == compares structure, with operands in order." echo
+"" echo
+"(x + y) == (x + y)" showBool: ((x + y) == (x + y))
+"(x + y) == (y + x)" showBool: ((x + y) == (y + x))
 
 "" echo
-(x + y + z) showSimplified
-(x * (y * z)) showSimplified
-((x + (y + z)) pow: 2 num) showSimplified
-(y + x + 2 num) showSimplified
-(x * y + y) showSimplified
-(x + 2 num + 3 num) showSimplified
-(x * 2 num * 3 num) showSimplified
-(x + y + x) showSimplified
-((x * y) pow: 2 num) showSimplified
-((x pow: 2 num) pow: 3 num) showSimplified
-(x * y * x) showSimplified
+"Simplifying: simplify puts an expression in Cohen's canonical form." echo
+"Each line is an expression as built, then simplified." echo
+"" echo
+(x + y + z)                            showSimplified
+(x * (y * z))                          showSimplified
+((x + (y + z)) pow: 2 num)             showSimplified
+(y + x + 2 num)                        showSimplified
+(x * y + y)                            showSimplified
+(x + 2 num + 3 num)                    showSimplified
+(x * 2 num * 3 num)                    showSimplified
+(x + y + x)                            showSimplified
+((x * y) pow: 2 num)                   showSimplified
+((x pow: 2 num) pow: 3 num)            showSimplified
+(x * y * x)                            showSimplified
 ((x pow: 2 num) * y * (x pow: -2 num)) showSimplified

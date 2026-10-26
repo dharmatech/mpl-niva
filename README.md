@@ -33,16 +33,29 @@ tools/build-self-hosted-niva
 ```
 
 Then run the demo, which builds a few expressions and prints each
-beside the Niva that built it, then simplifies a few:
+beside the Niva that built it, compares two, then simplifies a few,
+each part under a heading. Some of its output:
 
 ```bash
 tools/nin run --backend=go
 ```
 
 ```
+Building: the operators build what's written, and nothing is simplified.
+Binary messages go left to right, so x + 2 num * y is (x + 2) * y.
+Each line is the Niva, then the expression it builds.
+
 x + (2 num * y)   =>   x + 2 * y
 x + y + z   =>   (x + y) + z
 (x + y) pow: 2 num   =>   (x + y)^2
+
+Comparing: == compares structure, with operands in order.
+
+(x + y) == (x + y)   =>   true
+(x + y) == (y + x)   =>   false
+
+Simplifying: simplify puts an expression in Cohen's canonical form.
+Each line is an expression as built, then simplified.
 
 (x + y) + z   =>   x + y + z
 (y + x) + 2   =>   2 + x + y
