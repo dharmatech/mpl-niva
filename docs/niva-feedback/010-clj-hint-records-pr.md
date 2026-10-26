@@ -1,12 +1,13 @@
 # 010 Clojure: no class hint for a union or an enum, as a pull request
 
-**Status:** Drafted 2026-10-26, not opened. A PR without an issue, as
-[009](009-clj-record-names-pr.md) (#461) was: a hint has to name a
-class, and a union or an enum has none, so there's nothing for Gavr to
-decide.
-**Branch:** `clj-hint-records`, one commit on `self-host` at
-`03b69df4`: `11f91733`. Locally in `~/src/Niva-self-host-clj-hints`, a
-worktree of `~/src/Niva-self-host`. Not pushed.
+**Status:** Opened 2026-10-26 as [#462](https://github.com/gavr123456789/Niva/pull/462), not as a draft. A PR
+without an issue, as [009](009-clj-record-names-pr.md) (#461) was: a
+hint has to name a class, and a union or an enum has none, so there's
+nothing for Gavr to decide. No CI checks. Each paragraph went in on one
+line. `self-host` was still at `03b69df4`.
+**Branch:** [`dharmatech/Niva:clj-hint-records`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-hint-records),
+one commit on `self-host` at `03b69df4`: `11f91733`. Locally in
+`~/src/Niva-self-host-clj-hints`, a worktree of `~/src/Niva-self-host`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 It's item 39 in the [README](README.md), found right after #461 was
@@ -88,7 +89,7 @@ wasn't tried on JVM. Gavr's `cljFunctionHintsUseClojureTypeTags`
 asserts the same hint for a one-file program emitted as `(ns main …)`,
 a path the compiler uses only for REPL mode. Left as it is.
 
-Everything below the line is the pull request as it would be opened.
+Everything below the line is the pull request as opened.
 
 ---
 
