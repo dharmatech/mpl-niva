@@ -4,7 +4,10 @@
 without an issue, as [009](009-clj-record-names-pr.md) (#461) was: a
 hint has to name a class, and a union or an enum has none, so there's
 nothing for Gavr to decide. No CI checks. Each paragraph went in on one
-line. `self-host` was still at `03b69df4`.
+line. `self-host` was still at `03b69df4`. Gavr approved it without
+comments and merged it into `self-host` the same day (20:22 UTC),
+squashed as `a4429c50`, unchanged, retitled "[clj] no class hint for a
+union root, enums, since they have no real classes".
 **Branch:** [`dharmatech/Niva:clj-hint-records`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-hint-records),
 one commit on `self-host` at `03b69df4`: `11f91733`. Locally in
 `~/src/Niva-self-host-clj-hints`, a worktree of `~/src/Niva-self-host`.
