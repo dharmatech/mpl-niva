@@ -75,3 +75,15 @@ route stays the candidate for a true REPL.
   the plain name is easier to notice if one is ever left behind.
 - `.gitignore` ignores `repl.niva`.
 - [The REPL](../../../repl.md): how to use it, and its limits.
+
+## MPL on Clojure, as a program
+
+Since a Clojure REPL wants MPL working on Clojure first, the program
+was tried there too, after this landed. `nin run --backend=clj` fails on
+`bb` and on JVM Clojure alike, at feedback item 3: records with dots in
+their names, and another namespace naming a record class with `/`.
+Patched by hand in the generated code, with item 8 (`any:`) and item 17
+(list `+`) shimmed in the runtime, the demo's output on `bb` matches
+Go's line for line, and all 151 checks pass on `bb` and on JVM Clojure.
+So four fixes to NIN make MPL work on every backend, and three of them
+are also three of the REPL mode's four blockers.

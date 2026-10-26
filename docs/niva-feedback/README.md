@@ -62,6 +62,16 @@ and 7 are filed by us, 23 by Gavr.
    `(defrecord mpl.tree_Num [value])`, which Babashka and JVM Clojure
    read as a class. let-go accepts it, so MPL runs as laid out on `lg`
    ([series 002](../design/implementation/002-let-go/README.md)).
+   At `781c5b05` there are two causes, both in the emitter. The record
+   keeps its package's dots, since `cljSanitizeIdent` leaves them; JVM
+   Clojure then can't build even its constructor, `->mpl.tree_Num`, in
+   its own file. And another namespace names the class
+   `niva.generated.mpl.tree/mpl.tree_Num`, with `/`, which is how
+   `cljQualifiedTypeName` qualifies an enum var, where Clojure names a
+   record class `niva.generated.mpl.tree.mpl_tree_Num`. With both
+   patched by hand in the generated code, and 8 and 17 shimmed, MPL's
+   demo matches Go and all its 151 checks pass, on `bb` and on JVM
+   Clojure ([series 010](../design/implementation/010-repl/README.md)).
 4. **Both:** compile errors exit 0. On Clojure, a run-time error exits 0
    too, though `bb` and `lg` exit 1 when run directly: `nin run` drops
    it.
@@ -257,6 +267,21 @@ and 7 are filed by us, 23 by Gavr.
     receiver. Workaround: parentheses, `(1 < 2) && true`. Found at
     `781c5b05` writing simplifier 006's `simplifiedPower:`, whose
     `this == 0 num && w isNum` looked for `&&` on an `Expr`.
+37. **Clojure, REPL mode:** `--repl` puts every package in one
+    namespace, in package order, with each package's records in its own
+    part. So a package's records come after the functions of earlier
+    packages that use them: MPL's `main.clj` names `mpl.tree_Num` 455
+    lines before it's defined, and `bb` stops at "Unable to resolve
+    symbol: mpl.tree_Num". A program in one file works. Found at
+    `781c5b05` trying a Clojure REPL for MPL
+    ([series 010](../design/implementation/010-repl/README.md)), as is
+    38.
+38. **Clojure, REPL mode:** a module built with `--repl-line=N` for a
+    live session defines its records again, which makes new classes, so
+    the session's values no longer match any branch: after the full
+    module, a line using its `x` stops at "no matching type". Without
+    the records the line runs. It's what an editor's evaluate-line
+    would hit.
 
 Gaps rather than bugs: `sortedWith:`, which the Kotlin compiler has,
 was missing from NIN until
