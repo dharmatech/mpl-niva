@@ -287,6 +287,19 @@ and 7 are filed by us, 23 by Gavr.
     module, a line using its `x` stops at "no matching type". Without
     the records the line runs. It's what an editor's evaluate-line
     would hit.
+39. **Clojure, JVM:** since `b73180dd` (2026-10-26), a method on a
+    union or an enum doesn't compile on JVM Clojure: `this` gets a
+    class hint naming the union or the enum,
+    `(defn main_Shape__area ^long [^niva.generated.main.main_Shape this]`,
+    and neither is a class. A union is one record per branch, and an
+    enum is keywords. So it stops at `ClassNotFoundException:
+    niva.generated.main.main_Shape`, in one file too; `bb` ignores the
+    hint. At `03b69df4`, MPL with items 8 and 17 shimmed passes all 151
+    checks on `bb` and stops on JVM at its first method on `Expr`. The
+    IR doesn't tell a union from a record (`IrTypeRefKind` is `Builtin`,
+    `Custom` or `Function`), so the hint needs the module's record
+    types. Found right after #461 was merged, checking Gavr's type
+    hints, which name a record's class with `.` as #461 does.
 
 Gaps rather than bugs: `sortedWith:`, which the Kotlin compiler has,
 was missing from NIN until
