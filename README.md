@@ -71,6 +71,19 @@ And the checks, which end with `all N checks passed` when they do:
 tools/check
 ```
 
+Or try expressions a line at a time in the [REPL](docs/repl.md), which
+runs each line on the Go backend:
+
+```bash
+tools/repl
+```
+
+```
+niva> x = "x" sym
+niva> (x * x + x) showSimplified
+x * x + x   =>   x + x^2
+```
+
 ## Building expressions
 
 ```
@@ -91,12 +104,14 @@ Binary messages have no precedence and go left to right, so
 | `mpl/` | The library: `Expr` and its operators (`tree`), printing (`notation`), the order relation (`order`), and simplifying (`simplify`). |
 | `main.niva` | The demo. |
 | `check.niva`, `tests/` | The checks. |
-| `tools/` | Building and running the self-hosted compiler, and running the checks. |
+| `tools/` | Building and running the self-hosted compiler, running the checks, and the REPL. |
 
 ## Docs
 
 - [Simplifying](docs/simplifying.md): what `simplify` does, the rules
   that hold, and a known gap.
+- [The REPL](docs/repl.md): trying expressions a line at a time,
+  and its limits.
 - [Niva notes](docs/niva-notes.md): the language as this project meets
   it, and workarounds for its bugs.
 - [The self-hosted compiler](docs/self-hosted-compiler.md): building and

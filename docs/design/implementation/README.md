@@ -27,3 +27,4 @@ series: **expression-tree**, **collect-terms 001**.
 | [`007-sorted-with-pin`](007-sorted-with-pin/README.md) | The pin moves to #455, so lists have `sortedWith:`, and the notes say so. | Done at `e5874de` (2026-10-25). |
 | [`008-simplifier`](008-simplifier/README.md) | Cohen's automatic simplification, in small increments, as a charter, a spec and checkpoints. | The spec's seven increments done (2026-10-25), the last at `435dea7`. What comes next is open. |
 | [`009-optional-imports`](009-optional-imports/README.md) | An idea for Niva: imports optional per file and checked when present, and a no-cycles flag, as an alternative to show Gavr. | Parked (2026-10-26) until NIN is the main implementation. |
+| [`010-repl`](010-repl/README.md) | What Niva has for REPLs, and `tools/repl`, a REPL on the Go backend by replay. The Clojure REPL mode stays the candidate for a true REPL. | Done (2026-10-26). |

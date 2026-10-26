@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# A Niva REPL on the Go backend, by replay: each line you enter runs
+# after the lines already kept, and only its own output is shown. A line
+# that fails to build or run isn't kept. Ctrl-D ends the session.
+#
+#   tools/repl
+#
+# The session is written to repl.niva at the project root, where the
+# compiler finds mpl/, and removed at the end. While it runs, other
+# builds see its declarations too.
+set -uo pipefail
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+cd "$root"
+if [ -e repl.niva ]; then
+  echo "repl: repl.niva exists, from another session or one that didn't end; remove it first" >&2
+  exit 1
+fi
+trap 'rm -f repl.niva' EXIT
+
+marker="-- niva repl: new output --"
+session=()
+
+while IFS= read -r -e -p "niva> " line; do
+  [ -z "$line" ] && continue
+  history -s "$line"
+  {
+    [ ${#session[@]} -gt 0 ] && printf '%s\n' "${session[@]}"
+    printf '"%s" echo\n' "$marker"
+    printf '%s\n' "$line"
+  } > repl.niva
+  out=$("$root/tools/nin" run repl.niva --backend=go 2>&1)
+  status=$?
+  # The compiler exits 0 even when the build fails, so a failed build
+  # shows as no marker in the output; a run-time error exits 1.
+  if [ $status -eq 0 ] && [[ $out == *"$marker"* ]]; then
+    shown=${out#*"$marker"}
+    shown=${shown#$'\n'}
+    [ -n "$shown" ] && printf '%s\n' "$shown"
+    session+=("$line")
+  else
+    # The message without the compiler's own stack trace.
+    printf '%s\n' "${out#*"$marker"}" | grep -v -e '^Method:' -e '^-*$' -e '^ *$' | head -n 6
+    echo "(not kept)"
+  fi
+done
+echo
