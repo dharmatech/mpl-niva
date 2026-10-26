@@ -1,13 +1,14 @@
 # 011 Clojure: collection `+` and `-`, and `any:`, as a pull request
 
-**Status:** Drafted 2026-10-26, not opened. A PR without an issue, as
-[009](009-clj-record-names-pr.md) (#461) and
+**Status:** Opened 2026-10-26 as [#463](https://github.com/gavr123456789/Niva/pull/463), not as a draft. A PR
+without an issue, as [009](009-clj-record-names-pr.md) (#461) and
 [010](010-clj-hint-records-pr.md) (#462) were: the runtime already has
 the functions under Go's names, and `any:` is in the type checker, so
-there's nothing for Gavr to decide.
-**Branch:** `clj-collection-ops`, one commit on `self-host` at
-`a4429c50`: `8fe22164`. Locally in `~/src/Niva-self-host-clj-ops`, a
-worktree of `~/src/Niva-self-host`. Not pushed.
+there's nothing for Gavr to decide. No CI checks. Each paragraph went
+in on one line. `self-host` was still at `a4429c50`.
+**Branch:** [`dharmatech/Niva:clj-collection-ops`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-collection-ops),
+one commit on `self-host` at `a4429c50`: `8fe22164`. Locally in
+`~/src/Niva-self-host-clj-ops`, a worktree of `~/src/Niva-self-host`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 It's items 17 and 8 in the [README](README.md), the last two that
@@ -78,7 +79,7 @@ On 2026-10-26, each from an exported copy, with stage 1 at `781c5b05`
   record, `niva.generated.mpl.tree.mpl_tree_Num`, as since #461
   (let-go #1101).
 
-Everything below the line is the pull request as it would be opened.
+Everything below the line is the pull request as opened.
 
 ---
 
