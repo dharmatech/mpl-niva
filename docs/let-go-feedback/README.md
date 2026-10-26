@@ -28,6 +28,8 @@ filed, the header links the issue.
   JVM Clojure throws `ClassNotFoundException`, and Babashka rejects the
   `defrecord`. Niva's Clojure output depends on this today (Niva
   feedback item 3), so MPL would stop running on `lg` if let-go turned
-  strict first. It waits for Niva's fix, drafted as
-  [009](../niva-feedback/009-clj-record-names-pr.md) and open as
-  [#461](https://github.com/gavr123456789/Niva/pull/461), to be merged.
+  strict first. It waited for Niva's fix,
+  [009](../niva-feedback/009-clj-record-names-pr.md), merged on
+  2026-10-26 as [#461](https://github.com/gavr123456789/Niva/pull/461),
+  so it can be filed. MPL at our pin, `781c5b05`, still has the dotted
+  names, until the pin moves past `6313be64`.

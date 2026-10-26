@@ -5,7 +5,11 @@ without an issue, as
 [007](007-inject-into-pr.md) (#454) and [008](008-sorted-with-pr.md)
 (#455) were: the generated code names things Clojure can't resolve, and
 naming them as Clojure does leaves nothing for Gavr to decide. No CI
-checks. Each paragraph went in on one line.
+checks. Each paragraph went in on one line. Gavr merged it into
+`self-host` the same day (17:36 UTC), without a review or comments,
+squashed as `6313be64`, unchanged and under our title. His next two
+commits, `b73180dd` and `03b69df4`, add type hints to the generated
+functions, naming a record's class with `.` as this does.
 **Branch:** [`dharmatech/Niva:clj-record-names`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-record-names),
 one commit on `self-host` at `139a44e0`: `c6ade25a`. Locally in
 `~/src/Niva-self-host-clj-records`, a worktree of `~/src/Niva-self-host`.
