@@ -1,10 +1,10 @@
 # 001 A record's class name from another namespace
 
-**Status:** Drafted 2026-10-26, not filed. Ready to file: Niva PR
-[009](../niva-feedback/009-clj-record-names-pr.md), whose change it's
-about, is open as [#461](https://github.com/gavr123456789/Niva/pull/461), and the last paragraph cites it.
-Filed before it, it would have brought up Niva feedback item 3 before
-Gavr had it.
+**Status:** Filed 2026-10-26 as [#1101](https://github.com/nooga/let-go/issues/1101), right after Niva PR
+[009](../niva-feedback/009-clj-record-names-pr.md) was opened as
+[#461](https://github.com/gavr123456789/Niva/pull/461), which its last
+paragraph cites and whose timeline now links it. Filed before it, it
+would have brought up Niva feedback item 3 before Gavr had it.
 **Repository:** [nooga/let-go](https://github.com/nooga/let-go/issues)
 **Checked against:** let-go `main` at `18df3ad5` (2026-10-22), still
 `main` on 2026-10-26
@@ -44,7 +44,7 @@ names like `java.util.Map` to a type, and each `defrecord` makes a
 Left out, as in [Held](README.md#held): that `lg` accepts a dotted
 record name. That waits until 009 is merged.
 
-Everything below the line is the issue as it would be filed.
+Everything below the line is the issue as filed.
 
 ---
 

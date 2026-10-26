@@ -19,7 +19,7 @@ filed, the header links the issue.
 | Draft | Status |
 |---|---|
 | [000 `lg -m`: run a namespace's `-main`](000-lg-main-option.md) | Filed as [#1096](https://github.com/nooga/let-go/issues/1096) (2026-10-23). |
-| [001 A record's class name from another namespace](001-record-class-name.md) | Drafted 2026-10-26, not filed. `lg` names another namespace's record only as `ns/Name`, which JVM Clojure and `bb` reject, so with Niva's fix for item 3 ([009](../niva-feedback/009-clj-record-names-pr.md)) MPL stops on `lg`. Ready to file, now that that PR is open as [#461](https://github.com/gavr123456789/Niva/pull/461). |
+| [001 A record's class name from another namespace](001-record-class-name.md) | Filed as [#1101](https://github.com/nooga/let-go/issues/1101) (2026-10-26). `lg` names another namespace's record only as `ns/Name`, which JVM Clojure and `bb` reject, so with Niva's fix for item 3 ([009](../niva-feedback/009-clj-record-names-pr.md)) MPL stops on `lg`. Filed right after that PR was opened as [#461](https://github.com/gavr123456789/Niva/pull/461). |
 
 ## Held
 

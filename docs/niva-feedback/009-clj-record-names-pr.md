@@ -105,8 +105,8 @@ On 2026-10-26, each from an exported copy, with stage 1 at `781c5b05`
   ([series 002](../design/implementation/002-let-go/README.md)). The
   user chose this on 2026-10-26: fix Niva for `bb` and JVM Clojure
   first, as drafted, and ask let-go for the class name, drafted as
-  [let-go 001](../let-go-feedback/001-record-class-name.md), to be
-  filed now that this PR is open.
+  [let-go 001](../let-go-feedback/001-record-class-name.md), filed
+  as [#1101](https://github.com/nooga/let-go/issues/1101) right after this PR.
 
 Not covered: REPL and hot-reload modes beyond their existing tests,
 which pass. In REPL mode every package is one namespace, so nothing is
