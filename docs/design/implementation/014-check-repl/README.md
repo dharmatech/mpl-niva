@@ -1,6 +1,6 @@
 # 014 check-repl
 
-**Status:** Done; landed at `<commit>` (2026-10-26).
+**Status:** Done; landed at `1c60ce0` (2026-10-26).
 
 `tools/check-repl` builds MPL's Clojure REPL module, the one namespace
 that `nin build --backend=clj --repl` writes, loads it on `bb`, JVM
