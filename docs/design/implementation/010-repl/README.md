@@ -107,3 +107,7 @@ above went out of date. As of the pin at `a4429c50`
   mode from loading MPL. The F8 problem, a line's records defined again
   in a live session, is item 38. They're next in line after #463, one
   at a time.
+
+With the item 37 fix, MPL's REPL module loads on `bb`, JVM Clojure
+and let-go alike: [which runtime for a live REPL](runtimes.md) has the
+timings, and why `bb` comes first.
