@@ -6,7 +6,9 @@ Option 1 was opened right after as draft PR
 ([draft](013-clj-repl-line-records-pr.md)). As for 005 and 006, the
 issue was filed saying a draft PR for 1 would follow, then edited with
 `gh api -X PATCH` to name #466, and each paragraph went in on one line.
-`self-host` was still at `622df25f`.
+`self-host` was still at `622df25f`. On 2026-10-27 Gavr asked "Whats
+the line module?"; the answer was that it's `line.clj` in the first
+example.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `622df25f` (2026-10-27), first found
 at `781c5b05` (2026-10-26)

@@ -4,15 +4,18 @@
 [#466](https://github.com/gavr123456789/Niva/pull/466), right after the
 issue, linking it with "For #465", as 005 and 006 were. No CI checks.
 Each paragraph went in on one line. `self-host` was still at
-`622df25f`.
+`622df25f`. On 2026-10-27 (16:44 UTC) Gavr left one inline comment,
+labeled the PR `codegen` and took it out of draft. The fix was pushed
+with a reply at 22:25 UTC. See [Review](#review).
 **Issue:** [#465](https://github.com/gavr123456789/Niva/issues/465) ([draft](013-clj-repl-line-records.md))
 **Branch:** [`dharmatech/Niva:clj-repl-keep-records`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-repl-keep-records),
-one commit on `self-host` at `622df25f`: `f52ae1f5`. Locally in
+one commit on `self-host` at `622df25f`: `f52ae1f5`. For his review:
+`381a8765`, pushed as a fast-forward. Locally in
 `~/src/Niva-self-host-clj-repl-records`, a worktree of
 `~/src/Niva-self-host`. Its `Niva/NivaInNiva/main.jar` is built from it
 (ignored by git), so
 `NIVA_SELF_HOST=~/src/Niva-self-host-clj-repl-records` works with
-`tools/nin`.
+`tools/nin`. It's now built from `381a8765`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 The issue's option 1, in Gavr's style:
@@ -47,6 +50,36 @@ type" on JVM.
    draft with the issue's number in its title and body.
 3. The issue's sentence was changed to "Draft PR #466 shows what 1
    looks like" with `gh api -X PATCH`.
+
+## Review
+
+**Gavr's comment** (2026-10-27,
+[comment](https://github.com/gavr123456789/Niva/pull/466#discussion_r4391503464)),
+on `cljBack.niva` line 52, the new constructor: "same names for local
+and key-name (and the rest of the file)", `repl(repl): Bool` ->
+`repl: Bool`. In a declaration, `key: Type` names the local after the
+key, so `key(key)` isn't needed.
+
+**The fix,** `381a8765` [clj] key: Type instead of key(key): Type in
+cljBack.niva: all five `CljContext newDebug:` constructors, and
+`:imports :pkg :hotReload` in the one call that still spelled them out.
+`newDebug(debug)` keeps its local, since the names differ. Only
+`cljBack.niva`, as he asked: `cljEmit.niva` has twelve more in code the
+PR doesn't touch, left to him, and the PR's own new code had none.
+
+Checked as before: `niva test` 412 of 413 (the same one failing), the Go
+self-build, and the same modules as `f52ae1f5` for the issue's program
+(`3` twice on `bb`) and for MPL's REPL module, `--repl-line=64` and
+program.
+
+**The reply** (22:25 UTC,
+[comment](https://github.com/gavr123456789/Niva/pull/466#discussion_r4394876385)),
+in his thread:
+
+> Done in 381a8765: `key: Type` wherever the local had the key's name,
+> in all of `CljContext`'s constructors, and `:imports :pkg :hotReload`
+> in the one call that still spelled them out. Tests and the Go build
+> are as before.
 
 ## What was checked
 
