@@ -87,3 +87,23 @@ Patched by hand in the generated code, with item 8 (`any:`) and item 17
 Go's line for line, and all 151 checks pass on `bb` and on JVM Clojure.
 So four fixes to NIN make MPL work on every backend, and three of them
 are also three of the REPL mode's four blockers.
+
+## Since
+
+Later on 2026-10-26 the break from asks ended, and the Clojure sections
+above went out of date. As of the pin at `a4429c50`
+([series 012](../012-clj-records-pin/README.md)):
+
+- **Blocker 2, and item 3,** fixed by our
+  [#461](https://github.com/gavr123456789/Niva/pull/461), merged: records
+  have no dots in their names, and another namespace names their class
+  with `.`. let-go then can't resolve that class, so MPL no longer runs
+  on `lg` ([let-go #1101](https://github.com/nooga/let-go/issues/1101)).
+- **Blockers 3 and 4, items 17 and 8,** are in our
+  [#463](https://github.com/gavr123456789/Niva/pull/463), open. With its
+  two functions added by hand, MPL as a program passes all 151 checks
+  on `bb` and JVM Clojure.
+- **Blocker 1 is feedback item 37,** the only thing left stopping REPL
+  mode from loading MPL. The F8 problem, a line's records defined again
+  in a live session, is item 38. They're next in line after #463, one
+  at a time.
