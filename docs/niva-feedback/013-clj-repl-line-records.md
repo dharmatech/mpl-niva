@@ -1,6 +1,7 @@
 # 013 Clojure REPL mode: a line's records break the session
 
-**Status:** Drafted, not filed.
+**Status:** Drafted, not filed. Option 1 is drafted as a draft PR
+([draft](013-clj-repl-line-records-pr.md)), to open right after.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `622df25f` (2026-10-27), first found
 at `781c5b05` (2026-10-26)
@@ -17,8 +18,9 @@ REPL's).
 
 Unlike 37, it needs Gavr's choice, so it's an issue with options, as
 [005](005-go-list-literal-of-branch.md) and
-[006](006-string-ordering.md) were. A draft PR for the option he
-prefers could follow, as for those.
+[006](006-string-ordering.md) were. As for those, a draft PR for 1
+follows it: the issue says so as filed, and is edited to name the PR
+once it's open.
 
 ## What was checked
 
@@ -122,7 +124,9 @@ What should a REPL module do with records the session already has?
    session already has.
 
 I'd suggest 1: it's a few lines next to `^:clj-reload/keep`, and covers
-both cases. I can send a PR for whichever you prefer.
+both cases. I'm opening a draft PR for 1 right after this issue, with
+tests, so there's something concrete to look at. You don't have to take
+it, and if another option fits better, that's fine.
 
 Niva `self-host` at `622df25f`, Babashka 1.13, Clojure CLI 1.12 on
 OpenJDK 25, Linux. Found while building a REPL for a small computer
