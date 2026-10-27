@@ -1,6 +1,6 @@
 # 015 clj-repl-types-pin
 
-**Status:** Done; landed at `<commit>` (2026-10-26).
+**Status:** Done; landed at `c830f8c` (2026-10-26).
 
 Moves the pin from `7ac94536` to `self-host` at `622df25f`, our
 [#464](https://github.com/gavr123456789/Niva/pull/464): in Clojure's
