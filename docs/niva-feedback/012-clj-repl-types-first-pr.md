@@ -1,12 +1,15 @@
 # 012 Clojure REPL mode: every package's types before the functions that use them, as a pull request
 
-**Status:** Drafted, not opened. A PR without an issue, as
-[009](009-clj-record-names-pr.md) (#461) to
+**Status:** Opened 2026-10-26 as [#464](https://github.com/gavr123456789/Niva/pull/464), not as a draft. A PR
+without an issue, as [009](009-clj-record-names-pr.md) (#461) to
 [011](011-clj-collection-ops-pr.md) (#463) were: a function can't name
 a record before it's defined, so there's nothing for Gavr to decide.
-**Branch:** `clj-repl-types-first`, one commit on `self-host` at
-`7ac94536`: `2cda679a`. Locally in `~/src/Niva-self-host-clj-repl-order`,
-a worktree of `~/src/Niva-self-host`. Not pushed.
+No CI checks. Each paragraph went in on one line. `self-host` was
+still at `7ac94536`.
+**Branch:** [`dharmatech/Niva:clj-repl-types-first`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-repl-types-first),
+one commit on `self-host` at `7ac94536`: `2cda679a`. Locally in
+`~/src/Niva-self-host-clj-repl-order`, a worktree of
+`~/src/Niva-self-host`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 It's item 37 in the [README](README.md), found at `781c5b05` trying a
@@ -111,7 +114,7 @@ Found while writing it, on stock too, and not in the PR:
 
 Left out of the PR on purpose: MPL, and item 38.
 
-Everything below the line is the pull request as it would be opened.
+Everything below the line is the pull request as opened.
 
 ---
 
