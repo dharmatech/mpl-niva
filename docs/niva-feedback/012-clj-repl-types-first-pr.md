@@ -85,19 +85,20 @@ of its home:
 
 Found while writing it, on stock too, and not in the PR:
 
-- **A one-file program's REPL module doesn't load on JVM Clojure.** A
-  record method's hint names the program's namespace,
-  `^niva.generated.main.main_Point`, but in REPL mode the class is
-  `niva.repl.session.main_Point`: `ClassNotFoundException`. `bb`
-  ignores hints. [010](010-clj-hint-records-pr.md) left this untried.
-  With several packages `cljClassHint` names the session's namespace,
-  so MPL doesn't hit it.
-- **A method on another package's record doesn't bind its fields.**
-  `Circle grow -> Int = radius + 1` in `main.niva`, with `Circle` in
-  `model/shapes.niva`, emits `(+ radius 1)`, where the type's own
-  package gets `(let [radius (:radius this)] …)`. Both runtimes stop at
-  `Unable to resolve symbol: radius`, as a program too; Go prints `3`.
-  `this radius` works. MPL doesn't hit it.
+- **A one-file program's REPL module doesn't load on JVM Clojure**
+  ([README](README.md) item 41). A record method's hint names the
+  program's namespace, `^niva.generated.main.main_Point`, but in REPL
+  mode the class is `niva.repl.session.main_Point`:
+  `ClassNotFoundException`. `bb` ignores hints.
+  [010](010-clj-hint-records-pr.md) left this untried. With several
+  packages `cljClassHint` names the session's namespace, so MPL doesn't
+  hit it.
+- **A method on another package's record doesn't bind its fields**
+  (item 42). `Circle grow -> Int = radius + 1` in `main.niva`, with
+  `Circle` in `model/shapes.niva`, emits `(+ radius 1)`, where the
+  type's own package gets `(let [radius (:radius this)] …)`. Both
+  runtimes stop at `Unable to resolve symbol: radius`, as a program
+  too; Go prints `3`. `this radius` works. MPL doesn't hit it.
 - **The Go-built compiler is slow on MPL's REPL module,** and varies a
   lot: 39 s to 3 min a run on stock (three runs), 35 s to 2.5 min on the
   branch (three), at full CPU. The jar takes 0.6 s, and the Go-built
