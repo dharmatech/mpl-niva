@@ -68,6 +68,13 @@ output rather than the exit code, which is 0 even when the build fails.
 Then it checks the [import comments](comment-imports.md), which builds on
 Go whatever the backend.
 
+`tools/check-repl` builds MPL's Clojure REPL module, loads it on
+Babashka, JVM Clojure and let-go (`LG` names `lg` if it's not on
+`PATH`), and checks that each prints the demo as Go does. At the pin it
+fails on all three, at Niva feedback item 37, until the pin moves past
+[#464](https://github.com/gavr123456789/Niva/pull/464).
+[Series 014](design/implementation/014-check-repl/README.md) has why.
+
 ### On let-go
 
 The Clojure output also runs on [let-go](https://github.com/nooga/let-go)

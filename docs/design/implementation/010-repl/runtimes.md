@@ -3,10 +3,12 @@
 Measured on 2026-10-26, to pick an engine for a REPL with live state
 rather than replay. MPL's REPL module comes from NIN at `7ac94536` with
 the item 37 fix, our
-[#464](https://github.com/gavr123456789/Niva/pull/464), still open
-([draft](../../../niva-feedback/012-clj-repl-types-first-pr.md)):
+[#464](https://github.com/gavr123456789/Niva/pull/464), merged after
+the pin ([draft](../../../niva-feedback/012-clj-repl-types-first-pr.md)):
 `tools/nin build main.niva --backend=clj --repl`, which gives one
 `main.clj` beside the runtime's `niva/core.clj`.
+[`tools/check-repl`](../014-check-repl/README.md) checks the output
+on each.
 
 ## Loading the module and running the demo
 

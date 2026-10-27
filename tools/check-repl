@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Builds MPL's Clojure REPL module (one namespace, as `nin build --repl`
+# writes it) and checks that loading it prints the demo as Go does, on
+# each Clojure runtime. Exits 1 if any runtime differs or the build fails.
+#
+#   tools/check-repl              # bb, jvm and lg
+#   tools/check-repl bb jvm       # just these
+#
+# lg is let-go, which NIN doesn't target; LG names its binary if it's
+# not on PATH. A runtime that isn't installed is skipped, and says so.
+# It builds in a copy of the project, so .niva_clj/ here isn't touched.
+set -uo pipefail
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+[ $# -eq 0 ] && set -- bb jvm lg
+for runtime in "$@"; do
+  case $runtime in
+    bb | jvm | lg) ;;
+    *) echo "check-repl: unknown runtime $runtime (bb, jvm or lg)" >&2; exit 2 ;;
+  esac
+done
+work=$(mktemp -d)
+trap 'rm -rf "$work"' EXIT
+(cd "$root" && git ls-files -z --cached --others --exclude-standard | tar --null -T - -cf -) |
+  tar -xf - -C "$work"
+cd "$work"
+
+# The compiler exits 0 even when the build fails, so check what it wrote.
+"$root/tools/nin" run main.niva --backend=go > go.txt 2>&1
+"$root/tools/nin" build main.niva --backend=clj --repl > build.txt 2>&1
+if [ ! -s .niva_clj/main.clj ]; then
+  echo "check-repl: no REPL module was built:" >&2
+  cat build.txt >&2
+  exit 1
+fi
+cd .niva_clj
+
+status=0
+for runtime in "$@"; do
+  case $runtime in
+    bb)  bin=bb;            run=(bb -cp . main.clj) ;;
+    jvm) bin=clojure;       run=(clojure -M main.clj) ;;
+    lg)  bin=${LG:-lg};     run=("$bin" -source-paths . main.clj) ;;
+  esac
+  if ! command -v "$bin" > /dev/null; then
+    echo "$runtime: skipped, $bin not found"
+    continue
+  fi
+  if ! "${run[@]}" < /dev/null > "$work/$runtime.txt" 2>&1; then
+    echo "$runtime: failed to load it:"
+    grep -v -e '^ *$' -e '^-*$' "$work/$runtime.txt" | head -n 4
+    status=1
+  elif diff -q "$work/go.txt" "$work/$runtime.txt" > /dev/null; then
+    echo "$runtime: the demo matches Go's, $(wc -l < "$work/go.txt") lines"
+  else
+    echo "$runtime: differs from Go's (< Go, > $runtime):"
+    diff "$work/go.txt" "$work/$runtime.txt" | head -n 20
+    status=1
+  fi
+done
+exit $status
