@@ -1,7 +1,12 @@
 # 013 Clojure REPL mode: a line's records break the session
 
-**Status:** Drafted, not filed. Option 1 is drafted as a draft PR
-([draft](013-clj-repl-line-records-pr.md)), to open right after.
+**Status:** Filed 2026-10-26 as [#465](https://github.com/gavr123456789/Niva/issues/465).
+Option 1 was opened right after as draft PR
+[#466](https://github.com/gavr123456789/Niva/pull/466)
+([draft](013-clj-repl-line-records-pr.md)). As for 005 and 006, the
+issue was filed saying a draft PR for 1 would follow, then edited with
+`gh api -X PATCH` to name #466, and each paragraph went in on one line.
+`self-host` was still at `622df25f`.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `622df25f` (2026-10-27), first found
 at `781c5b05` (2026-10-26)
@@ -19,8 +24,7 @@ REPL's).
 Unlike 37, it needs Gavr's choice, so it's an issue with options, as
 [005](005-go-list-literal-of-branch.md) and
 [006](006-string-ordering.md) were. As for those, a draft PR for 1
-follows it: the issue says so as filed, and is edited to name the PR
-once it's open.
+followed it.
 
 ## What was checked
 
@@ -55,7 +59,8 @@ methods need its set of classless types, #462), and doesn't cover
 loading the module again. 3 is no change, for completeness: it's what a
 REPL loop of ours would do meanwhile.
 
-Everything below the line is the issue as it would be filed.
+Everything below the line is the issue as filed, with the PR's number
+put in.
 
 ---
 
@@ -124,9 +129,9 @@ What should a REPL module do with records the session already has?
    session already has.
 
 I'd suggest 1: it's a few lines next to `^:clj-reload/keep`, and covers
-both cases. I'm opening a draft PR for 1 right after this issue, with
-tests, so there's something concrete to look at. You don't have to take
-it, and if another option fits better, that's fine.
+both cases. Draft PR #466 shows what 1 looks like, with tests, so
+there's something concrete to look at. You don't have to take it, and
+if another option fits better, that's fine.
 
 Niva `self-host` at `622df25f`, Babashka 1.13, Clojure CLI 1.12 on
 OpenJDK 25, Linux. Found while building a REPL for a small computer

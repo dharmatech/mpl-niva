@@ -1,15 +1,18 @@
 # 013 Clojure REPL mode: a line's records break the session, option 1 as a draft pull request
 
-**Status:** Drafted, not opened. To be opened as a draft PR right after
-the issue is filed, linking it with "For #N", as 005 and 006 were.
-**Issue:** not filed yet ([draft](013-clj-repl-line-records.md))
-**Branch:** `clj-repl-keep-records`, one commit on `self-host` at
-`622df25f`: `f52ae1f5`. Locally in
+**Status:** Opened 2026-10-26 as draft PR
+[#466](https://github.com/gavr123456789/Niva/pull/466), right after the
+issue, linking it with "For #465", as 005 and 006 were. No CI checks.
+Each paragraph went in on one line. `self-host` was still at
+`622df25f`.
+**Issue:** [#465](https://github.com/gavr123456789/Niva/issues/465) ([draft](013-clj-repl-line-records.md))
+**Branch:** [`dharmatech/Niva:clj-repl-keep-records`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-repl-keep-records),
+one commit on `self-host` at `622df25f`: `f52ae1f5`. Locally in
 `~/src/Niva-self-host-clj-repl-records`, a worktree of
-`~/src/Niva-self-host`. Not pushed; it goes to `dharmatech/Niva` like
-#464's branch. Its `Niva/NivaInNiva/main.jar` is built from it (ignored
-by git), so `NIVA_SELF_HOST=~/src/Niva-self-host-clj-repl-records`
-works with `tools/nin`.
+`~/src/Niva-self-host`. Its `Niva/NivaInNiva/main.jar` is built from it
+(ignored by git), so
+`NIVA_SELF_HOST=~/src/Niva-self-host-clj-repl-records` works with
+`tools/nin`.
 **Base:** `gavr123456789/Niva` `self-host`, not `main`
 
 The issue's option 1, in Gavr's style:
@@ -38,15 +41,12 @@ type" on JVM.
 
 **Order of filing,** as for 005 and 006:
 
-1. File the issue, saying "I'm opening a draft PR for 1 right after
+1. The issue was filed saying "I'm opening a draft PR for 1 right after
    this issue".
-2. Push the branch to `dharmatech/Niva`, and open the PR as a draft
-   with the issue's number in place of `#N` in its title and body.
-3. Change the issue's sentence to "Draft PR #M shows what 1 looks like"
-   with `gh api -X PATCH`.
-
-Each paragraph goes in on one line, since GitHub shows a newline as a
-line break.
+2. The branch was pushed to `dharmatech/Niva`, and the PR opened as a
+   draft with the issue's number in its title and body.
+3. The issue's sentence was changed to "Draft PR #466 shows what 1
+   looks like" with `gh api -X PATCH`.
 
 ## What was checked
 
@@ -99,15 +99,15 @@ so a session run that way shows `3` four times; `-i` doesn't.
 Not covered: a record whose fields change between loads keeps its old
 fields until a new session, as the issue says.
 
-Everything below the line is the pull request as it would be opened.
+Everything below the line is the pull request as opened.
 
 ---
 
-**Title:** [clj] repl mode: define each record once per session (#N)
+**Title:** [clj] repl mode: define each record once per session (#465)
 
-Option 1 from #N, as a draft, to show what it looks like. You don't
+Option 1 from #465, as a draft, to show what it looks like. You don't
 have to take it, and if another option fits better, that's fine.
-For #N.
+For #465.
 
 In REPL mode, a record is now defined only if the session doesn't have
 it yet:
