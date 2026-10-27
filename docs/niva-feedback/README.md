@@ -319,6 +319,26 @@ and 7 are filed by us, 23 by Gavr.
     `(#(1 2) - #(1)) echo` gives `#{ 2 => struct {}{}, }`, where Clojure
     prints `#(2)`. Found at `a4429c50` writing
     [011](011-clj-collection-ops-pr.md).
+41. **Clojure, REPL mode, JVM:** a method's class hint names the record
+    by its program namespace, though in REPL mode the record lives in
+    `niva.repl.session`. With `type Point x: Int y: Int`,
+    `Point sum -> Int = x + y` and `(Point x: 1 y: 2) sum echo` in one
+    file, `build --repl` emits
+    `(defn main_Point__sum ^long [^niva.generated.main.main_Point this] …)`,
+    and JVM Clojure stops at `ClassNotFoundException:
+    niva.generated.main.main_Point`. `bb` ignores the hint and prints
+    3, and so does the program on JVM. Found at `7ac94536` drafting
+    [012](012-clj-repl-types-first-pr.md), as is 42. MPL's REPL module
+    doesn't hit it.
+42. **Clojure:** a method declared in one file on a type from another
+    reads a bare field that nothing binds. With
+    `type Circle radius: Int` in `model/shapes.niva`, and
+    `Circle bigger -> Int = radius + 1` in `main.niva`, the method is
+    `(defn main__model__shapes_Circle__bigger … [… this] (+ radius 1))`,
+    and `bb` and JVM Clojure stop at "Unable to resolve symbol:
+    radius". Go prints 3, as Clojure does with `this radius + 1`, or
+    with the type in the same file. MPL's methods use `this` or match,
+    so it doesn't hit it.
 
 Gaps rather than bugs: `sortedWith:`, which the Kotlin compiler has,
 was missing from NIN until
