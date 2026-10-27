@@ -80,6 +80,14 @@ The demo and the checks run on Clojure too, on Babashka
 tools/check --backend=clj --runtime=bb
 ```
 
+`tools/check-repl` checks the demo in Clojure's REPL mode, as one
+module loaded on Babashka, JVM Clojure and
+[let-go](https://github.com/nooga/let-go):
+
+```bash
+tools/check-repl
+```
+
 Or try expressions a line at a time in the [REPL](docs/repl.md), which
 runs each line on the Go backend:
 

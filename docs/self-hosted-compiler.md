@@ -24,7 +24,7 @@ The script:
 
 1. Clones the `self-host` branch to `~/src/Niva-self-host`, or uses the
    clone that's there. `NIVA_SELF_HOST` picks another place.
-2. Checks out the pinned commit, `7ac94536` (2026-10-27). It won't move
+2. Checks out the pinned commit, `622df25f` (2026-10-27). It won't move
    a clone that has local changes.
 3. Builds the branch's Kotlin compiler with Gradle.
 4. Uses that to compile NivaInNiva into `Niva/NivaInNiva/main.jar`.
@@ -70,9 +70,8 @@ Go whatever the backend.
 
 `tools/check-repl` builds MPL's Clojure REPL module, loads it on
 Babashka, JVM Clojure and let-go (`LG` names `lg` if it's not on
-`PATH`), and checks that each prints the demo as Go does. At the pin it
-fails on all three, at Niva feedback item 37, until the pin moves past
-[#464](https://github.com/gavr123456789/Niva/pull/464).
+`PATH`), and checks that each prints the demo as Go does. A runtime
+that isn't installed is skipped.
 [Series 014](design/implementation/014-check-repl/README.md) has why.
 
 ### On let-go

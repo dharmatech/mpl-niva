@@ -27,6 +27,9 @@ where [series 010](../010-repl/README.md) is headed.
   our [#464](https://github.com/gavr123456789/Niva/pull/464), was
   merged into `self-host` on 2026-10-27 (01:38 UTC) as `622df25f`,
   after the pin. Once the pin moves past it, this can join them.
+  [Series 015](../015-clj-repl-types-pin/README.md) moved it there and
+  put this in the README; `tools/check` still leaves it out, since `lg`
+  isn't one of NIN's runtimes.
 - **Not covered:** lines sent one at a time into a live session, which
   item 38 breaks on all three runtimes; NIN's interactive
   `run --repl`; and `ixgo`, which isn't installed here.

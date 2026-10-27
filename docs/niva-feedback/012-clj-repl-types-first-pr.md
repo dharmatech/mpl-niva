@@ -5,7 +5,9 @@ without an issue, as [009](009-clj-record-names-pr.md) (#461) to
 [011](011-clj-collection-ops-pr.md) (#463) were: a function can't name
 a record before it's defined, so there's nothing for Gavr to decide.
 No CI checks. Each paragraph went in on one line. `self-host` was
-still at `7ac94536`.
+still at `7ac94536`. Gavr approved it without comments and merged it
+into `self-host` 2026-10-27 (01:38 UTC), squashed as `622df25f`,
+unchanged and under our title.
 **Branch:** [`dharmatech/Niva:clj-repl-types-first`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-repl-types-first),
 one commit on `self-host` at `7ac94536`: `2cda679a`. Locally in
 `~/src/Niva-self-host-clj-repl-order`, a worktree of
