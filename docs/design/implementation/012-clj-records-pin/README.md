@@ -1,6 +1,6 @@
 # 012 clj-records-pin
 
-**Status:** Done (2026-10-26).
+**Status:** Done; landed at `b282791` (2026-10-26).
 
 Moves the pin from `781c5b05` to `self-host` at `a4429c50`, to stay in
 sync with upstream. Five commits come in: our
