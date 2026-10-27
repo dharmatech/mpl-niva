@@ -38,9 +38,10 @@ again, and item 38 follows. A principled design keeps the session in
 the compiler, its typing environment and what it has emitted, and each
 line then emits only what changed: new or changed definitions, and the
 new expression. NIN's `--incremental` mode, "a persistent compiler
-session", might be a place to start. Option 1 is the pragmatic version:
-definitions that are safe to repeat, as `defonce` and hot reload's
-`^:clj-reload/keep` are.
+session", might be a place to start: [from option 1 to a sound
+REPL](sound-repl-path.md) has what it already does. Option 1 is the
+pragmatic version: definitions that are safe to repeat, as `defonce`
+and hot reload's `^:clj-reload/keep` are.
 
 **Redefining things in a live, typed session is hard everywhere.** The
 core of item 38 shows in plain Clojure, with no Niva:
@@ -81,4 +82,5 @@ It covers the common case, sending lines and loading the module again,
 and leaves one gap: a record whose fields change keeps its old fields,
 silently. Against decision 3, it should say "`Square`'s fields changed;
 start a new session" instead. That's a follow-up for once Gavr has
-settled #465.
+settled #465, and a small one, since hot reload already has the check:
+[from option 1 to a sound REPL](sound-repl-path.md).

@@ -124,3 +124,7 @@ as draft PR [#466](https://github.com/gavr123456789/Niva/pull/466).
 [What a sound REPL needs](sound-repl.md): why a hosted language can
 still have a correct one, the three decisions it makes, and where
 option 1 stands.
+
+[From option 1 to a sound REPL](sound-repl-path.md): what Niva's
+compiler session already has for it, what it would buy MPL, and the
+steps from here.
