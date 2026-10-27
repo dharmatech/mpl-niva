@@ -31,8 +31,9 @@ where [series 010](../010-repl/README.md) is headed.
   put this in the README; `tools/check` still leaves it out, since `lg`
   isn't one of NIN's runtimes.
 - **Not covered:** lines sent one at a time into a live session, which
-  item 38 breaks on all three runtimes; NIN's interactive
-  `run --repl`; and `ixgo`, which isn't installed here.
+  item 38 breaks on all three runtimes; and `ixgo`, which isn't
+  installed here. `nin run --backend=clj --repl` isn't a REPL: it's
+  watch mode, on the program's own files rather than this module.
 
 ## What was checked
 

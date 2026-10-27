@@ -17,15 +17,20 @@ At `self-host` `781c5b05`:
   `main` and `self-host` alike. Issues #23, #34, #62, #65, #240 and #318
   are about it.
 - **NIN's Clojure REPL mode**, from 2026-10-20 to 10-22:
-  - `nin run --backend=clj --repl` compiles the program into one
-    namespace, each entry-level `x = …` a `(def x …)`, and starts
-    `bb repl` or `clojure -r` in it. What you type there is Clojure, with
+  - `nin build --backend=clj --repl` compiles the program into one
+    namespace, `niva.repl.session`, each entry-level `x = …` a
+    `(def x …)`, as a module to load into a REPL yourself:
+    `bb -cp . --init main.clj repl` in `.niva_clj/`, then
+    `(in-ns 'niva.repl.session)`. What you type there is Clojure, with
     generated names such as `(main__mpl__tree_Expr__showSimplified x)`.
   - `nin build --backend=clj --repl --repl-line=N` type-checks the whole
     file but emits only the entry lines from line N, for a live session
     that already has the earlier ones: what an F8 would need.
   - `nin watch` recompiles on save and reloads into a live Clojure
-    session.
+    session. `nin run --backend=clj --repl` does the same, since
+    `26d42474` (2026-10-21), and opens no prompt. Until 2026-10-26 this
+    page said it started `bb repl` in the module, which its code still
+    has but never reaches.
 - **The Go backend** has none. `--target=ixgo` runs the generated Go in
   an interpreter, but as a whole program, with no session.
 - **The VS Code extension**, `niva-vscode-bundle`, has the language
