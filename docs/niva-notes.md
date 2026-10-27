@@ -1,7 +1,7 @@
 # Niva notes
 
 What to know when writing Niva for this project, with the self-hosted
-compiler at `self-host` `a4429c50` (2026-10-26). Each note was
+compiler at `self-host` `7ac94536` (2026-10-27). Each note was
 re-checked at `4e809716`
 ([series 004](design/implementation/004-notes-recheck/README.md));
 since then come only #452, string ordering
@@ -11,7 +11,9 @@ since then come only #452, string ordering
 #455, `sortedWith:`
 ([series 007](design/implementation/007-sorted-with-pin/README.md)),
 and, on Clojure, #461, #462 and Gavr's type hints
-([series 012](design/implementation/012-clj-records-pin/README.md)). The
+([series 012](design/implementation/012-clj-records-pin/README.md)) and
+#463, collection `+` and `-` and `any:`
+([series 013](design/implementation/013-clj-collection-ops-pin/README.md)). The
 Go backend is the one we use; Clojure differences are marked, and hold
 on Babashka and let-go alike unless noted
 ([series 002](design/implementation/002-let-go/README.md)). The bugs
@@ -91,13 +93,13 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   [#433](https://github.com/gavr123456789/Niva/pull/433) it was silently
   dropped. Write the whole method as an `ifTrue:ifFalse:` expression
   instead.
-- **On Clojure, MPL stops at list `+`.** A type used from another file
+- **A type used from another file doesn't resolve on let-go.** It
   works on Babashka and JVM Clojure since
-  [#461](https://github.com/gavr123456789/Niva/pull/461), but let-go
-  then can't resolve it ([let-go #1101](https://github.com/nooga/let-go/issues/1101)).
-  What's left is list `+` and `any:` below, which
-  [#463](https://github.com/gavr123456789/Niva/pull/463) adds; with
-  those two, MPL passes all its checks on both.
+  [#461](https://github.com/gavr123456789/Niva/pull/461), which names
+  the record's class as Clojure does; let-go can't yet
+  ([let-go #1101](https://github.com/nooga/let-go/issues/1101)). With
+  [#463](https://github.com/gavr123456789/Niva/pull/463) too, MPL
+  passes all its checks on both.
 - **`/` on two `Int`s gives a ratio on Clojure**: `17 / 5` is `17/5`,
   where Go gives 3. Nothing in MPL divides yet; when it does, check it
   on Go.
@@ -112,13 +114,10 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
 
 ## Library gaps
 
-- No `all:`. `any:` passes the type checker but is missing from the
-  Clojure runtime, so we use `filter:` and `isEmpty`.
+- No `all:`: negate `any:` on the negated condition (both runtimes have
+  `any:` since #463), or use `filter:` and `isEmpty`.
 - `contains:` on a list passes the type checker but is in neither
   runtime.
-- `+` on two lists is missing from the Clojure runtime: the call is to
-  `List__+`, and the runtime has `List__plus`. `check.niva` uses it, so
-  the checks can't run on Clojure even in one file.
 - `indexOfFirst:` is in both runtimes, but the type checker doesn't know
   it.
 - No `reversed` or `sum` on a list. `toSet` is missing from the Clojure

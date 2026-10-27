@@ -73,6 +73,13 @@ nothing more when they hold:
 tools/check
 ```
 
+The demo and the checks run on Clojure too, on Babashka
+(`--runtime=bb`) or JVM Clojure (`--runtime=jvm`):
+
+```bash
+tools/check --backend=clj --runtime=bb
+```
+
 Or try expressions a line at a time in the [REPL](docs/repl.md), which
 runs each line on the Go backend:
 
