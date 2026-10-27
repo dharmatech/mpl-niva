@@ -1,6 +1,6 @@
 # 013 clj-collection-ops-pin
 
-**Status:** Done (2026-10-27).
+**Status:** Done; landed at `8433333` (2026-10-27).
 
 Moves the pin from `a4429c50` to `self-host` at `7ac94536`, our
 [#463](https://github.com/gavr123456789/Niva/pull/463): on Clojure,

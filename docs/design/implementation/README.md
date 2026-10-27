@@ -30,4 +30,4 @@ series: **expression-tree**, **collect-terms 001**.
 | [`010-repl`](010-repl/README.md) | What Niva has for REPLs, and `tools/repl`, a REPL on the Go backend by replay. The Clojure REPL mode stays the candidate for a true REPL. | Done at `d8b6a9a` (2026-10-26). |
 | [`011-comment-imports`](011-comment-imports/README.md) | Each file's imports as comments in the future syntax, and `tools/check-imports`, which checks them against NIN's Go: series 009's idea, tried without a compiler change. | Done, merged at `a9184c0` (2026-10-26). |
 | [`012-clj-records-pin`](012-clj-records-pin/README.md) | The pin moves to `a4429c50`, with #461, #462 and Gavr's Clojure type hints; MPL on Clojure now stops only at list `+`, which #463 adds. | Done at `b282791` (2026-10-26). |
-| [`013-clj-collection-ops-pin`](013-clj-collection-ops-pin/README.md) | The pin moves to #463, so MPL runs on Go, Babashka and JVM Clojure from stock `self-host`. | Done (2026-10-27). |
+| [`013-clj-collection-ops-pin`](013-clj-collection-ops-pin/README.md) | The pin moves to #463, so MPL runs on Go, Babashka and JVM Clojure from stock `self-host`. | Done at `8433333` (2026-10-27). |
