@@ -1,15 +1,17 @@
 # Niva notes
 
 What to know when writing Niva for this project, with the self-hosted
-compiler at `self-host` `781c5b05` (2026-10-25). Each note was
+compiler at `self-host` `a4429c50` (2026-10-26). Each note was
 re-checked at `4e809716`
 ([series 004](design/implementation/004-notes-recheck/README.md));
 since then come only #452, string ordering
 ([series 005](design/implementation/005-string-ordering-pin/README.md)),
 #454, `inject:into:`
 ([series 006](design/implementation/006-inject-into-pin/README.md)),
-and #455, `sortedWith:`
-([series 007](design/implementation/007-sorted-with-pin/README.md)). The
+#455, `sortedWith:`
+([series 007](design/implementation/007-sorted-with-pin/README.md)),
+and, on Clojure, #461, #462 and Gavr's type hints
+([series 012](design/implementation/012-clj-records-pin/README.md)). The
 Go backend is the one we use; Clojure differences are marked, and hold
 on Babashka and let-go alike unless noted
 ([series 002](design/implementation/002-let-go/README.md)). The bugs
@@ -89,9 +91,13 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
   [#433](https://github.com/gavr123456789/Niva/pull/433) it was silently
   dropped. Write the whole method as an `ifTrue:ifFalse:` expression
   instead.
-- **A type used from another file can't be found on Babashka or JVM
-  Clojure.** let-go accepts the generated code. No workaround on the
-  others short of one file, so we don't use Clojure for now.
+- **On Clojure, MPL stops at list `+`.** A type used from another file
+  works on Babashka and JVM Clojure since
+  [#461](https://github.com/gavr123456789/Niva/pull/461), but let-go
+  then can't resolve it ([let-go #1101](https://github.com/nooga/let-go/issues/1101)).
+  What's left is list `+` and `any:` below, which
+  [#463](https://github.com/gavr123456789/Niva/pull/463) adds; with
+  those two, MPL passes all its checks on both.
 - **`/` on two `Int`s gives a ratio on Clojure**: `17 / 5` is `17/5`,
   where Go gives 3. Nothing in MPL divides yet; when it does, check it
   on Go.
