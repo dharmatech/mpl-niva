@@ -6,7 +6,11 @@ issue, linking it with "For #465", as 005 and 006 were. No CI checks.
 Each paragraph went in on one line. `self-host` was still at
 `622df25f`. On 2026-10-27 (16:44 UTC) Gavr left one inline comment,
 labeled the PR `codegen` and took it out of draft. The fix was pushed
-with a reply at 22:25 UTC. See [Review](#review).
+with a reply at 22:25 UTC. See [Review](#review). He merged it into
+`self-host` on 2026-10-27 (2026-10-28 01:11 UTC), squashed as
+`dccd5143`, unchanged from `381a8765` and retitled "[clj repl] define
+each record once per session (#465) (#466)". His thread was left
+unresolved. #465 stays open, since "For #465" doesn't close it.
 **Issue:** [#465](https://github.com/gavr123456789/Niva/issues/465) ([draft](013-clj-repl-line-records.md))
 **Branch:** [`dharmatech/Niva:clj-repl-keep-records`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-repl-keep-records),
 one commit on `self-host` at `622df25f`: `f52ae1f5`. For his review:

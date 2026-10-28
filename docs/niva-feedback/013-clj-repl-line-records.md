@@ -8,7 +8,8 @@ issue was filed saying a draft PR for 1 would follow, then edited with
 `gh api -X PATCH` to name #466, and each paragraph went in on one line.
 `self-host` was still at `622df25f`. On 2026-10-27 Gavr asked "Whats
 the line module?"; the answer was that it's `line.clj` in the first
-example.
+example. Gavr took 1: he merged #466 into `self-host` on 2026-10-27
+(2026-10-28 01:11 UTC), squashed as `dccd5143`.
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `622df25f` (2026-10-27), first found
 at `781c5b05` (2026-10-26)
