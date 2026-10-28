@@ -115,6 +115,16 @@ The legacy compiler's notes are in [Niva notes: the legacy compiler](niva-notes-
 - **A `throw` that ends a block doesn't build on Go**: `this < 0
   ifTrue: [(Bad text: "negative") throw]` stops at an unused
   `__callResult`. MPL doesn't throw.
+- **A variable declared inside an expression isn't there after it,**
+  though NIN's checks pass: `a = x = 5`, then `x echo`, stops at
+  "undefined: x" on Go and "Unable to resolve symbol: x" on Clojure.
+  Declare one variable a statement. [Feedback](niva-feedback/README.md)
+  item 43.
+- **In Clojure's REPL mode, an assignment to a name never declared**
+  makes a new variable: `cuont <- 5`, for `count`, leaves `count` as it
+  was. Built as a program, either backend refuses it, "assignment to
+  non-mut var". So in the REPL, check the name when an assignment seems
+  to do nothing. [Feedback](niva-feedback/README.md) item 44.
 
 ## Library gaps
 

@@ -347,6 +347,20 @@ and 7 are filed by us, 23 by Gavr.
     radius". Go prints 3, as Clojure does with `this radius + 1`, or
     with the type in the same file. MPL's methods use `this` or match,
     so it doesn't hit it.
+43. **Both:** a variable's declaration parses as an expression, and
+    type-checks with the variable in scope after it, but neither backend
+    declares it there. With `a = x = 5`, then `x echo`, Clojure emits
+    `(def a (let [x 5] :unit))`, so `x` is local to `a`'s value, and
+    `bb` stops at "Unable to resolve symbol: x"; Go's compiler stops at
+    "undefined: x". `a = mut x = 5` builds the same way on Clojure.
+    Found at `dccd5143` writing
+    [series 021](../design/implementation/021-repl-values/README.md),
+    whose REPL tries each line as `resN = line`, as is 44.
+44. **Clojure, REPL mode:** an assignment to a name never declared
+    builds, as a new variable. With `mut count = 0`, `cuont <- 5` is
+    emitted as `(def cuont 5)`, and `count` stays 0. Built without
+    `--repl`, it's refused on either backend: "assignment to non-mut
+    var: cuont". The type checker passes it either way.
 
 Gaps rather than bugs: `sortedWith:`, which the Kotlin compiler has,
 was missing from NIN until

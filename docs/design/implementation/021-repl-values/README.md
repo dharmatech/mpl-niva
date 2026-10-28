@@ -120,15 +120,17 @@ A line is kept in the form that ran, so `res3` can be used later.
 
 ## Found in NIN on the way
 
-Not filed; for [the Niva notes](../../../niva-notes.md) if they matter:
+Not filed. They're [Niva feedback](../../../niva-feedback/README.md)
+items 43 and 44, with a workaround each in
+[the Niva notes](../../../niva-notes.md#workarounds):
 
 - **A variable's declaration parses as an expression.** `a = x = 5`
   type-checks, with `x` in scope after it, but the Clojure backend makes
   `x` local to `a`'s value, and Go's build fails with "undefined: x".
-- **An assignment to an undeclared variable builds on Clojure.**
-  `m <- 3`, with no `m`, is emitted as `(def m 3)`; the Go backend
-  refuses it, "assignment to non mut var m". `tools/repl-jvm` keeps it,
-  as it did before this series.
+- **In Clojure's REPL mode, an assignment to an undeclared variable
+  builds.** `m <- 3`, with no `m`, is emitted as `(def m 3)`. Built as a
+  program, both backends refuse it, "assignment to non-mut var".
+  `tools/repl-jvm` keeps it, as it did before this series.
 
 ## What changed
 
