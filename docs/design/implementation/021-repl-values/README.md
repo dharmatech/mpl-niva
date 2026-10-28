@@ -1,6 +1,6 @@
 # 021 repl-values
 
-**Status:** Done; landed at `HASH` (2026-10-28).
+**Status:** Done; landed at `c99c9f9` (2026-10-28).
 
 `tools/repl-jvm` prints a line's value by itself, as a REPL should:
 `10` shows `10`, where before it showed nothing. Each line is built
