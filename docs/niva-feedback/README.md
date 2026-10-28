@@ -304,8 +304,8 @@ and 7 are filed by us, 23 by Gavr.
     the records the line runs. It's what an editor's evaluate-line
     would hit. Filed as
     [#465](https://github.com/gavr123456789/Niva/issues/465), an issue
-    with options ([draft](013-clj-repl-line-records.md)), with option 1
-    as draft PR [#466](https://github.com/gavr123456789/Niva/pull/466)
+    with options ([draft](013-clj-repl-line-records.md)). Fixed by
+    option 1, [#466](https://github.com/gavr123456789/Niva/pull/466)
     ([draft](013-clj-repl-line-records-pr.md)), merged into `self-host`
     2026-10-27 as `dccd5143`.
 39. **Clojure, JVM:** since `b73180dd` (2026-10-26), a method on a

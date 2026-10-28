@@ -117,9 +117,12 @@ With the item 37 fix, MPL's REPL module loads on `bb`, JVM Clojure
 and let-go alike: [which runtime for a live REPL](runtimes.md) has the
 timings, and why `bb` comes first. The fix, our #464, is in the pin
 since [series 015](../015-clj-repl-types-pin/README.md), and
-`tools/check-repl` checks it. Item 38 is filed as
-[#465](https://github.com/gavr123456789/Niva/issues/465), with option 1
-as draft PR [#466](https://github.com/gavr123456789/Niva/pull/466).
+`tools/check-repl` checks it. Item 38 was filed as
+[#465](https://github.com/gavr123456789/Niva/issues/465), and Gavr
+took option 1, our [#466](https://github.com/gavr123456789/Niva/pull/466).
+It's in the pin since [series 016](../016-clj-repl-records-pin/README.md):
+MPL's full REPL module, then `--repl-line=64`, prints the demo and
+line 64's five lines as Go does, on `bb`, JVM Clojure and let-go.
 
 [What a sound REPL needs](sound-repl.md): why a hosted language can
 still have a correct one, the three decisions it makes, and where

@@ -57,5 +57,6 @@ takes 35 s to 3 min on MPL's REPL module.
 - **The compiler** is the bigger cost per line, so a long-running NIN
   matters more than the choice of runtime.
 
-Item 38, a line's records defined again in the session, comes before
-any of these.
+Item 38, a line's records defined again in the session, came before
+any of these. Its fix, our #466, is in the pin since
+[series 016](../016-clj-repl-records-pin/README.md).

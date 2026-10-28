@@ -1,7 +1,7 @@
 # Niva notes
 
 What to know when writing Niva for this project, with the self-hosted
-compiler at `self-host` `622df25f` (2026-10-27). Each note was
+compiler at `self-host` `dccd5143` (2026-10-28). Each note was
 re-checked at `4e809716`
 ([series 004](design/implementation/004-notes-recheck/README.md));
 since then come only #452, string ordering
@@ -11,11 +11,13 @@ since then come only #452, string ordering
 #455, `sortedWith:`
 ([series 007](design/implementation/007-sorted-with-pin/README.md)),
 and, on Clojure, #461, #462 and Gavr's type hints
-([series 012](design/implementation/012-clj-records-pin/README.md)) and
+([series 012](design/implementation/012-clj-records-pin/README.md)),
 #463, collection `+` and `-` and `any:`
 ([series 013](design/implementation/013-clj-collection-ops-pin/README.md)),
-and #464, REPL mode's types first
-([series 015](design/implementation/015-clj-repl-types-pin/README.md)). The
+#464, REPL mode's types first
+([series 015](design/implementation/015-clj-repl-types-pin/README.md)),
+and #466, each record once per REPL session
+([series 016](design/implementation/016-clj-repl-records-pin/README.md)). The
 Go backend is the one we use; Clojure differences are marked, and hold
 on Babashka and let-go alike unless noted
 ([series 002](design/implementation/002-let-go/README.md)). The bugs

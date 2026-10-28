@@ -24,7 +24,7 @@ The script:
 
 1. Clones the `self-host` branch to `~/src/Niva-self-host`, or uses the
    clone that's there. `NIVA_SELF_HOST` picks another place.
-2. Checks out the pinned commit, `622df25f` (2026-10-27). It won't move
+2. Checks out the pinned commit, `dccd5143` (2026-10-28). It won't move
    a clone that has local changes.
 3. Builds the branch's Kotlin compiler with Gradle.
 4. Uses that to compile NivaInNiva into `Niva/NivaInNiva/main.jar`.

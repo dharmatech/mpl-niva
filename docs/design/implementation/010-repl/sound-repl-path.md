@@ -83,7 +83,9 @@ first.
 ## The steps
 
 1. **#466**, once Gavr has settled
-   [#465](https://github.com/gavr123456789/Niva/issues/465).
+   [#465](https://github.com/gavr123456789/Niva/issues/465). Done:
+   he took it, and it's in the pin since
+   [series 016](../016-clj-repl-records-pin/README.md).
 2. **Our REPL loop on `bb`,** the tool around `--repl-line`, and using
    it on MPL.
 3. **The manifest check in REPL mode,** a small PR reusing hot
