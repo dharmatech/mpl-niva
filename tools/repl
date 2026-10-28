@@ -4,8 +4,8 @@
 # kept. Ctrl-D ends the session.
 #
 #   tools/repl                              # Go, by replay
-#   tools/repl --backend=clj                # Clojure, live, on bb
-#   tools/repl --backend=clj --runtime=jvm  # or on JVM Clojure, or lg
+#   tools/repl --backend=clj                # Clojure, live, on the JVM
+#   tools/repl --backend=clj --runtime=bb   # or on bb, or lg
 #
 # On Go, each line runs as a program after the lines kept so far. On
 # Clojure, one process keeps the session: it loads the REPL module built
@@ -22,7 +22,7 @@ set -uo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 backend=go
-runtime=bb
+runtime=jvm
 for arg; do
   case $arg in
     --backend=go | --backend=clj) backend=${arg#*=} ;;

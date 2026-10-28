@@ -22,11 +22,12 @@ through what you've entered.
 tools/repl --backend=clj
 ```
 
-runs each line in one Babashka process, which keeps what the lines
-before it made, so no line runs again and each takes about the same,
-0.65 s, most of it compiling. `--runtime=jvm` runs it on JVM Clojure,
-with the compiler in the same process, so after 2 s to start a line
-takes about 0.14 s. `--runtime=lg` runs it on let-go.
+runs each line in one JVM, which keeps what the lines before it made,
+so no line runs again. The compiler runs in the same JVM, so after 2 s
+to start, a line takes about 0.14 s. `--runtime=bb` runs it on
+Babashka, which starts in under a second but compiles each line in a
+new process, at about 0.65 s a line, and `--runtime=lg` on let-go, the
+same way.
 
 It's newer than the Go mode, and has a gap Go's doesn't: a record whose
 fields you edit in a file during a session keeps its old fields, so

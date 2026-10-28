@@ -102,15 +102,15 @@ niva> (x * x + x) showSimplified
 x * x + x   =>   x + x^2
 ```
 
-Or in a live session on Babashka, which keeps what each line made, so
-no line runs again:
+Or in a live session on JVM Clojure, which keeps what each line made,
+so no line runs again, and runs the compiler too:
 
 ```bash
 tools/repl --backend=clj
 ```
 
-With `--runtime=jvm`, the compiler runs in the session's JVM too, so
-each line takes a fifth as long, after a slower start.
+`--runtime=bb` runs it on Babashka, which starts faster but takes
+about four times as long a line.
 
 ## Building expressions
 
