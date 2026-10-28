@@ -10,7 +10,8 @@ with a reply at 22:25 UTC. See [Review](#review). He merged it into
 `self-host` on 2026-10-27 (2026-10-28 01:11 UTC), squashed as
 `dccd5143`, unchanged from `381a8765` and retitled "[clj repl] define
 each record once per session (#465) (#466)". His thread was left
-unresolved. #465 stays open, since "For #465" doesn't close it.
+unresolved. "For #465" didn't close #465, so we closed it on
+2026-10-28.
 **Issue:** [#465](https://github.com/gavr123456789/Niva/issues/465) ([draft](013-clj-repl-line-records.md))
 **Branch:** [`dharmatech/Niva:clj-repl-keep-records`](https://github.com/gavr123456789/Niva/compare/self-host...dharmatech:Niva:clj-repl-keep-records),
 one commit on `self-host` at `622df25f`: `f52ae1f5`. For his review:

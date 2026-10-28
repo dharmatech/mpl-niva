@@ -9,7 +9,9 @@ issue was filed saying a draft PR for 1 would follow, then edited with
 `self-host` was still at `622df25f`. On 2026-10-27 Gavr asked "Whats
 the line module?"; the answer was that it's `line.clj` in the first
 example. Gavr took 1: he merged #466 into `self-host` on 2026-10-27
-(2026-10-28 01:11 UTC), squashed as `dccd5143`.
+(2026-10-28 01:11 UTC), squashed as `dccd5143`. We closed it on
+2026-10-28: "Fixed by #466, merged into `self-host`. A record whose
+fields change between loads still needs a new session."
 **Repository:** [gavr123456789/Niva](https://github.com/gavr123456789/Niva/issues)
 **Checked against:** `self-host` at `622df25f` (2026-10-27), first found
 at `781c5b05` (2026-10-26)
