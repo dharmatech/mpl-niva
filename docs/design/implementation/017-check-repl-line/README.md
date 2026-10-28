@@ -1,6 +1,6 @@
 # 017 check-repl-line
 
-**Status:** Done; landed at `<commit>` (2026-10-28).
+**Status:** Done; landed at `68cc60a` (2026-10-28).
 
 `tools/check-repl` also sends a line into a live session now: after
 loading MPL's REPL module, it loads `main.niva`'s last line, built
