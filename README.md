@@ -102,6 +102,13 @@ niva> (x * x + x) showSimplified
 x * x + x   =>   x + x^2
 ```
 
+Or in a live session on Babashka, which keeps what each line made, so
+no line runs again:
+
+```bash
+tools/repl --backend=clj
+```
+
 ## Building expressions
 
 ```

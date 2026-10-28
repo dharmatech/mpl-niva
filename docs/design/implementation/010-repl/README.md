@@ -124,7 +124,9 @@ It's in the pin since [series 016](../016-clj-repl-records-pin/README.md):
 MPL's full REPL module, then `--repl-line=64`, prints the demo and
 line 64's five lines as Go does, on `bb`, JVM Clojure and let-go.
 Since [series 017](../017-check-repl-line/README.md),
-`tools/check-repl` sends such a line too.
+`tools/check-repl` sends such a line too, and since
+[series 018](../018-clj-repl-loop/README.md), `tools/repl --backend=clj`
+is a REPL with a live session on `bb`, built on it.
 
 [What a sound REPL needs](sound-repl.md): why a hosted language can
 still have a correct one, the three decisions it makes, and where

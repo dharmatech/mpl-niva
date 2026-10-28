@@ -87,7 +87,9 @@ first.
    he took it, and it's in the pin since
    [series 016](../016-clj-repl-records-pin/README.md).
 2. **Our REPL loop on `bb`,** the tool around `--repl-line`, and using
-   it on MPL.
+   it on MPL. Done as `tools/repl --backend=clj`, in
+   [series 018](../018-clj-repl-loop/README.md), which has what it
+   leaves for step 3.
 3. **The manifest check in REPL mode,** a small PR reusing hot
    reload's.
 4. **A session-aware REPL mode,** if step 2 shows it's needed.

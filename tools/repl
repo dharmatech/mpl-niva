@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
-# A Niva REPL on the Go backend, by replay: each line you enter runs
-# after the lines already kept, and only its own output is shown. A line
-# that fails to build or run isn't kept. Ctrl-D ends the session.
+# A Niva REPL: each line you enter runs after the lines already kept, and
+# only its own output is shown. A line that fails to build or run isn't
+# kept. Ctrl-D ends the session.
 #
-#   tools/repl
+#   tools/repl                              # Go, by replay
+#   tools/repl --backend=clj                # Clojure, live, on bb
+#   tools/repl --backend=clj --runtime=jvm  # or on JVM Clojure, or lg
+#
+# On Go, each line runs as a program after the lines kept so far. On
+# Clojure, one process keeps the session: it loads the REPL module built
+# before any line, then each line's module, built with --repl-line, which
+# runs only that line. lg is let-go, which NIN doesn't target; LG names
+# its binary if it's not on PATH.
 #
 # The session is written to repl.niva at the project root, where the
 # compiler finds mpl/, and removed at the end. While it runs, other
@@ -11,6 +19,15 @@
 set -uo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
+backend=go
+runtime=bb
+for arg; do
+  case $arg in
+    --backend=go | --backend=clj) backend=${arg#*=} ;;
+    --runtime=bb | --runtime=jvm | --runtime=lg) runtime=${arg#*=} ;;
+    *) echo "repl: unknown option $arg (--backend=go or clj, --runtime=bb, jvm or lg)" >&2; exit 2 ;;
+  esac
+done
 cd "$root"
 if [ -e repl.niva ]; then
   echo "repl: repl.niva exists, from another session or one that didn't end; remove it first" >&2
@@ -18,29 +35,115 @@ if [ -e repl.niva ]; then
 fi
 trap 'rm -f repl.niva' EXIT
 
-marker="-- niva repl: new output --"
 session=()
 
-while IFS= read -r -e -p "niva> " line; do
-  [ -z "$line" ] && continue
-  history -s "$line"
+# Writes repl.niva: the lines kept so far, then these.
+write_session() {
   {
     [ ${#session[@]} -gt 0 ] && printf '%s\n' "${session[@]}"
-    printf '"%s" echo\n' "$marker"
-    printf '%s\n' "$line"
+    printf '%s\n' "$@"
   } > repl.niva
+}
+
+# The compiler's message without its own stack trace.
+trimmed() {
+  grep -v -e '^Method:' -e '^-*$' -e '^ *$' | head -n 6
+}
+
+# go_line LINE and clj_line LINE run LINE after the lines kept so far,
+# print its output, or why it failed, and fail if it didn't build or run.
+marker="-- niva repl: new output --"
+go_line() {
+  write_session "\"$marker\" echo" "$1"
+  local out status
   out=$("$root/tools/nin" run repl.niva --backend=go 2>&1)
   status=$?
   # The compiler exits 0 even when the build fails, so a failed build
   # shows as no marker in the output; a run-time error exits 1.
   if [ $status -eq 0 ] && [[ $out == *"$marker"* ]]; then
-    shown=${out#*"$marker"}
-    shown=${shown#$'\n'}
-    [ -n "$shown" ] && printf '%s\n' "$shown"
+    out=${out#*"$marker"}
+    out=${out#$'\n'}
+    [ -n "$out" ] && printf '%s\n' "$out"
+    return 0
+  fi
+  printf '%s\n' "${out#*"$marker"}" | trimmed
+  return 1
+}
+
+clj_line() {
+  write_session "$1"
+  build "--repl-line=$((${#session[@]} + 1))" && load
+}
+
+# Builds repl.niva's REPL module, with these options, as
+# $work/.niva_clj/main.clj. The compiler writes .niva_clj/ where it runs
+# and exits 0 even when the build fails, so this checks what it wrote.
+build() {
+  rm -f "$work/.niva_clj/main.clj"
+  local out
+  out=$(cd "$work" && "$root/tools/nin" build "$root/repl.niva" --backend=clj --repl "$@" 2>&1)
+  [ -s "$work/.niva_clj/main.clj" ] && return 0
+  printf '%s\n' "${out//"$root/"/}" | trimmed
+  return 1
+}
+
+# Loads main.clj into the session and prints what it prints, then the
+# error if it fails, and fails then.
+done_marker="-- niva repl: done --"
+failed_marker="-- niva repl: failed --"
+load() {
+  printf '%s\n' "$work/.niva_clj/main.clj" >&"${clj[1]}"
+  local out failed=
+  while IFS= read -r out <&"${clj[0]}"; do
+    case $out in
+      "$done_marker") [ -z "$failed" ]; return ;;
+      "$failed_marker") failed=1 ;;
+      *) printf '%s\n' "$out" ;;
+    esac
+  done
+  echo "repl: the $runtime session ended" >&2
+  exit 1
+}
+
+if [ "$backend" = clj ]; then
+  case $runtime in
+    bb)  start=(bb -cp . serve.clj) ;;
+    jvm) start=(clojure -M serve.clj) ;;
+    lg)  start=("${LG:-lg}" -source-paths . serve.clj) ;;
+  esac
+  if ! command -v "${start[0]}" > /dev/null; then
+    echo "repl: ${start[0]} not found" >&2
+    exit 1
+  fi
+  work=$(mktemp -d)
+  trap 'rm -f repl.niva; rm -rf "$work"' EXIT
+  : > repl.niva
+  build || exit 1
+  # The session loads each file named on its input. It says when it's
+  # done, after the error's root cause if the file failed. The same code
+  # runs on all three, since lg has no load-file.
+  cat > "$work/.niva_clj/serve.clj" <<EOF
+(loop []
+  (when-let [path (read-line)]
+    (try (load-string (slurp path))
+         (catch Throwable e
+           (let [cause (loop [e e] (if-let [c (ex-cause e)] (recur c) e))]
+             (println "$failed_marker")
+             (println (or (ex-message cause) (str cause))))))
+    (println "$done_marker")
+    (flush)
+    (recur)))
+EOF
+  coproc clj { cd "$work/.niva_clj" && exec "${start[@]}" 2>&1; }
+  load || exit 1
+fi
+
+while IFS= read -r -e -p "niva> " line; do
+  [ -z "$line" ] && continue
+  history -s "$line"
+  if "${backend}_line" "$line"; then
     session+=("$line")
   else
-    # The message without the compiler's own stack trace.
-    printf '%s\n' "${out#*"$marker"}" | grep -v -e '^Method:' -e '^-*$' -e '^ *$' | head -n 6
     echo "(not kept)"
   fi
 done
