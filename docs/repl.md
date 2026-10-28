@@ -25,7 +25,8 @@ tools/repl --backend=clj
 runs each line in one Babashka process, which keeps what the lines
 before it made, so no line runs again and each takes about the same,
 0.65 s, most of it compiling. `--runtime=jvm` runs it on JVM Clojure,
-which takes 3 s to start, and `--runtime=lg` on let-go.
+with the compiler in the same process, so after 2 s to start a line
+takes about 0.14 s. `--runtime=lg` runs it on let-go.
 
 It's newer than the Go mode, and has a gap Go's doesn't: a record whose
 fields you edit in a file during a session keeps its old fields, so
@@ -62,5 +63,7 @@ second on MPL.
   demo compile `repl.niva`'s declarations along with everything else.
 
 Why it's built this way, and the other routes, are in
-[series 010](design/implementation/010-repl/README.md), and the
-Clojure mode in [series 018](design/implementation/018-clj-repl-loop/README.md).
+[series 010](design/implementation/010-repl/README.md), the Clojure
+mode in [series 018](design/implementation/018-clj-repl-loop/README.md),
+and the compiler in the JVM's session in
+[series 019](design/implementation/019-repl-one-jvm/README.md).

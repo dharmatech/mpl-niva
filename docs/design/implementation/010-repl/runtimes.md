@@ -43,7 +43,10 @@ checking the whole project again for one line. So per line, the
 compiler costs more than any runtime takes to evaluate it. A NIN that
 stays running between lines would cut that, as `nin watch` keeps a
 compiler session for hot reload. The Go-built NIN doesn't help yet: it
-takes 35 s to 3 min on MPL's REPL module.
+takes 35 s to 3 min on MPL's REPL module. Since
+[series 019](../019-repl-one-jvm/README.md), `tools/repl --runtime=jvm`
+calls NIN in the session's own JVM, where a warm build takes 40 to
+60 ms.
 
 ## So
 

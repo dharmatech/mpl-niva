@@ -59,6 +59,8 @@ tools/repl --backend=clj --runtime=jvm  # or JVM Clojure, or lg
 - **The runtime a choice, built and tested on `bb`:** `jvm` and `lg`
   run as `tools/check-repl` runs them, `LG` naming the binary. Both
   print the demo as `bb` does, but only `bb` is meant for use yet.
+  Since [series 019](../019-repl-one-jvm/README.md), `jvm` runs NIN in
+  the session's JVM instead.
 
 ## What's known not to work yet
 
@@ -73,7 +75,8 @@ tools/repl --backend=clj --runtime=jvm  # or JVM Clojure, or lg
 - **Each line costs about 0.6 s of compiling:** NIN checks the whole
   project again for each line, and loading the module takes the rest,
   well under a tenth of a second. A NIN that stays running would cut
-  it; not done here.
+  it; not done here. Series 019 does it on JVM Clojure, at about 0.14 s
+  a line.
 - **A value made before an edit keeps what it was:** `p = 1 point`,
   then a new `point`, leaves `p` alone. Functions edited in a file
   apply from the next line, since every line's module sends them all

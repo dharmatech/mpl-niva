@@ -109,6 +109,9 @@ no line runs again:
 tools/repl --backend=clj
 ```
 
+With `--runtime=jvm`, the compiler runs in the session's JVM too, so
+each line takes a fifth as long, after a slower start.
+
 ## Building expressions
 
 ```
