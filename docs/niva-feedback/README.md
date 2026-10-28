@@ -31,6 +31,7 @@ filed. Once filed, the header links the issue.
 | [012 Clojure REPL mode: every package's types before the functions that use them, as a pull request](012-clj-repl-types-first-pr.md) | Opened 2026-10-26 as [#464](https://github.com/gavr123456789/Niva/pull/464): a PR without an issue, as 009 to 011 were. README item 37. Branch `dharmatech/Niva:clj-repl-types-first` at `2cda679a` on `self-host` `7ac94536`, locally in `~/src/Niva-self-host-clj-repl-order`: REPL mode emits every package's types before any package's functions, with two tests that fail without it. With it, MPL's REPL module loads in `bb` and JVM Clojure and prints the demo as Go does; programs are unchanged, and all 151 checks still pass on Go, `bb` and JVM Clojure. Approved without comments and merged into `self-host` 2026-10-27 (01:38 UTC), squashed as `622df25f`, unchanged. |
 | [013 Clojure REPL mode: a line's records break the session](013-clj-repl-line-records.md) | Filed as [#465](https://github.com/gavr123456789/Niva/issues/465) (2026-10-26). README item 38, next after #464: a `--repl-line` module defines every record again, so the session's values match no branch, on `bb`, JVM Clojure and `lg` alike. Options: 1 define each record once per session, `(when-not (resolve 'X) (eval '(defrecord …)))`, the REPL's counterpart of hot reload's `^:clj-reload/keep`; 2 a line module leaves out the records declared before line N; 3 no change. Suggests 1, pointing to draft PR [#466](https://github.com/gavr123456789/Niva/pull/466) (row below). Both 1 and 2 tried by hand on `bb`, JVM and `lg`, on a small program and on MPL. Gavr took 1, merging #466 on 2026-10-27. We closed it on 2026-10-28, noting that a record whose fields change between loads still needs a new session. |
 | [013 Clojure REPL mode: a line's records break the session, option 1 as a draft pull request](013-clj-repl-line-records-pr.md) | Opened 2026-10-26 as draft PR [#466](https://github.com/gavr123456789/Niva/pull/466), "For #465", right after the issue, whose last paragraph was then edited to name it. Branch `dharmatech/Niva:clj-repl-keep-records` at `f52ae1f5` on `self-host` `622df25f`, locally in `~/src/Niva-self-host-clj-repl-records`: in REPL mode each record and union branch is `(when-not (resolve 'X) (eval '(defrecord …)))`, through one `recordDef:fields:` shared with hot reload's `^:clj-reload/keep`, with two tests that fail without it. MPL's session then takes line 64 after the full module, and keeps a value made in it across a reload, on `bb`, JVM Clojure and `lg`; programs and hot reload are unchanged, and all 151 checks and `tools/check-repl` pass. On 2026-10-27 Gavr labeled it `codegen`, took it out of draft, and asked inline for `key: Type` over `key(key): Type` in `cljBack.niva`, "and the rest of the file": done in `381a8765`, pushed with a reply the same day. Merged into `self-host` that evening (2026-10-28 01:11 UTC), squashed as `dccd5143`, unchanged, retitled "[clj repl] define each record once per session (#465) (#466)". |
+| [014 Running one file builds its whole folder](014-run-one-file.md) | Drafted 2026-10-28, not filed: for the user's review first. README item 45, from REPL worksheets for MPL: NIN has no single-file run, which the Kotlin compiler has as `niva file.niva` (Gavr's #128), so a folder can't hold independent programs. Options: 1 `nin FILE` builds that file alone, as the Kotlin compiler and `go run a.go` do; 2 a file names what it uses (`Project use:`), and a run builds the file and what it names; 3 no change. Suggests 1, saying 2 is where the user would like it to go. Checked against `self-host` `1109e9ee`, on NIN, the Kotlin compiler and Go. |
 
 ## Self-hosted compiler
 
@@ -361,6 +362,25 @@ and 7 are filed by us, 23 by Gavr.
     emitted as `(def cuont 5)`, and `count` stays 0. Built without
     `--repl`, it's refused on either backend: "assignment to non-mut
     var: cuont". The type checker passes it either way.
+45. **Both:** NIN can't run one file alone. `nin run FILE` builds every
+    `.niva` file under FILE's folder, except under a folder whose name
+    starts with `.`, and `nin FILE` says "FILE arg is unknown". The
+    Kotlin compiler's `niva file.niva` compiles that file alone (Gavr's
+    [#128](https://github.com/gavr123456789/Niva/issues/128)). So a
+    folder can't hold independent programs, a file in a subfolder can't
+    use the project above it (on both compilers), and REPL mode can't
+    start from one file. Found 2026-10-28 at `dccd5143` setting up REPL
+    worksheets for MPL, as is 46, and drafted as
+    [014](014-run-one-file.md).
+46. **Both:** in folder mode, a file that the one being run doesn't use
+    still stops it, where the Kotlin compiler's `niva run` copes: a
+    `type Point` of another shape gives "CloseParen expected but got
+    IdentifierColon(x) at: 2:9", the same method on `Int` in two other
+    files gives "already has method", and an unfinished file gives
+    "step: EOF" without naming it. The Kotlin compiler prints the
+    program's output for the first two, and names the file for the
+    third. The first is close to Gavr's
+    [#68](https://github.com/gavr123456789/Niva/issues/68).
 
 Gaps rather than bugs: `sortedWith:`, which the Kotlin compiler has,
 was missing from NIN until
