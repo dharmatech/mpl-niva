@@ -1,6 +1,6 @@
 # 016 clj-repl-records-pin
 
-**Status:** Done; landed at `<commit>` (2026-10-28).
+**Status:** Done; landed at `105e213` (2026-10-28).
 
 Moves the pin from `622df25f` to `self-host` at `dccd5143`, our
 [#466](https://github.com/gavr123456789/Niva/pull/466): in Clojure's
