@@ -1,6 +1,6 @@
 # 018 clj-repl-loop
 
-**Status:** Done; landed at `<commit>` (2026-10-28).
+**Status:** Done; landed at `15eb107` (2026-10-28).
 
 `tools/repl --backend=clj` is a REPL with a live session: one `bb`
 process loads MPL's REPL module, then each line you type, built alone
