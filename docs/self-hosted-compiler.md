@@ -70,9 +70,12 @@ Go whatever the backend.
 
 `tools/check-repl` builds MPL's Clojure REPL module, loads it on
 Babashka, JVM Clojure and let-go (`LG` names `lg` if it's not on
-`PATH`), and checks that each prints the demo as Go does. A runtime
-that isn't installed is skipped.
-[Series 014](design/implementation/014-check-repl/README.md) has why.
+`PATH`), and checks that each prints the demo as Go does. Then it
+sends that session `main.niva`'s last line, built alone with
+`--repl-line`, and checks that it prints Go's last line again. A
+runtime that isn't installed is skipped.
+[Series 014](design/implementation/014-check-repl/README.md) and
+[017](design/implementation/017-check-repl-line/README.md) have why.
 
 ### On let-go
 

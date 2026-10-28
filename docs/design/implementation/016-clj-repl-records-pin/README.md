@@ -77,3 +77,7 @@ item 38 coming back. Options, for the user to choose:
 
 2 covers what item 38 was, at little cost; 3 is the other half of
 option 1, reloading, but ties the script to the generated names.
+
+2 was chosen the same day, and built as
+[series 017](../017-check-repl-line/README.md), with the last line
+alone.

@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Builds MPL's Clojure REPL module (one namespace, as `nin build --repl`
 # writes it) and checks that loading it prints the demo as Go does, on
-# each Clojure runtime. Exits 1 if any runtime differs or the build fails.
+# each Clojure runtime. Then, in a session that has loaded it, it loads
+# main.niva's last line built alone with --repl-line, as an editor sends
+# a line, and checks that it prints Go's last line again. Exits 1 if any
+# runtime differs or a build fails.
 #
 #   tools/check-repl              # bb, jvm and lg
 #   tools/check-repl bb jvm       # just these
@@ -26,36 +29,62 @@ trap 'rm -rf "$work"' EXIT
 cd "$work"
 
 # The compiler exits 0 even when the build fails, so check what it wrote.
+build() {
+  "$root/tools/nin" build main.niva --backend=clj --repl "$@" > build.txt 2>&1
+  if [ ! -s .niva_clj/main.clj ]; then
+    echo "check-repl: no REPL module was built:" >&2
+    cat build.txt >&2
+    exit 1
+  fi
+}
+
+# main.niva's last line is one showSimplified, so it prints Go's last line.
+line=$(grep -n . main.niva | tail -n 1 | cut -d: -f1)
 "$root/tools/nin" run main.niva --backend=go > go.txt 2>&1
-"$root/tools/nin" build main.niva --backend=clj --repl > build.txt 2>&1
-if [ ! -s .niva_clj/main.clj ]; then
-  echo "check-repl: no REPL module was built:" >&2
-  cat build.txt >&2
-  exit 1
-fi
+{ cat go.txt; tail -n 1 go.txt; } > go-line.txt
+build "--repl-line=$line"
+mv .niva_clj/main.clj .niva_clj/line.clj
+build
 cd .niva_clj
+# lg has no load-file, so its session is the two modules as one file.
+cat main.clj line.clj > session.clj
+
+# compare WHAT EXPECTED OUT COMMAND...: runs COMMAND and diffs its output.
+compare() {
+  local what=$1 expected=$2 out=$3
+  shift 3
+  if ! "$@" < /dev/null > "$out" 2>&1; then
+    echo "$runtime: $what failed to load:"
+    grep -v -x -F -f "$expected" "$out" | grep -v -e '^ *$' -e '^-*$' | head -n 4
+    return 1
+  elif diff -q "$expected" "$out" > /dev/null; then
+    echo "$runtime: $what matches Go's, $(wc -l < "$expected") lines"
+  else
+    echo "$runtime: $what differs from Go's (< Go, > $runtime):"
+    diff "$expected" "$out" | head -n 20
+    return 1
+  fi
+}
 
 status=0
 for runtime in "$@"; do
   case $runtime in
-    bb)  bin=bb;            run=(bb -cp . main.clj) ;;
-    jvm) bin=clojure;       run=(clojure -M main.clj) ;;
-    lg)  bin=${LG:-lg};     run=("$bin" -source-paths . main.clj) ;;
+    bb)  bin=bb
+         run=(bb -cp . main.clj)
+         session=(bb -cp . -e '(load-file "main.clj") (load-file "line.clj") nil') ;;
+    jvm) bin=clojure
+         run=(clojure -M main.clj)
+         session=(clojure -M -i main.clj -i line.clj) ;;
+    lg)  bin=${LG:-lg}
+         run=("$bin" -source-paths . main.clj)
+         session=("$bin" -source-paths . session.clj) ;;
   esac
   if ! command -v "$bin" > /dev/null; then
     echo "$runtime: skipped, $bin not found"
     continue
   fi
-  if ! "${run[@]}" < /dev/null > "$work/$runtime.txt" 2>&1; then
-    echo "$runtime: failed to load it:"
-    grep -v -e '^ *$' -e '^-*$' "$work/$runtime.txt" | head -n 4
+  compare "the demo" "$work/go.txt" "$work/$runtime.txt" "${run[@]}" &&
+    compare "the demo, then line $line," "$work/go-line.txt" "$work/$runtime-line.txt" "${session[@]}" ||
     status=1
-  elif diff -q "$work/go.txt" "$work/$runtime.txt" > /dev/null; then
-    echo "$runtime: the demo matches Go's, $(wc -l < "$work/go.txt") lines"
-  else
-    echo "$runtime: differs from Go's (< Go, > $runtime):"
-    diff "$work/go.txt" "$work/$runtime.txt" | head -n 20
-    status=1
-  fi
 done
 exit $status

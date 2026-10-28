@@ -82,7 +82,8 @@ tools/check --backend=clj --runtime=bb
 
 `tools/check-repl` checks the demo in Clojure's REPL mode, as one
 module loaded on Babashka, JVM Clojure and
-[let-go](https://github.com/nooga/let-go):
+[let-go](https://github.com/nooga/let-go), and then `main.niva`'s last
+line sent into that session on its own:
 
 ```bash
 tools/check-repl
