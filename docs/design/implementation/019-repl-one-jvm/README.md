@@ -1,6 +1,6 @@
 # 019 repl-one-jvm
 
-**Status:** Done; landed at `<commit>` (2026-10-28).
+**Status:** Done; landed at `84ff3c2` (2026-10-28).
 
 `tools/repl --backend=clj --runtime=jvm` runs NIN inside the session's
 own JVM: the compiler and the session are one process, as in Clojure,
