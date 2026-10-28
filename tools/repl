@@ -4,16 +4,15 @@
 # kept. Ctrl-D ends the session.
 #
 #   tools/repl                              # Go, by replay
-#   tools/repl --backend=clj                # Clojure, live, on the JVM
-#   tools/repl --backend=clj --runtime=bb   # or on bb, or lg
+#   tools/repl --backend=clj                # Clojure, live, on bb
+#   tools/repl --backend=clj --runtime=lg   # or on let-go
 #
 # On Go, each line runs as a program after the lines kept so far. On
 # Clojure, one process keeps the session: it loads the REPL module built
 # before any line, then each line's module, built with --repl-line, which
-# runs only that line. On JVM Clojure that process also runs NIN, so the
-# compiler stays warm; on bb and lg, NIN starts again for each line. lg
-# is let-go, which NIN doesn't target; LG names its binary if it's not on
-# PATH.
+# runs only that line. NIN starts again for each line; tools/repl-jvm
+# keeps it running, in the session's own JVM. lg is let-go, which NIN
+# doesn't target; LG names its binary if it's not on PATH.
 #
 # The session is written to repl.niva at the project root, where the
 # compiler finds mpl/, and removed at the end. While it runs, other
@@ -22,12 +21,13 @@ set -uo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 backend=go
-runtime=jvm
+runtime=bb
 for arg; do
   case $arg in
     --backend=go | --backend=clj) backend=${arg#*=} ;;
-    --runtime=bb | --runtime=jvm | --runtime=lg) runtime=${arg#*=} ;;
-    *) echo "repl: unknown option $arg (--backend=go or clj, --runtime=bb, jvm or lg)" >&2; exit 2 ;;
+    --runtime=bb | --runtime=lg) runtime=${arg#*=} ;;
+    --runtime=jvm) echo "repl: the REPL on JVM Clojure is tools/repl-jvm" >&2; exit 2 ;;
+    *) echo "repl: unknown option $arg (--backend=go or clj, --runtime=bb or lg)" >&2; exit 2 ;;
   esac
 done
 cd "$root"
@@ -76,17 +76,7 @@ go_line() {
 
 clj_line() {
   write_session "$1"
-  module "--repl-line=$((${#session[@]} + 1))"
-}
-
-# Builds repl.niva's REPL module with these options and loads it into the
-# session. On JVM Clojure, the session builds it itself.
-module() {
-  if [ "$runtime" = jvm ]; then
-    request "$*"
-  else
-    build "$@" && request "$work/.niva_clj/main.clj"
-  fi
+  build "--repl-line=$((${#session[@]} + 1))" && load
 }
 
 # Builds repl.niva's REPL module, with these options, as
@@ -101,19 +91,18 @@ build() {
   return 1
 }
 
-# Sends the session a request, a module to load or, on JVM Clojure, the
-# options to build one with, and prints what it prints. If it fails, this
-# prints why and fails.
+# Loads main.clj into the session and prints what it prints. If it fails,
+# this prints why and fails.
 done_marker="-- niva repl: done --"
 failed_marker="-- niva repl: failed --"
-request() {
-  printf '%s\n' "$1" >&"${clj[1]}"
+load() {
+  printf '%s\n' "$work/.niva_clj/main.clj" >&"${clj[1]}"
   local out failed= why=
   while IFS= read -r out <&"${clj[0]}"; do
     case $out in
       "$done_marker")
         [ -z "$failed" ] && return 0
-        printf '%s' "${why//"$root/"/}" | trimmed
+        printf '%s' "$why" | trimmed
         return 1 ;;
       "$failed_marker") failed=1 ;;
       *) if [ -n "$failed" ]; then why+=$out$'\n'; else printf '%s\n' "$out"; fi ;;
@@ -124,61 +113,25 @@ request() {
 }
 
 if [ "$backend" = clj ]; then
-  # NIN's jar, as tools/nin finds it.
-  jar=${NIVA_SELF_HOST:-$HOME/src/Niva-self-host}/Niva/NivaInNiva/main.jar
   case $runtime in
-    bb)  bin=bb ;;
-    jvm) bin=clojure ;;
-    lg)  bin=${LG:-lg} ;;
+    bb) start=(bb -cp .niva_clj serve.clj) ;;
+    lg) start=("${LG:-lg}" -source-paths .niva_clj serve.clj) ;;
   esac
-  if ! command -v "$bin" > /dev/null; then
-    echo "repl: $bin not found" >&2
+  if ! command -v "${start[0]}" > /dev/null; then
+    echo "repl: ${start[0]} not found" >&2
     exit 1
   fi
   work=$(mktemp -d)
   trap 'rm -f repl.niva; rm -rf "$work"' EXIT
   : > repl.niva
-  # The session runs each request on its input as run does. It says when
-  # it's done, after the error's root cause if the request failed.
-  case $runtime in
-    jvm)
-      if [ ! -f "$jar" ]; then
-        echo "repl: $jar not found; run tools/build-self-hosted-niva" >&2
-        exit 1
-      fi
-      # NIN's main, called in this JVM, prints why a build failed; that
-      # is caught, since the session's own output is Clojure's *out*.
-      start=(java -cp "$(cd "$work" && clojure -Spath):$jar:.niva_clj" clojure.main serve.clj)
-      cat > "$work/serve.clj" <<EOF
-(require '[clojure.string :as str])
-(defn run [options]
-  (let [module (java.io.File. ".niva_clj/main.clj")
-        printed (java.io.ByteArrayOutputStream.)
-        out System/out
-        err System/err]
-    (.delete module)
-    (System/setOut (java.io.PrintStream. printed true))
-    (System/setErr (java.io.PrintStream. printed true))
-    (try (mainNiva.MainKt/main
-          (into-array String (concat ["build" "$root/repl.niva" "--backend=clj" "--repl"]
-                                     (remove str/blank? (str/split options #" ")))))
-         (finally (System/setOut out) (System/setErr err)))
-    (if (.exists module)
-      (load-file (str module))
-      (throw (ex-info (str printed) {})))))
-EOF
-      ;;
-    *)
-      start=(bb -cp .niva_clj serve.clj)
-      [ "$runtime" = lg ] && start=("$bin" -source-paths .niva_clj serve.clj)
-      # The same code runs on both, since lg has no load-file.
-      echo '(defn run [path] (load-string (slurp path)))' > "$work/serve.clj"
-      ;;
-  esac
-  cat >> "$work/serve.clj" <<EOF
+  build || exit 1
+  # The session loads each file named on its input. It says when it's
+  # done, after the error's root cause if the file failed. The same code
+  # runs on both, since lg has no load-file.
+  cat > "$work/serve.clj" <<EOF
 (loop []
-  (when-let [request (read-line)]
-    (try (run request)
+  (when-let [path (read-line)]
+    (try (load-string (slurp path))
          (catch Throwable e
            (let [cause (loop [e e] (if-let [c (ex-cause e)] (recur c) e))]
              (println "$failed_marker")
@@ -187,10 +140,8 @@ EOF
     (flush)
     (recur)))
 EOF
-  # The classpath has .niva_clj/ only if it's there when the JVM starts.
-  mkdir "$work/.niva_clj"
   coproc clj { cd "$work" && exec "${start[@]}" 2>&1; }
-  module || exit 1
+  load || exit 1
 fi
 
 while IFS= read -r -e -p "niva> " line; do

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# A Niva REPL in one JVM, which runs the compiler as well as the session.
+# This finds NIN's jar and Clojure, then becomes the JVM, which runs
+# tools/repl-jvm.clj. It has no line editing; for that, run it in rlwrap:
+#
+#   tools/repl-jvm
+#   rlwrap tools/repl-jvm
+set -euo pipefail
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+# NIN's jar, as tools/nin finds it.
+jar=${NIVA_SELF_HOST:-$HOME/src/Niva-self-host}/Niva/NivaInNiva/main.jar
+if [ ! -f "$jar" ]; then
+  echo "repl-jvm: $jar not found; run tools/build-self-hosted-niva" >&2
+  exit 1
+fi
+cp=$(clojure -Spath)
+# NIN writes .niva_clj/ in the JVM's folder, so the JVM runs in a
+# temporary one, which the REPL removes at the end. .niva_clj/ is on the
+# classpath only if it's there when the JVM starts.
+work=$(mktemp -d)
+mkdir "$work/.niva_clj"
+cd "$work"
+exec java -cp "$cp:$jar:.niva_clj" clojure.main "$root/tools/repl-jvm.clj" "$root"

@@ -89,11 +89,11 @@ line sent into that session on its own:
 tools/check-repl
 ```
 
-Or try expressions a line at a time in the [REPL](docs/repl.md), which
-runs each line on the Go backend:
+Or try expressions a line at a time in the [REPL](docs/repl.md), a
+live session in one JVM, which runs the compiler too:
 
 ```bash
-tools/repl
+tools/repl-jvm
 ```
 
 ```
@@ -102,15 +102,10 @@ niva> (x * x + x) showSimplified
 x * x + x   =>   x + x^2
 ```
 
-Or in a live session on JVM Clojure, which keeps what each line made,
-so no line runs again, and runs the compiler too:
-
-```bash
-tools/repl --backend=clj
-```
-
-`--runtime=bb` runs it on Babashka, which starts faster but takes
-about four times as long a line.
+It has no line editing: `rlwrap tools/repl-jvm` adds it. `tools/repl`
+has it, and runs each line on the Go backend by replay, or with
+`--backend=clj` in a live session on Babashka, at about four times as
+long a line.
 
 ## Building expressions
 

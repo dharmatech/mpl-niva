@@ -11,7 +11,7 @@ On the demo's lines it prints what Go prints.
 
 ```
 tools/repl --backend=clj --runtime=bb   # on bb
-tools/repl --backend=clj --runtime=jvm  # or JVM Clojure, or lg
+tools/repl --backend=clj --runtime=lg   # or let-go
 ```
 
 ## The loop
@@ -60,7 +60,9 @@ tools/repl --backend=clj --runtime=jvm  # or JVM Clojure, or lg
   run as `tools/check-repl` runs them, `LG` naming the binary. Both
   print the demo as `bb` does, but only `bb` is meant for use yet.
   Since [series 019](../019-repl-one-jvm/README.md), `jvm` runs NIN in
-  the session's JVM instead, and is the default.
+  the session's JVM instead, and since
+  [series 020](../020-repl-jvm/README.md) that's `tools/repl-jvm`, and
+  `tools/repl` runs on `bb` and `lg`.
 
 ## What's known not to work yet
 

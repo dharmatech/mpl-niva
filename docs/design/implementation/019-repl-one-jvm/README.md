@@ -9,9 +9,12 @@ about 0.14 s instead of 0.6 s. `bb` and `lg` are as in
 [series 018](../018-clj-repl-loop/README.md), with NIN started again
 for each line. It's the default runtime since `f162b88`.
 
+**Since [series 020](../020-repl-jvm/README.md),** the JVM REPL is a
+script of its own, one process, and `tools/repl` refuses
+`--runtime=jvm`:
+
 ```
-tools/repl --backend=clj                # the JVM
-tools/repl --backend=clj --runtime=bb   # or bb, or lg
+tools/repl-jvm
 ```
 
 ## Why
@@ -66,7 +69,8 @@ lines, warm builds took 40 to 60 ms and loading the module about
 - **The JVM the default:** `bb` starts in 0.7 s against 1.9 s and
   holds about 120 MB against 470, but the JVM is ahead from the third
   line or so. `bb` stayed the default when this landed, and the user
-  made it the JVM at `f162b88`.
+  made it the JVM at `f162b88`. Series 020 moved the JVM to
+  `tools/repl-jvm`, and `bb` is `tools/repl`'s again.
 
 ## What's known not to work yet
 
