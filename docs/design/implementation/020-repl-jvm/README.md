@@ -8,7 +8,9 @@ NIN, the session, and the REPL's own loop, in
 only finds NIN's jar and Clojure, then becomes the JVM. It takes
 [series 019](../019-repl-one-jvm/README.md)'s JVM mode out of
 `tools/repl`, which runs on Go, `bb` and `lg` again, with
-`--backend=clj` meaning `bb`.
+`--backend=clj` meaning `bb`. Since
+[series 021](../021-repl-values/README.md), `tools/repl-jvm` prints a
+line's value.
 
 ```
 tools/repl-jvm

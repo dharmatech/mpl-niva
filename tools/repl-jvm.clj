@@ -1,7 +1,10 @@
 ;; A Niva REPL in one JVM, started by tools/repl-jvm with the project's
 ;; root. Each line you enter is built by NIN, called in this JVM, with
 ;; --repl-line, so only that line runs, and loaded into the session here.
-;; A line that fails to build or run isn't kept. Ctrl-D ends the session.
+;; A line is built as resN = line first, and if it builds, its value is
+;; printed as echo prints it; if not, it's built as it is, as a
+;; declaration or an assignment. A line that fails to build or run isn't
+;; kept. Ctrl-D ends the session.
 ;;
 ;; The session is written to repl.niva at the project root, where the
 ;; compiler finds mpl/, and removed at the end, with the temporary folder
@@ -27,11 +30,13 @@
                   (Thread. #(do (io/delete-file session-file true)
                                 (remove-work))))
 
-;; Builds repl.niva's REPL module with these options and loads it. NIN
-;; prints why a build fails, and exits 0 either way, so what it prints is
-;; caught, and thrown when it wrote no module. The session's own output
-;; is unaffected: Clojure's *out* holds the stream it started with.
-(defn run [& options]
+;; Writes these lines to repl.niva and builds its REPL module with these
+;; options. NIN prints why a build fails, and exits 0 either way, so what
+;; it prints is caught, and thrown when it wrote no module. The session's
+;; own output is unaffected: Clojure's *out* holds the stream it started
+;; with.
+(defn build [lines & options]
+  (spit session-file (str/join (map #(str % "\n") lines)))
   (let [printed (java.io.ByteArrayOutputStream.)
         out System/out
         err System/err]
@@ -42,8 +47,11 @@
           (into-array String (list* "build" (str session-file) "--backend=clj" "--repl" options)))
          (finally (System/setOut out) (System/setErr err)))
     (when-not (.exists module)
-      (throw (ex-info (str printed) {})))
-    (load-file (str module))))
+      (throw (ex-info (str printed) {})))))
+
+;; Builds these lines for the last one alone.
+(defn build-line [lines]
+  (build lines (str "--repl-line=" (count lines))))
 
 ;; The compiler's message, or the error's, without NIN's stack trace or
 ;; the project's path.
@@ -52,33 +60,63 @@
        (remove #(or (str/starts-with? % "Method:") (re-matches #"-*| *" %)))
        (take 6)))
 
-;; Runs these options, and prints why if it fails, with the root cause of
-;; a run-time error. Says whether it ran.
-(defn ran? [& options]
-  (try (apply run options)
+;; Runs f, and prints why if it fails, with the root cause of a run-time
+;; error. Says whether it ran.
+(defn ran? [f]
+  (try (f)
        true
        (catch Throwable e
          (let [cause (loop [e e] (if-let [c (ex-cause e)] (recur c) e))]
            (run! println (trimmed (or (ex-message cause) (str cause)))))
          false)))
 
+;; A variable's declaration, x = …, x::T = … or mut x = …, or an
+;; assignment, x <- …. NIN builds a declaration after resN = too, but with
+;; x local to resN's value, and checks an assignment there as far as the
+;; Clojure backend, so these are built as they are.
+(def declaration #"\s*(mut\s+)?\w+(::\S+)?\s*(=(?!=)|<-).*")
+
+;; Prints resN, the line's value, as echo does, unless it's Unit, which
+;; NIN's Clojure writes :unit, or echo, the line's last message, printed
+;; it already.
+(defn show [n]
+  (let [name (str "res" n)
+        value @(ns-resolve 'niva.repl.session (symbol name))]
+    (when-not (or (= value :unit)
+                  (str/includes? (slurp module) (str "(def " name " (niva.core/Any__echo")))
+      ((resolve 'niva.core/Any__echo) value))))
+
+;; Builds a line and runs it: as resN = line if that builds, and prints
+;; its value, or else as it is. Returns the line in the form that ran, or
+;; nil if it failed.
+(defn enter [kept n line]
+  (let [named (str "res" n " = " line)
+        value? (and (not (re-matches declaration line))
+                    (try (build-line (conj kept named))
+                         true
+                         (catch Throwable _ false)))]
+    (when (ran? #(do (when-not value? (build-line (conj kept line)))
+                     (load-file (str module))
+                     (when value? (show n))))
+      (if value? named line))))
+
 ;; The prompt shows only on a terminal, as bash's read -p does, so lines
 ;; piped in print only their output.
 (def prompt (when (some-> (System/console) .isTerminal) "niva> "))
 
-(spit session-file "")
-(when-not (ran?)
+(when-not (ran? #(do (build [])
+                      (load-file (str module))))
   (System/exit 1))
-(loop [kept []]
+;; n counts the lines kept as resN = line, from res1.
+(loop [kept [] n 1]
   (when prompt
     (print prompt)
     (flush))
   (if-let [line (read-line)]
     (if (str/blank? line)
-      (recur kept)
-      (do (spit session-file (str/join (map #(str % "\n") (conj kept line))))
-          (if (ran? (str "--repl-line=" (inc (count kept))))
-            (recur (conj kept line))
-            (do (println "(not kept)")
-                (recur kept)))))
+      (recur kept n)
+      (if-let [form (enter kept n line)]
+        (recur (conj kept form) (if (= form line) n (inc n)))
+        (do (println "(not kept)")
+            (recur kept n))))
     (println)))
