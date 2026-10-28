@@ -108,7 +108,7 @@ OpenJDK 25, and let-go `18df3ad5`:
 - **Go's own mode dropped a line that printed only a blank line:** the
   five `"" echo` lines showed nothing, since `$(…)` strips trailing
   newlines. It was older than this series; the Clojure mode showed
-  them. Fixed afterwards, at `<commit>`: the Go mode prints the status
+  them. Fixed afterwards, at `4838a0e`: the Go mode prints the status
   after the output, so the newlines stay, and the demo's 40 lines then
   print what `tools/nin run --backend=go` prints there too. The lines
   that fail, below, are reported as before.
