@@ -1,6 +1,6 @@
 # 020 repl-jvm
 
-**Status:** Done; landed at `<commit>` (2026-10-28).
+**Status:** Done; landed at `b684836` (2026-10-28).
 
 `tools/repl-jvm` is a Niva REPL that's one process: a JVM that runs
 NIN, the session, and the REPL's own loop, in
