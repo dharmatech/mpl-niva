@@ -7,7 +7,7 @@ own JVM: the compiler and the session are one process, as in Clojure,
 Scala or F# Interactive. NIN stays warm between lines, so a line takes
 about 0.14 s instead of 0.6 s. `bb` and `lg` are as in
 [series 018](../018-clj-repl-loop/README.md), with NIN started again
-for each line. It's the default runtime since `<commit>`.
+for each line. It's the default runtime since `f162b88`.
 
 ```
 tools/repl --backend=clj                # the JVM
@@ -66,7 +66,7 @@ lines, warm builds took 40 to 60 ms and loading the module about
 - **The JVM the default:** `bb` starts in 0.7 s against 1.9 s and
   holds about 120 MB against 470, but the JVM is ahead from the third
   line or so. `bb` stayed the default when this landed, and the user
-  made it the JVM at `<commit>`.
+  made it the JVM at `f162b88`.
 
 ## What's known not to work yet
 
@@ -88,7 +88,7 @@ lines, warm builds took 40 to 60 ms and loading the module about
 
 - [`tools/repl`](../../../../tools/repl): `--runtime=jvm` runs NIN in
   the session, and every runtime starts in the temporary folder. Then,
-  at `<commit>`, `jvm` became the default.
+  at `f162b88`, `jvm` became the default.
 - [The REPL](../../../repl.md) and the README say so, as do series
   [018](../018-clj-repl-loop/README.md) and 010's
   [runtimes](../010-repl/runtimes.md).
