@@ -54,8 +54,7 @@ second on MPL.
   entry file's top-level code runs.
 - **On Go, every line runs the ones before it again,** so their output
   is computed again too, though not shown, and a long session gets
-  slower. A line that prints only a blank line, as `"" echo` does,
-  shows nothing.
+  slower.
 - **On Clojure, a value keeps what it was made with.** A function you
   edit in a file applies from the next line, but a value made before
   the edit isn't made again.

@@ -102,13 +102,16 @@ OpenJDK 25, and let-go `18df3ad5`:
   `tools/nin run --backend=go` prints, all 34 lines, then the blank
   line the REPL ends with. The same on `--runtime=jvm` and `lg`.
 - **Time,** for those 40 lines: 24 s on `bb` and on `lg`, 29 s on JVM
-  Clojure, and 33 s on Go, where each line takes longer than the one
-  before. Starting takes 0.7 s on `bb` and 2.9 s on JVM Clojure, then
+  Clojure, and 26 to 33 s on Go over two runs, where each line takes
+  longer than the one before. Starting takes 0.7 s on `bb` and 2.9 s on JVM Clojure, then
   0.65 s a line on `bb`.
-- **Go's own mode drops a line that prints only a blank line:** the
-  five `"" echo` lines show nothing, since `$(…)` strips trailing
-  newlines. It's older than this series and left as it was; the
-  Clojure mode shows them.
+- **Go's own mode dropped a line that printed only a blank line:** the
+  five `"" echo` lines showed nothing, since `$(…)` strips trailing
+  newlines. It was older than this series; the Clojure mode showed
+  them. Fixed afterwards, at `<commit>`: the Go mode prints the status
+  after the output, so the newlines stay, and the demo's 40 lines then
+  print what `tools/nin run --backend=go` prints there too. The lines
+  that fail, below, are reported as before.
 - **Lines that fail,** on `bb`: a message the type has none of, a
   method or a variable defined again, `1 / 0`, and an index out of
   range are each reported and not kept, and the session goes on. `mut`

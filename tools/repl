@@ -56,14 +56,16 @@ marker="-- niva repl: new output --"
 go_line() {
   write_session "\"$marker\" echo" "$1"
   local out status
-  out=$("$root/tools/nin" run repl.niva --backend=go 2>&1)
-  status=$?
+  # The status after the output keeps its trailing newlines, which $(…)
+  # would strip, so a line that prints a blank line shows it.
+  out=$("$root/tools/nin" run repl.niva --backend=go 2>&1; printf '\n%s' $?)
+  status=${out##*$'\n'}
+  out=${out%$'\n'*}
   # The compiler exits 0 even when the build fails, so a failed build
   # shows as no marker in the output; a run-time error exits 1.
-  if [ $status -eq 0 ] && [[ $out == *"$marker"* ]]; then
+  if [ "$status" -eq 0 ] && [[ $out == *"$marker"* ]]; then
     out=${out#*"$marker"}
-    out=${out#$'\n'}
-    [ -n "$out" ] && printf '%s\n' "$out"
+    printf '%s' "${out#$'\n'}"
     return 0
   fi
   printf '%s\n' "${out#*"$marker"}" | trimmed
